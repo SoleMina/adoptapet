@@ -1,0 +1,19 @@
+# Shared rules for the whole repo. adoptapet-backend/ and adoptapet-frontend/ keep their own .gitignore for stack-specific files.
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# Secrets and logs
+.env
+.env.*
+!.env.example
+*.log
