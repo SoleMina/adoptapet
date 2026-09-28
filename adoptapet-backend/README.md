@@ -30,9 +30,33 @@ Spring Boot 4 · Spring Cloud (Eureka + Gateway) · Spring Security with JWT · 
 * MySQL 8+ running on `localhost:3306` (defaults: user `root`, empty password)
 * RabbitMQ on `localhost:5672` (`brew install rabbitmq && brew services start rabbitmq`)
 
+## Configuration (.env)
+
+Secrets are not in the repo. Create your own `.env` in `adoptapet-backend/` from the template:
+
+```sh
+cp .env.example .env
+openssl rand -hex 32        # paste the result as JWT_SECRET
+```
+
+Every service loads that file on startup (`spring.config.import` in each `application.properties`), whether it runs
+from its own folder (`mvn spring-boot:run`), from `adoptapet-backend/` (`java -jar`) or from the repo root (IDE).
+Without it the services do not start (`Could not resolve placeholder 'JWT_SECRET'`).
+
+| Variable | Used by | Notes |
+|---|---|---|
+| `JWT_SECRET` | all | Same value everywhere, at least 64 characters |
+| `JWT_EXPIRATION` | user-service | Token lifetime in ms (default 1 hour) |
+| `DB_USER`, `DB_PASSWORD` | all with a database | Local MySQL account |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL` | user-service | First admin, created only when no ADMIN exists |
+| `RABBITMQ_USER`, `RABBITMQ_PASSWORD` | pet, adoption, notification | `guest`/`guest` works only from localhost |
+
+Optional overrides: `RABBITMQ_HOST`, `EUREKA_URL`, `EUREKA_ENABLED=false` (run user/pet/notification alone), `PORT`.
+
 ## Run locally
 
 ```sh
+cp .env.example .env         # first time only, then fill it in
 mvn clean package -DskipTests
 
 java -jar discovery-server/target/discovery-server-0.1.0-SNAPSHOT.jar      # start first
@@ -44,10 +68,7 @@ java -jar api-gateway/target/api-gateway-0.1.0-SNAPSHOT.jar
 ```
 
 Give Eureka ~30 seconds after startup before calling through the gateway. On first start user-service creates the
-admin `admin` / `Admin12345` (change it with `ADMIN_PASSWORD`).
-
-Useful environment variables: `DB_USER`, `DB_PASSWORD`, `JWT_SECRET` (must be the same in every service),
-`RABBITMQ_HOST`, `RABBITMQ_USER`, `RABBITMQ_PASSWORD`, `EUREKA_URL`, `EUREKA_ENABLED=false` (run user/pet/notification alone).
+admin with `ADMIN_USERNAME` / `ADMIN_PASSWORD` from your `.env`.
 
 ## API (through the gateway, http://localhost:8080)
 
