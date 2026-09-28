@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adoptapet.common.exception.ApiException;
-import com.adoptapet.common.security.AuthUser;
+import com.adoptapet.shared.exception.ApiException;
+import com.adoptapet.shared.security.AuthUser;
 import com.adoptapet.userservice.dto.RegisterRequest;
 import com.adoptapet.userservice.dto.UpdateUserRequest;
 import com.adoptapet.userservice.dto.UserResponse;

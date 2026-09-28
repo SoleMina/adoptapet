@@ -1,4 +1,4 @@
-package com.adoptapet.common.security;
+package com.adoptapet.shared.security;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

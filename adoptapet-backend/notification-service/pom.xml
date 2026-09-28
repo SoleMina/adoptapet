@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.adoptapet</groupId>
-			<artifactId>platform-common</artifactId>
+			<artifactId>shared-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -11,7 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.exception.ApiException;
 
 import lombok.extern.slf4j.Slf4j;
 

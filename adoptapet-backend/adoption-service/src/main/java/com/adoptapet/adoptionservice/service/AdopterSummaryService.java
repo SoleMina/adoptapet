@@ -14,7 +14,7 @@ import com.adoptapet.adoptionservice.dto.AdopterSummaryResponse;
 import com.adoptapet.adoptionservice.model.AdoptionApplication;
 import com.adoptapet.adoptionservice.model.ApplicationStatus;
 import com.adoptapet.adoptionservice.repository.ApplicationRepository;
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.exception.ApiException;
 
 import lombok.RequiredArgsConstructor;
 

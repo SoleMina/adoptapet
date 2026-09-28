@@ -23,7 +23,7 @@
 	</properties>
 
 	<modules>
-		<module>platform-common</module>
+		<module>shared-security</module>
 		<module>discovery-server</module>
 		<module>api-gateway</module>
 		<module>user-service</module>
@@ -43,7 +43,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.adoptapet</groupId>
-				<artifactId>platform-common</artifactId>
+				<artifactId>shared-security</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

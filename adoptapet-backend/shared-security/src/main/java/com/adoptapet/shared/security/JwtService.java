@@ -1,4 +1,4 @@
-package com.adoptapet.common.security;
+package com.adoptapet.shared.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;

@@ -3,7 +3,7 @@ package com.adoptapet.petservice.messaging;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import com.adoptapet.common.event.AdoptionEvent;
+import com.adoptapet.shared.event.AdoptionEvent;
 import com.adoptapet.petservice.config.RabbitConfig;
 import com.adoptapet.petservice.service.PetService;
 

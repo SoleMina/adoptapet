@@ -3,7 +3,7 @@ package com.adoptapet.notificationservice.messaging;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import com.adoptapet.common.event.AdoptionEvent;
+import com.adoptapet.shared.event.AdoptionEvent;
 import com.adoptapet.notificationservice.config.RabbitConfig;
 import com.adoptapet.notificationservice.service.NotificationService;
 

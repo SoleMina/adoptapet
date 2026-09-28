@@ -1,4 +1,4 @@
-package com.adoptapet.common.event;
+package com.adoptapet.shared.event;
 
 /**
  * RabbitMQ names shared by every service. The routing key of each message is

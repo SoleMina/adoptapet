@@ -13,8 +13,8 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import com.adoptapet.adoptionservice.model.AdoptionApplication;
 import com.adoptapet.adoptionservice.model.DeliveryAppointment;
-import com.adoptapet.common.event.AdoptionEvent;
-import com.adoptapet.common.event.EventTypes;
+import com.adoptapet.shared.event.AdoptionEvent;
+import com.adoptapet.shared.event.EventTypes;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

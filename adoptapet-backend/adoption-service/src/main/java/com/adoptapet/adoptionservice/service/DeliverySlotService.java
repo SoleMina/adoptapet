@@ -17,7 +17,7 @@ import com.adoptapet.adoptionservice.dto.ScheduleRequest;
 import com.adoptapet.adoptionservice.dto.SlotAvailabilityResponse;
 import com.adoptapet.adoptionservice.model.DeliverySlot;
 import com.adoptapet.adoptionservice.repository.DeliverySlotRepository;
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.exception.ApiException;
 
 /** Delivery windows and their capacity (max 2 deliveries per window). */
 @Service

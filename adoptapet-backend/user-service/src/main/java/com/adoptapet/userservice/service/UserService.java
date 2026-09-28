@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.exception.ApiException;
 import com.adoptapet.userservice.dto.RegisterRequest;
 import com.adoptapet.userservice.dto.UpdateUserRequest;
 import com.adoptapet.userservice.dto.UserResponse;

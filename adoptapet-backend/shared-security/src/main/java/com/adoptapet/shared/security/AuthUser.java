@@ -1,4 +1,4 @@
-package com.adoptapet.common.security;
+package com.adoptapet.shared.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

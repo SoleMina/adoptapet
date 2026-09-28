@@ -9,8 +9,8 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>platform-common</artifactId>
-	<description>Shared JWT security and error handling for all services</description>
+	<artifactId>shared-security</artifactId>
+	<description>Shared library (not a service): JWT security, error handling and RabbitMQ event contract</description>
 
 	<dependencies>
 		<dependency>

@@ -29,9 +29,9 @@ import com.adoptapet.adoptionservice.model.DocumentType;
 import com.adoptapet.adoptionservice.pdf.ActPdfGenerator;
 import com.adoptapet.adoptionservice.repository.ApplicationRepository;
 import com.adoptapet.adoptionservice.repository.AppointmentRepository;
-import com.adoptapet.common.event.EventTypes;
-import com.adoptapet.common.exception.ApiException;
-import com.adoptapet.common.security.AuthUser;
+import com.adoptapet.shared.event.EventTypes;
+import com.adoptapet.shared.exception.ApiException;
+import com.adoptapet.shared.security.AuthUser;
 
 import lombok.RequiredArgsConstructor;
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adoptapet.common.security.AuthUser;
+import com.adoptapet.shared.security.AuthUser;
 import com.adoptapet.notificationservice.dto.NotificationResponse;
 import com.adoptapet.notificationservice.service.NotificationService;
 

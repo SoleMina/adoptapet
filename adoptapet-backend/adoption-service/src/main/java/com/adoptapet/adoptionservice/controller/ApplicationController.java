@@ -30,7 +30,7 @@ import com.adoptapet.adoptionservice.dto.ScheduleRequest;
 import com.adoptapet.adoptionservice.model.ApplicationStatus;
 import com.adoptapet.adoptionservice.model.DocumentType;
 import com.adoptapet.adoptionservice.service.ApplicationService;
-import com.adoptapet.common.security.AuthUser;
+import com.adoptapet.shared.security.AuthUser;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

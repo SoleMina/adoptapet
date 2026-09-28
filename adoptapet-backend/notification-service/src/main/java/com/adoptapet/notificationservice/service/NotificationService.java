@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.adoptapet.common.event.AdoptionEvent;
-import com.adoptapet.common.event.EventTypes;
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.event.AdoptionEvent;
+import com.adoptapet.shared.event.EventTypes;
+import com.adoptapet.shared.exception.ApiException;
 import com.adoptapet.notificationservice.dto.NotificationResponse;
 import com.adoptapet.notificationservice.model.Notification;
 import com.adoptapet.notificationservice.repository.NotificationRepository;

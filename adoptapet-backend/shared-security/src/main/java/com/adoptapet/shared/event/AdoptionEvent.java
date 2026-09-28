@@ -1,4 +1,4 @@
-package com.adoptapet.common.event;
+package com.adoptapet.shared.event;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.adoptapet.common.exception;
+package com.adoptapet.shared.exception;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

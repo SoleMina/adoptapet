@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.adoptapet.common.event.EventTypes;
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.event.EventTypes;
+import com.adoptapet.shared.exception.ApiException;
 import com.adoptapet.petservice.dto.PetRequest;
 import com.adoptapet.petservice.dto.PetResponse;
 import com.adoptapet.petservice.model.AdoptionStatus;

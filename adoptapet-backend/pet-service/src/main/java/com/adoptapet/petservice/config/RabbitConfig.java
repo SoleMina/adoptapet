@@ -11,7 +11,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.adoptapet.common.event.EventTypes;
+import com.adoptapet.shared.event.EventTypes;
 
 @Configuration
 public class RabbitConfig {
@@ -35,6 +35,6 @@ public class RabbitConfig {
 
 	@Bean
 	public MessageConverter messageConverter() {
-		return new JacksonJsonMessageConverter("com.adoptapet.common.event");
+		return new JacksonJsonMessageConverter("com.adoptapet.shared.event");
 	}
 }

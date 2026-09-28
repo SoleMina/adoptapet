@@ -14,7 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.adoptapet.common.exception.ApiException;
+import com.adoptapet.shared.exception.ApiException;
 
 /**
  * Private documents (DNI, proof of address, acts). They are only returned through the API after
