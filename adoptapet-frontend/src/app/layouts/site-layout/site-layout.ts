@@ -16,7 +16,6 @@ import { filter, map } from 'rxjs';
 interface NavLink {
   label: string;
   path: string;
-  fragment?: string;
   active: boolean;
 }
 
@@ -56,17 +55,10 @@ export class SiteLayout {
   );
 
   protected readonly links = computed<NavLink[]>(() => {
-    const [path, fragment] = this.url().split('#');
-    const route = path.split('?')[0];
-    const howTo = route === '/' && fragment === 'como-adoptar';
+    const route = this.url().split(/[?#]/)[0];
     const links: NavLink[] = [
-      // As in the Figma, "Mascotas" is also highlighted on the home page.
-      {
-        label: 'Mascotas',
-        path: '/pets',
-        active: !howTo && (route === '/' || route.startsWith('/pets')),
-      },
-      { label: 'Cómo adoptar', path: '/', fragment: 'como-adoptar', active: howTo },
+      { label: 'Inicio', path: '/inicio', active: route === '/inicio' },
+      { label: 'Mascotas', path: '/pets', active: route.startsWith('/pets') }
     ];
     if (this.store.isAdopter()) {
       links.push(

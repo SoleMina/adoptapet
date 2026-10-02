@@ -20,6 +20,10 @@
   }
 }
 
+.media {
+  position: relative;
+}
+
 .name {
   margin-top: var(--ap-space-4);
   font-size: var(--ap-font-size-lg);
@@ -41,4 +45,53 @@
 .action {
   width: 100%;
   margin-top: auto;
+}
+
+// ----- featured (home)
+
+:host([data-variant='featured']) {
+  .card {
+    border-color: transparent;
+    border-radius: var(--ap-radius-xl);
+    box-shadow: var(--ap-shadow-md);
+  }
+
+  app-pet-photo {
+    --pet-photo-ratio: 1.55 / 1;
+    border-radius: var(--ap-radius-lg);
+  }
+
+  .name {
+    margin-top: var(--ap-space-3);
+    font-size: var(--ap-font-size-xl);
+    font-weight: 800;
+  }
+
+  .meta {
+    margin: var(--ap-space-2) 0 var(--ap-space-4);
+  }
+}
+
+// Status over the photo: "● Disponible · Sana".
+.pill {
+  position: absolute;
+  top: var(--ap-space-3);
+  right: var(--ap-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-sm);
+  font-size: var(--ap-font-size-xs);
+  font-weight: 700;
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
 }

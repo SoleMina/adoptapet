@@ -1,45 +1,76 @@
-<div class="ap-container page">
-  <app-page-header heading="Inicio" subtitle="Una nueva familia comienza con una oportunidad." />
+<section class="hero" aria-labelledby="home-title">
+  <div class="ap-container hero__inner">
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <a routerLink="/inicio">AdoptaPet</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Inicio</span>
+    </nav>
 
-  <section class="ap-card content" aria-labelledby="featured-title">
-    <p class="ap-banner">Adoptar cambia dos vidas. Encuentra tu próximo mejor amigo.</p>
+    <div class="hero__text">
+      <p class="chip">
+        <mat-icon aria-hidden="true">pets</mat-icon>
+        {{ greeting() }}
+      </p>
+      <h1 id="home-title" class="title">Inicio</h1>
+      <p class="subtitle">Una nueva familia comienza con una oportunidad.</p>
+      <p class="headline">
+        <span class="accent">Adoptar cambia dos vidas.</span>
+        Encuentra a tu próximo mejor amigo.
+      </p>
+    </div>
 
-    <h2 id="featured-title" class="cdk-visually-hidden">Mascotas destacadas</h2>
+    <div class="hero__art" aria-hidden="true">
+      <mat-icon class="paw paw--1">pets</mat-icon>
+      <mat-icon class="paw paw--2">pets</mat-icon>
+      <!-- Replace public/images/hero-pets.png with the illustration exported from Figma (2x). -->
+      <img src="images/hero-pets.png" alt="" width="454" height="272" fetchpriority="high" />
+    </div>
+  </div>
+</section>
 
-    @if (pets.isLoading()) {
-      <div class="grid" aria-busy="true">
-        @for (item of skeletons; track item) {
-          <app-pet-card-skeleton />
-        }
-      </div>
-    } @else if (pets.error()) {
+<div class="ap-container body">
+  <h2 class="cdk-visually-hidden">Mascotas destacadas</h2>
+
+  @if (pets.isLoading()) {
+    <div class="grid" aria-busy="true">
+      @for (item of skeletons; track item) {
+        <app-pet-card-skeleton />
+      }
+    </div>
+  } @else if (pets.error()) {
+    <div class="ap-card">
       <app-error-state [error]="pets.error()" (retry)="pets.reload()" />
-    } @else if (featured().length === 0) {
+    </div>
+  } @else if (featured().length === 0) {
+    <div class="ap-card">
       <app-empty-state
         heading="Pronto habrá nuevas mascotas"
         message="Por ahora no hay mascotas disponibles. Vuelve a visitarnos en unos días."
       />
-    } @else {
-      <div class="grid">
-        @for (pet of featured(); track pet.id) {
-          <app-pet-card [pet]="pet" [priority]="true" />
-        }
-      </div>
-      @if (hasMore()) {
-        <a matButton class="see-all" routerLink="/pets">
-          Ver todas las mascotas
-          <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon>
-        </a>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (pet of featured(); track pet.id) {
+        <app-pet-card [pet]="pet" variant="featured" [priority]="true" />
       }
-    }
+    </div>
+  }
 
-    <section id="como-adoptar" class="steps" aria-labelledby="steps-title">
-      <h2 id="steps-title" class="cdk-visually-hidden">Cómo adoptar</h2>
-      <ol>
-        @for (step of steps; track step; let i = $index) {
-          <li>{{ i + 1 }}. {{ step }}</li>
-        }
-      </ol>
-    </section>
+  <section id="como-adoptar" class="steps" aria-labelledby="steps-title">
+    <h2 id="steps-title" class="cdk-visually-hidden">Cómo adoptar</h2>
+    <ol>
+      @for (step of steps; track step.label; let i = $index; let last = $last) {
+        <li class="step">
+          <span class="step__number" aria-hidden="true">{{ i + 1 }}</span>
+          <span class="step__icon" aria-hidden="true"
+            ><mat-icon>{{ step.icon }}</mat-icon></span
+          >
+          <span class="step__label">{{ i + 1 }}. {{ step.label }}</span>
+          @if (!last) {
+            <mat-icon class="step__arrow" aria-hidden="true">chevron_right</mat-icon>
+          }
+        </li>
+      }
+    </ol>
   </section>
 </div>

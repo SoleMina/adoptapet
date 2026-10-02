@@ -6,7 +6,10 @@
     [opened]="!isHandset()"
     [attr.role]="isHandset() ? 'dialog' : 'navigation'"
   >
-    <a class="logo" routerLink="/staff/dashboard">AdoptaPet</a>
+    <a class="logo ap-logo" routerLink="/staff/dashboard">
+      <mat-icon class="ap-logo__icon" aria-hidden="true">pets</mat-icon>
+      AdoptaPet
+    </a>
     <mat-nav-list aria-label="Panel">
       @for (link of links(); track link.path) {
         <a

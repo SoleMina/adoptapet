@@ -50,7 +50,7 @@ export class Auth {
 
   logout(): void {
     this.store.clear();
-    void this.router.navigateByUrl('/');
+    void this.router.navigateByUrl('/inicio');
   }
 
   /** Token expired or rejected (401): back to login, remembering where the user was. */

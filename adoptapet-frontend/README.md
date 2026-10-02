@@ -65,7 +65,7 @@ src/
 
 | Route | Who | Status |
 |---|---|---|
-| `/`, `/pets`, `/pets/:id` | everyone | ✅ built |
+| `/inicio` (`/` redirects here), `/pets`, `/pets/:id` | everyone | ✅ built |
 | `/login`, `/register` | visitors only (`guestGuard`) | ✅ built |
 | `/my-applications`, `/my-applications/:id`, `/apply/:petId`, `/notifications`, `/profile` | ADOPTER | placeholder |
 | `/staff/dashboard`, `applications`, `applications/:id`, `pets`, `delivery-calendar`, `adopters`, `adopters/:id`, `profile` | ADMIN, WORKER | placeholder |
@@ -90,6 +90,9 @@ there changes the whole app.
 | `_base.scss`, `_forms.scss`, `_utilities.scss` | reset, form fields of the design, shared blocks (`.ap-card`, `.ap-banner`, `.ap-tone`) |
 
 Light mode is the default (the design). The sun/moon button switches to dark and remembers the choice.
+
+The home illustration is `public/images/hero-pets.png` (454×272, cropped from a design screenshot). Replace it with
+the asset exported from Figma at 2x (908×544) keeping the same name.
 
 ## Conventions
 

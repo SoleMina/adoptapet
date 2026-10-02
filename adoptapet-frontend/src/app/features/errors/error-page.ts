@@ -11,7 +11,7 @@ import { EmptyState } from '@shared/components/empty-state/empty-state';
     <div class="ap-container page">
       <section class="ap-card">
         <app-empty-state [icon]="icon()" [heading]="heading()" [message]="message()">
-          <a matButton="filled" routerLink="/">Ir al inicio</a>
+          <a matButton="filled" routerLink="/inicio">Ir al inicio</a>
         </app-empty-state>
       </section>
     </div>

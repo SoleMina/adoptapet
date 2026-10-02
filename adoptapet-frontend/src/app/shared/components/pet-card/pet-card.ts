@@ -13,16 +13,24 @@ import { PetResponse } from '@core/models/pet';
 import { PetAgePipe } from '@shared/pipes/pet-age-pipe';
 import { PetPhoto } from '../pet-photo/pet-photo';
 
-/** Catalog card: photo, name, "Perro · Hembra · 2 años", status and "Conocer mascota". */
+export type PetCardVariant = 'default' | 'featured';
+
+/**
+ * Pet card: photo, name, "Perro · Hembra · 2 años", status and "Conocer mascota".
+ * `default` (catalog): bordered card with the status under the meta line.
+ * `featured` (home): elevated card with the status as a pill over the photo.
+ */
 @Component({
   selector: 'app-pet-card',
   imports: [MatButtonModule, RouterLink, PetPhoto, PetAgePipe],
   templateUrl: './pet-card.html',
   styleUrl: './pet-card.scss',
+  host: { '[attr.data-variant]': 'variant()' },
 })
 export class PetCard {
   readonly pet = input.required<PetResponse>();
   readonly priority = input(false);
+  readonly variant = input<PetCardVariant>('default');
 
   protected readonly meta = computed(() => {
     const pet = this.pet();

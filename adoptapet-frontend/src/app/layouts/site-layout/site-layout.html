@@ -2,7 +2,10 @@
 
 <header class="header">
   <div class="bar">
-    <a class="logo" routerLink="/" aria-label="AdoptaPet, ir al inicio">AdoptaPet</a>
+    <a class="ap-logo" routerLink="/inicio" aria-label="AdoptaPet, ir al inicio">
+      <mat-icon class="ap-logo__icon" aria-hidden="true">pets</mat-icon>
+      AdoptaPet
+    </a>
 
     <nav class="nav" aria-label="Principal">
       @for (link of links(); track link.label) {
@@ -11,7 +14,6 @@
           [class.active]="link.active"
           [attr.aria-current]="link.active ? 'page' : null"
           [routerLink]="link.path"
-          [fragment]="link.fragment"
           >{{ link.label }}</a
         >
       }
@@ -56,7 +58,6 @@
           <a
             mat-menu-item
             [routerLink]="link.path"
-            [fragment]="link.fragment"
             [attr.aria-current]="link.active ? 'page' : null"
           >
             {{ link.label }}
