@@ -1,0 +1,79 @@
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="header">
+  <div class="bar">
+    <a class="logo" routerLink="/" aria-label="AdoptaPet, ir al inicio">AdoptaPet</a>
+
+    <nav class="nav" aria-label="Principal">
+      @for (link of links(); track link.label) {
+        <a
+          class="nav-link"
+          [class.active]="link.active"
+          [attr.aria-current]="link.active ? 'page' : null"
+          [routerLink]="link.path"
+          [fragment]="link.fragment"
+          >{{ link.label }}</a
+        >
+      }
+    </nav>
+
+    <div class="tools">
+      <app-theme-toggle />
+
+      @if (store.user(); as user) {
+        <button matButton type="button" class="user-button" [matMenuTriggerFor]="userMenu">
+          <mat-icon aria-hidden="true">account_circle</mat-icon>
+          <span class="user-name">{{ user.firstName }}</span>
+        </button>
+        <mat-menu #userMenu="matMenu" xPosition="before">
+          <div class="menu-header">
+            <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+            <span>{{ roleLabel[user.role] }}</span>
+          </div>
+          <mat-divider />
+          <a mat-menu-item [routerLink]="profilePath()">
+            <mat-icon aria-hidden="true">person</mat-icon>
+            Mi perfil
+          </a>
+          <button mat-menu-item type="button" (click)="logout()">
+            <mat-icon aria-hidden="true">logout</mat-icon>
+            Cerrar sesión
+          </button>
+        </mat-menu>
+      }
+
+      <button
+        matIconButton
+        type="button"
+        class="menu-button"
+        aria-label="Abrir menú"
+        [matMenuTriggerFor]="mobileMenu"
+      >
+        <mat-icon aria-hidden="true">menu</mat-icon>
+      </button>
+      <mat-menu #mobileMenu="matMenu" xPosition="before">
+        @for (link of links(); track link.label) {
+          <a
+            mat-menu-item
+            [routerLink]="link.path"
+            [fragment]="link.fragment"
+            [attr.aria-current]="link.active ? 'page' : null"
+          >
+            {{ link.label }}
+          </a>
+        }
+      </mat-menu>
+    </div>
+  </div>
+
+  <mat-progress-bar
+    class="progress"
+    mode="indeterminate"
+    [class.visible]="loading.active()"
+    aria-label="Cargando"
+  />
+</header>
+
+<main id="main" class="main" tabindex="-1">
+  <router-outlet />
+</main>

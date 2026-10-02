@@ -1,0 +1,7 @@
+<article class="card" [attr.aria-labelledby]="'pet-' + pet().id">
+  <app-pet-photo [path]="pet().imageUrl" [name]="pet().name" [priority]="priority()" />
+  <h3 class="name" [id]="'pet-' + pet().id">{{ pet().name }}</h3>
+  <p class="meta">{{ meta() }} · {{ pet() | petAge }}</p>
+  <p class="status ap-tone" [attr.data-tone]="status().tone">{{ status().text }}</p>
+  <a matButton="filled" class="action" [routerLink]="['/pets', pet().id]">Conocer mascota</a>
+</article>

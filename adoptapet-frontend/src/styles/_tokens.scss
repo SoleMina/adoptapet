@@ -1,0 +1,67 @@
+// Design tokens taken from the Figma file "AdoptaPet — Vistas por rol".
+// This is the only place where colors, radii, spacing and shadows are defined: change a value here and the
+// whole app (including Angular Material, see _theme.scss) follows. Each color is `light-dark(light, dark)`.
+
+:root {
+  // Brand
+  --ap-color-primary: light-dark(#541dce, #cdbdff);
+  --ap-color-on-primary: light-dark(#ffffff, #1f005f);
+  --ap-color-primary-soft: light-dark(#f1eafc, #2e2350);
+  --ap-color-on-primary-soft: light-dark(#541dce, #e7deff);
+
+  // Text
+  --ap-color-text: light-dark(#130a31, #ece8f6);
+  --ap-color-text-muted: light-dark(#6e6a83, #aaa5bd);
+
+  // Surfaces
+  --ap-color-page: light-dark(#faf9fd, #121019);
+  --ap-color-surface: light-dark(#ffffff, #1b1826);
+  --ap-color-field: light-dark(#faf9fd, #15131e);
+  --ap-color-border: light-dark(#e4e1f1, #353048);
+  --ap-color-border-strong: light-dark(#cbc6df, #4a4462);
+
+  // Status (text color + soft background)
+  --ap-color-success: light-dark(#36714b, #8fd3a6);
+  --ap-color-success-soft: light-dark(#e6f3ea, #1d3326);
+  --ap-color-warning: light-dark(#8a5a00, #f2c46b);
+  --ap-color-warning-soft: light-dark(#fff3dc, #3a2d10);
+  --ap-color-danger: light-dark(#b3261e, #ffb4ab);
+  --ap-color-danger-soft: light-dark(#fdeceb, #3d1a17);
+  --ap-color-info: var(--ap-color-primary);
+  --ap-color-info-soft: var(--ap-color-primary-soft);
+  --ap-color-neutral: var(--ap-color-text-muted);
+  --ap-color-neutral-soft: light-dark(#f1f0f5, #26232f);
+
+  // Typography
+  --ap-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ap-font-size-xs: 0.75rem; // 12px: breadcrumb
+  --ap-font-size-sm: 0.8125rem; // 13px: meta, labels
+  --ap-font-size-md: 0.9375rem; // 15px: body, inputs
+  --ap-font-size-lg: 1.25rem; // 20px: card titles
+  --ap-font-size-xl: 1.375rem; // 22px: logo
+  --ap-font-size-2xl: 1.875rem; // 30px: page titles
+
+  // Shape and spacing
+  --ap-radius-sm: 8px;
+  --ap-radius-md: 10px;
+  --ap-radius-lg: 12px;
+  --ap-radius-xl: 16px;
+  --ap-space-1: 4px;
+  --ap-space-2: 8px;
+  --ap-space-3: 12px;
+  --ap-space-4: 16px;
+  --ap-space-5: 20px;
+  --ap-space-6: 24px;
+  --ap-space-8: 32px;
+  --ap-space-12: 48px;
+
+  // Elevation
+  --ap-shadow-sm: 0 1px 2px rgb(19 10 49 / 5%);
+  --ap-shadow-md: 0 8px 24px rgb(19 10 49 / 8%);
+
+  // Layout
+  --ap-content-max-width: 900px;
+  --ap-nav-height: 72px;
+  --ap-control-height: 44px;
+  --ap-button-height: 42px;
+}

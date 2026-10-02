@@ -1,0 +1,89 @@
+@use 'breakpoints' as bp;
+
+// Small set of shared building blocks. Anything more specific belongs to a component stylesheet.
+
+// Centered content column used by every page.
+.ap-container {
+  width: 100%;
+  max-width: calc(var(--ap-content-max-width) + 2 * var(--ap-space-4));
+  margin-inline: auto;
+  padding-inline: var(--ap-space-4);
+}
+
+// White panel that holds the page content.
+.ap-card {
+  background-color: var(--ap-color-surface);
+  border-radius: var(--ap-radius-lg);
+  padding: var(--ap-space-5);
+  box-shadow: var(--ap-shadow-sm);
+
+  @include bp.up(bp.$sm) {
+    padding: var(--ap-space-6);
+  }
+}
+
+// Lavender message strip ("Adoptar cambia dos vidas...").
+.ap-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  padding: var(--ap-space-3) var(--ap-space-4);
+  border-radius: var(--ap-radius-md);
+  background-color: var(--ap-color-info-soft);
+  color: var(--ap-color-info);
+  font-size: var(--ap-font-size-sm);
+
+  &--danger {
+    background-color: var(--ap-color-danger-soft);
+    color: var(--ap-color-danger);
+  }
+
+  &--success {
+    background-color: var(--ap-color-success-soft);
+    color: var(--ap-color-success);
+  }
+
+  .mat-icon {
+    flex-shrink: 0;
+  }
+}
+
+.ap-muted {
+  color: var(--ap-color-text-muted);
+}
+
+// Status text colored by tone: <span class="ap-tone" data-tone="success">Disponible · Sana</span>
+.ap-tone {
+  &[data-tone='success'] {
+    color: var(--ap-color-success);
+  }
+
+  &[data-tone='warning'] {
+    color: var(--ap-color-warning);
+  }
+
+  &[data-tone='danger'] {
+    color: var(--ap-color-danger);
+  }
+
+  &[data-tone='info'] {
+    color: var(--ap-color-info);
+  }
+
+  &[data-tone='neutral'] {
+    color: var(--ap-color-neutral);
+  }
+}
+
+// Snackbar variants (core/ui/notify.ts). Fixed colors: white text must stay readable in dark mode too.
+.ap-snack--error {
+  --mat-snack-bar-container-color: #b3261e;
+  --mat-snack-bar-supporting-text-color: #fff;
+  --mat-snack-bar-button-color: #fff;
+}
+
+.ap-snack--success {
+  --mat-snack-bar-container-color: #36714b;
+  --mat-snack-bar-supporting-text-color: #fff;
+  --mat-snack-bar-button-color: #fff;
+}

@@ -1,0 +1,89 @@
+@use 'breakpoints' as bp;
+
+.page {
+  padding-block: var(--ap-space-8) var(--ap-space-12);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-5);
+}
+
+.pet {
+  max-width: 548px;
+  padding: var(--ap-space-4);
+  border: 1px solid var(--ap-color-border);
+  border-radius: var(--ap-radius-lg);
+}
+
+.photo {
+  --pet-photo-ratio: 2 / 1;
+}
+
+.name {
+  margin-top: var(--ap-space-4);
+  font-size: var(--ap-font-size-lg);
+  font-weight: 700;
+}
+
+.meta {
+  margin-top: var(--ap-space-3);
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+.status {
+  margin: var(--ap-space-3) 0 var(--ap-space-3);
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+}
+
+.adopt {
+  width: 100%;
+
+  @include bp.up(bp.$sm) {
+    width: auto;
+    min-width: 224px;
+  }
+}
+
+.details {
+  margin-top: var(--ap-space-3);
+  font-size: var(--ap-font-size-md);
+  color: var(--ap-color-text-muted);
+}
+
+.note {
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  a {
+    font-weight: 700;
+  }
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-3);
+
+  .block {
+    border-radius: var(--ap-radius-sm);
+    background-color: var(--ap-color-primary-soft);
+  }
+
+  .photo {
+    aspect-ratio: 2 / 1;
+  }
+
+  .line {
+    height: 14px;
+    width: 40%;
+  }
+
+  .wide {
+    height: 22px;
+    width: 30%;
+  }
+}

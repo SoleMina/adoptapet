@@ -1,0 +1,70 @@
+@use '@angular/material' as mat;
+@use 'theme-colors' as colors;
+
+// Angular Material 3 theme. The palettes come from `ng generate @angular/material:theme-color` with the Figma
+// primary (#541DCE); the system tokens below are then pinned to the exact values of _tokens.scss.
+
+html {
+  // Light by default. ThemeService switches it to `dark` (or `light dark` to follow the OS).
+  color-scheme: light;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: colors.$primary-palette,
+        tertiary: colors.$tertiary-palette,
+        theme-type: color-scheme,
+      ),
+      typography: (
+        plain-family: 'Inter',
+        brand-family: 'Inter',
+        bold-weight: 700,
+        medium-weight: 600,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+
+  @include mat.theme-overrides(
+    (
+      primary: var(--ap-color-primary),
+      on-primary: var(--ap-color-on-primary),
+      primary-container: var(--ap-color-primary-soft),
+      on-primary-container: var(--ap-color-on-primary-soft),
+      secondary-container: var(--ap-color-primary-soft),
+      on-secondary-container: var(--ap-color-on-primary-soft),
+      surface: var(--ap-color-surface),
+      on-surface: var(--ap-color-text),
+      on-surface-variant: var(--ap-color-text-muted),
+      background: var(--ap-color-page),
+      outline: var(--ap-color-border-strong),
+      outline-variant: var(--ap-color-border),
+    )
+  );
+
+  // Buttons as in Figma: filled = primary action, tonal = secondary action ("Volver", "Crear cuenta").
+  @include mat.button-overrides(
+    (
+      filled-container-shape: var(--ap-radius-sm),
+      filled-container-height: var(--ap-button-height),
+      filled-horizontal-padding: var(--ap-space-6),
+      filled-label-text-weight: 700,
+      tonal-container-shape: var(--ap-radius-sm),
+      tonal-container-height: var(--ap-button-height),
+      tonal-horizontal-padding: var(--ap-space-6),
+      tonal-label-text-weight: 700,
+      tonal-container-color: var(--ap-color-primary-soft),
+      tonal-label-text-color: var(--ap-color-on-primary-soft),
+      text-container-shape: var(--ap-radius-sm),
+      text-label-text-weight: 600,
+    )
+  );
+
+  @include mat.progress-bar-overrides(
+    (
+      track-height: 3px,
+      active-indicator-height: 3px,
+    )
+  );
+}

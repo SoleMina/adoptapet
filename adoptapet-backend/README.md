@@ -50,6 +50,7 @@ Without it the services do not start (`Could not resolve placeholder 'JWT_SECRET
 | `DB_USER`, `DB_PASSWORD` | all with a database | Local MySQL account |
 | `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL` | user-service | First admin, created only when no ADMIN exists |
 | `RABBITMQ_USER`, `RABBITMQ_PASSWORD` | pet, adoption, notification | `guest`/`guest` works only from localhost |
+| `CORS_ALLOWED_ORIGINS` | api-gateway | Optional, comma separated. Default `http://localhost:4200` (Angular) |
 
 Optional overrides: `RABBITMQ_HOST`, `EUREKA_URL`, `EUREKA_ENABLED=false` (run user/pet/notification alone), `PORT`.
 

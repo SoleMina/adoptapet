@@ -1,0 +1,63 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="!isHandset()"
+    [attr.role]="isHandset() ? 'dialog' : 'navigation'"
+  >
+    <a class="logo" routerLink="/staff/dashboard">AdoptaPet</a>
+    <mat-nav-list aria-label="Panel">
+      @for (link of links(); track link.path) {
+        <a
+          mat-list-item
+          [routerLink]="link.path"
+          routerLinkActive="active"
+          #rla="routerLinkActive"
+          [activated]="rla.isActive"
+          (click)="isHandset() && drawer.close()"
+        >
+          <mat-icon matListItemIcon aria-hidden="true">{{ link.icon }}</mat-icon>
+          <span matListItemTitle>{{ link.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+    <div class="sidenav-footer">
+      <a routerLink="/pets">
+        <mat-icon aria-hidden="true">storefront</mat-icon>
+        Ver sitio público
+      </a>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <mat-toolbar class="toolbar">
+      @if (isHandset()) {
+        <button matIconButton type="button" aria-label="Abrir menú" (click)="drawer.toggle()">
+          <mat-icon aria-hidden="true">menu</mat-icon>
+        </button>
+      }
+      <span class="spacer"></span>
+      <app-theme-toggle />
+      @if (store.user(); as user) {
+        <a matButton routerLink="/staff/profile" class="user">
+          <mat-icon aria-hidden="true">account_circle</mat-icon>
+          {{ user.firstName }} · {{ roleLabel[user.role] }}
+        </a>
+      }
+      <button matIconButton type="button" aria-label="Cerrar sesión" (click)="logout()">
+        <mat-icon aria-hidden="true">logout</mat-icon>
+      </button>
+      <mat-progress-bar
+        class="progress"
+        mode="indeterminate"
+        [class.visible]="loading.active()"
+        aria-label="Cargando"
+      />
+    </mat-toolbar>
+
+    <main class="main">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

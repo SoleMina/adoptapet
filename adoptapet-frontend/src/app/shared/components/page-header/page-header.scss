@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  margin-bottom: var(--ap-space-6);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ap-space-4);
+  font-size: var(--ap-font-size-xs);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-1);
+  color: var(--ap-color-text-muted);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.greeting {
+  color: var(--ap-color-primary);
+  white-space: nowrap;
+}
+
+.heading {
+  margin-top: var(--ap-space-5);
+  font-size: var(--ap-font-size-2xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  margin-top: var(--ap-space-4);
+  color: var(--ap-color-text-muted);
+}

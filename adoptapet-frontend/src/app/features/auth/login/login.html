@@ -1,0 +1,76 @@
+<div class="ap-container page">
+  <app-page-header heading="Iniciar sesión" subtitle="Accede a tu cuenta de AdoptaPet." />
+
+  <section class="ap-card">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="ap-form-grid">
+        <div class="ap-field">
+          <label class="ap-field__label" for="username">Usuario</label>
+          <input
+            id="username"
+            class="ap-input"
+            formControlName="username"
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false"
+            [attr.aria-invalid]="form.controls.username.invalid && form.controls.username.touched"
+            aria-describedby="username-error"
+          />
+          <app-field-error [control]="form.controls.username" errorId="username-error" />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="password">Contraseña</label>
+          <div class="ap-input-group">
+            <input
+              id="password"
+              class="ap-input"
+              formControlName="password"
+              autocomplete="current-password"
+              [type]="showPassword() ? 'text' : 'password'"
+              [attr.aria-invalid]="form.controls.password.invalid && form.controls.password.touched"
+              aria-describedby="password-error"
+            />
+            <button
+              matIconButton
+              type="button"
+              class="ap-input-group__action"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-pressed]="showPassword()"
+              (click)="showPassword.set(!showPassword())"
+            >
+              <mat-icon aria-hidden="true">{{
+                showPassword() ? 'visibility_off' : 'visibility'
+              }}</mat-icon>
+            </button>
+          </div>
+          <app-field-error [control]="form.controls.password" errorId="password-error" />
+        </div>
+      </div>
+
+      @if (error(); as message) {
+        <p class="ap-banner ap-banner--danger error" role="alert">
+          <mat-icon aria-hidden="true">error</mat-icon>
+          {{ message }}
+        </p>
+      }
+
+      <div class="ap-form-actions">
+        <button matButton="filled" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Ingresando…' : 'Iniciar sesión' }}
+        </button>
+        <a
+          matButton="tonal"
+          routerLink="/register"
+          [queryParams]="returnUrl() ? { returnUrl: returnUrl() } : {}"
+        >
+          Crear cuenta
+        </a>
+      </div>
+    </form>
+
+    <p class="ap-banner hint">
+      Si eres adoptante irás al catálogo de mascotas. Si eres trabajador o administrador, al panel.
+    </p>
+  </section>
+</div>

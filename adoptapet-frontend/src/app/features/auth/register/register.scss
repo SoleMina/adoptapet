@@ -1,0 +1,41 @@
+.page {
+  padding-block: var(--ap-space-8) var(--ap-space-12);
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ap-space-2);
+  margin: 0 0 var(--ap-space-5);
+  padding: 0;
+  list-style: none;
+  font-size: var(--ap-font-size-md);
+  font-weight: 700;
+  color: var(--ap-color-primary);
+
+  .arrow {
+    display: flex;
+
+    .mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+  }
+
+  [aria-current='step'] {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--ap-color-text-muted);
+}
+
+.error {
+  margin-top: var(--ap-space-4);
+}

@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--ap-space-4);
+  border: 1px solid var(--ap-color-border);
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-surface);
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease;
+
+  &:hover {
+    box-shadow: var(--ap-shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.name {
+  margin-top: var(--ap-space-4);
+  font-size: var(--ap-font-size-lg);
+  font-weight: 700;
+}
+
+.meta {
+  margin-top: var(--ap-space-3);
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+.status {
+  margin: var(--ap-space-3) 0;
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+}
+
+.action {
+  width: 100%;
+  margin-top: auto;
+}

@@ -1,0 +1,71 @@
+<div class="ap-container page">
+  <app-page-header
+    [heading]="heading()"
+    subtitle="Conoce su historia antes de dar el siguiente paso."
+  />
+
+  <section class="ap-card content">
+    @if (pet.isLoading()) {
+      <div class="pet skeleton" aria-busy="true" aria-label="Cargando mascota">
+        <div class="block photo"></div>
+        <div class="block line wide"></div>
+        <div class="block line"></div>
+      </div>
+    } @else if (pet.error()) {
+      <app-error-state
+        [error]="pet.error()"
+        heading="No encontramos esta mascota"
+        (retry)="pet.reload()"
+      >
+        <a matButton="tonal" routerLink="/pets">Ver el catálogo</a>
+      </app-error-state>
+    } @else if (pet.value(); as current) {
+      <article class="pet" aria-labelledby="pet-name">
+        <app-pet-photo
+          class="photo"
+          [path]="current.imageUrl"
+          [name]="current.name"
+          [priority]="true"
+        />
+        <h2 id="pet-name" class="name">{{ current.name }}</h2>
+        <p class="meta">{{ meta() }} · {{ current | petAge }}</p>
+        <p class="status ap-tone" [attr.data-tone]="status()?.tone">{{ status()?.text }}</p>
+
+        @if (action(); as act) {
+          @if (act.visible) {
+            @if (act.enabled) {
+              <a
+                matButton="filled"
+                class="adopt"
+                [routerLink]="act.link"
+                [queryParams]="act.queryParams"
+              >
+                {{ adoptLabel() }}
+              </a>
+            } @else {
+              <button matButton="filled" class="adopt" type="button" disabled>
+                {{ adoptLabel() }}
+              </button>
+            }
+          }
+        }
+
+        <div class="details">
+          <p>{{ details() }}</p>
+          @if (current.observations) {
+            <p>{{ current.observations }}</p>
+          }
+        </div>
+      </article>
+
+      @if (action(); as act) {
+        <p class="ap-banner note">
+          <span>{{ act.note }}</span>
+          @if (act.noteLink; as noteLink) {
+            <a [routerLink]="noteLink.path">{{ noteLink.label }}</a>
+          }
+        </p>
+      }
+    }
+  </section>
+</div>

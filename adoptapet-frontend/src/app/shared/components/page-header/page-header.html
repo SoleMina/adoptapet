@@ -1,0 +1,12 @@
+<div class="top">
+  <nav class="crumbs" aria-label="Ruta de navegación">
+    <a routerLink="/">AdoptaPet</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{{ crumbText() }}</span>
+  </nav>
+  <span class="greeting">{{ greeting() }}</span>
+</div>
+<h1 class="heading">{{ heading() }}</h1>
+@if (subtitle()) {
+  <p class="subtitle">{{ subtitle() }}</p>
+}

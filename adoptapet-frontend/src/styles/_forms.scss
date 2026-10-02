@@ -1,0 +1,124 @@
+@use 'breakpoints' as bp;
+
+// Form fields as in Figma: bold label above, soft filled input with a thin border.
+// Markup:
+//   <div class="ap-field">
+//     <label class="ap-field__label" for="x">Usuario</label>
+//     <input class="ap-input" id="x" />
+//     <p class="ap-field__error">...</p>
+//   </div>
+
+.ap-form-grid {
+  display: grid;
+  gap: var(--ap-space-4) var(--ap-space-5);
+  grid-template-columns: 1fr;
+
+  @include bp.up(bp.$sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ap-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-2);
+  min-width: 0;
+}
+
+.ap-field__label {
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+  color: var(--ap-color-text);
+}
+
+.ap-field__hint,
+.ap-field__error {
+  font-size: var(--ap-font-size-xs);
+  margin: 0;
+}
+
+.ap-field__hint {
+  color: var(--ap-color-text-muted);
+}
+
+.ap-field__error {
+  color: var(--ap-color-danger);
+}
+
+.ap-input {
+  width: 100%;
+  height: var(--ap-control-height);
+  padding: 0 var(--ap-space-3);
+  border: 1px solid var(--ap-color-border);
+  border-radius: var(--ap-radius-md);
+  background-color: var(--ap-color-field);
+  color: var(--ap-color-text);
+  font: inherit;
+  font-size: var(--ap-font-size-md);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+
+  &::placeholder {
+    color: var(--ap-color-text-muted);
+  }
+
+  &:hover {
+    border-color: var(--ap-color-border-strong);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--ap-color-primary);
+    box-shadow: 0 0 0 3px var(--ap-color-primary-soft);
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--ap-color-danger);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+select.ap-input {
+  appearance: none;
+  padding-right: var(--ap-space-8);
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+// Input with a trailing icon button (show/hide password).
+.ap-input-group {
+  position: relative;
+
+  .ap-input {
+    padding-right: 48px;
+  }
+
+  .ap-input-group__action {
+    position: absolute;
+    top: 50%;
+    right: 2px;
+    transform: translateY(-50%);
+  }
+}
+
+.ap-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-3);
+  margin-top: var(--ap-space-5);
+
+  .mat-mdc-button-base {
+    min-width: 156px;
+  }
+}

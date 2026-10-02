@@ -1,0 +1,79 @@
+<div class="ap-container page">
+  <app-page-header
+    heading="Catálogo de mascotas"
+    subtitle="Mascotas disponibles que esperan un hogar."
+  />
+
+  <section class="ap-card content">
+    <form class="ap-form-grid filters" role="search" (submit)="$event.preventDefault()">
+      <div class="ap-field">
+        <label class="ap-field__label" for="search">Buscar</label>
+        <input
+          #searchInput
+          id="search"
+          class="ap-input"
+          type="search"
+          placeholder="Nombre o raza"
+          autocomplete="off"
+          [value]="search()"
+          (input)="onSearch(searchInput.value)"
+        />
+      </div>
+      <div class="ap-field">
+        <label class="ap-field__label" for="species">Especie</label>
+        <select
+          #speciesSelect
+          id="species"
+          class="ap-input"
+          [value]="selectedSpecies()"
+          (change)="onSpecies(speciesSelect.value)"
+        >
+          <option value="">Todas</option>
+          @for (option of speciesOptions(); track option.value) {
+            <option [value]="option.value" [selected]="option.value === selectedSpecies()">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </div>
+    </form>
+
+    @if (pets.isLoading()) {
+      <div class="grid" aria-busy="true">
+        @for (item of skeletons; track item) {
+          <app-pet-card-skeleton />
+        }
+      </div>
+    } @else if (pets.error()) {
+      <app-error-state [error]="pets.error()" (retry)="pets.reload()" />
+    } @else {
+      <p class="cdk-visually-hidden" aria-live="polite">
+        {{ filtered().length }} mascotas encontradas
+      </p>
+      @if (filtered().length === 0) {
+        @if (hasFilters()) {
+          <app-empty-state
+            icon="search_off"
+            heading="No encontramos mascotas con esos filtros"
+            message="Prueba con otro nombre, otra raza u otra especie."
+          >
+            <button matButton="tonal" type="button" (click)="clearFilters()">
+              Limpiar filtros
+            </button>
+          </app-empty-state>
+        } @else {
+          <app-empty-state
+            heading="Pronto habrá nuevas mascotas"
+            message="Por ahora no hay mascotas disponibles. Vuelve a visitarnos en unos días."
+          />
+        }
+      } @else {
+        <div class="grid">
+          @for (pet of filtered(); track pet.id; let i = $index) {
+            <app-pet-card [pet]="pet" [priority]="i < 3" />
+          }
+        </div>
+      }
+    }
+  </section>
+</div>
