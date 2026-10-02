@@ -1,56 +1,56 @@
-<div class="ap-container page">
-  <app-page-header
-    heading="Catálogo de mascotas"
-    subtitle="Mascotas disponibles que esperan un hogar."
-  />
+<app-page-hero
+  heading="Catálogo de mascotas"
+  subtitle="Mascotas disponibles que esperan un hogar."
+/>
 
-  <section class="ap-card content">
-    <form class="ap-form-grid filters" role="search" (submit)="$event.preventDefault()">
-      <div class="ap-field">
-        <label class="ap-field__label" for="search">Buscar</label>
-        <input
-          #searchInput
-          id="search"
-          class="ap-input"
-          type="search"
-          placeholder="Nombre o raza"
-          autocomplete="off"
-          [value]="search()"
-          (input)="onSearch(searchInput.value)"
-        />
-      </div>
-      <div class="ap-field">
-        <label class="ap-field__label" for="species">Especie</label>
-        <select
-          #speciesSelect
-          id="species"
-          class="ap-input"
-          [value]="selectedSpecies()"
-          (change)="onSpecies(speciesSelect.value)"
-        >
-          <option value="">Todas</option>
-          @for (option of speciesOptions(); track option.value) {
-            <option [value]="option.value" [selected]="option.value === selectedSpecies()">
-              {{ option.label }}
-            </option>
-          }
-        </select>
-      </div>
-    </form>
+<div class="ap-container ap-container--wide body">
+  <form class="filters" role="search" (submit)="$event.preventDefault()">
+    <label class="filters__label" for="search">Buscar</label>
+    <div class="search">
+      <mat-icon class="search__icon" aria-hidden="true">search</mat-icon>
+      <input
+        #searchInput
+        id="search"
+        class="ap-input"
+        type="search"
+        placeholder="Nombre o raza"
+        autocomplete="off"
+        [value]="search()"
+        (input)="onSearch(searchInput.value)"
+      />
+    </div>
 
-    @if (pets.isLoading()) {
-      <div class="grid" aria-busy="true">
-        @for (item of skeletons; track item) {
-          <app-pet-card-skeleton />
-        }
-      </div>
-    } @else if (pets.error()) {
+    <label class="filters__label" for="species">Especie</label>
+    <select
+      #speciesSelect
+      id="species"
+      class="ap-input"
+      [value]="selectedSpecies()"
+      (change)="onSpecies(speciesSelect.value)"
+    >
+      <option value="">Todas</option>
+      @for (option of speciesOptions(); track option.value) {
+        <option [value]="option.value" [selected]="option.value === selectedSpecies()">
+          {{ option.label }}
+        </option>
+      }
+    </select>
+  </form>
+
+  @if (pets.isLoading()) {
+    <div class="grid" aria-busy="true">
+      @for (item of skeletons; track item) {
+        <app-pet-card-skeleton />
+      }
+    </div>
+  } @else if (pets.error()) {
+    <div class="ap-card">
       <app-error-state [error]="pets.error()" (retry)="pets.reload()" />
-    } @else {
-      <p class="cdk-visually-hidden" aria-live="polite">
-        {{ filtered().length }} mascotas encontradas
-      </p>
-      @if (filtered().length === 0) {
+    </div>
+  } @else {
+    <p class="count" aria-live="polite">{{ countText() }}</p>
+    @if (filtered().length === 0) {
+      <div class="ap-card">
         @if (hasFilters()) {
           <app-empty-state
             icon="search_off"
@@ -67,13 +67,13 @@
             message="Por ahora no hay mascotas disponibles. Vuelve a visitarnos en unos días."
           />
         }
-      } @else {
-        <div class="grid">
-          @for (pet of filtered(); track pet.id; let i = $index) {
-            <app-pet-card [pet]="pet" [priority]="i < 3" />
-          }
-        </div>
-      }
+      </div>
+    } @else {
+      <div class="grid">
+        @for (pet of filtered(); track pet.id; let i = $index) {
+          <app-pet-card [pet]="pet" [priority]="i < 3" />
+        }
+      </div>
     }
-  </section>
+  }
 </div>

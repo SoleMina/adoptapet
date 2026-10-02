@@ -7,68 +7,25 @@
   flex-direction: column;
   height: 100%;
   padding: var(--ap-space-4);
-  border: 1px solid var(--ap-color-border);
-  border-radius: var(--ap-radius-lg);
+  border-radius: var(--ap-radius-xl);
   background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-md);
   transition:
     box-shadow 160ms ease,
     transform 160ms ease;
 
   &:hover {
-    box-shadow: var(--ap-shadow-md);
+    box-shadow: var(--ap-shadow-lg);
     transform: translateY(-2px);
   }
 }
 
 .media {
   position: relative;
-}
-
-.name {
-  margin-top: var(--ap-space-4);
-  font-size: var(--ap-font-size-lg);
-  font-weight: 700;
-}
-
-.meta {
-  margin-top: var(--ap-space-3);
-  font-size: var(--ap-font-size-sm);
-  color: var(--ap-color-text-muted);
-}
-
-.status {
-  margin: var(--ap-space-3) 0;
-  font-size: var(--ap-font-size-sm);
-  font-weight: 700;
-}
-
-.action {
-  width: 100%;
-  margin-top: auto;
-}
-
-// ----- featured (home)
-
-:host([data-variant='featured']) {
-  .card {
-    border-color: transparent;
-    border-radius: var(--ap-radius-xl);
-    box-shadow: var(--ap-shadow-md);
-  }
 
   app-pet-photo {
     --pet-photo-ratio: 1.55 / 1;
     border-radius: var(--ap-radius-lg);
-  }
-
-  .name {
-    margin-top: var(--ap-space-3);
-    font-size: var(--ap-font-size-xl);
-    font-weight: 800;
-  }
-
-  .meta {
-    margin: var(--ap-space-2) 0 var(--ap-space-4);
   }
 }
 
@@ -93,5 +50,52 @@
     height: 8px;
     border-radius: 50%;
     background-color: currentColor;
+  }
+}
+
+.name {
+  margin-top: var(--ap-space-4);
+  font-size: var(--ap-font-size-2xl);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.meta {
+  margin: var(--ap-space-2) 0 var(--ap-space-3);
+  font-size: var(--ap-font-size-md);
+  color: var(--ap-color-text-muted);
+}
+
+.status {
+  margin-bottom: var(--ap-space-4);
+  font-size: var(--ap-font-size-md);
+  font-weight: 700;
+}
+
+.action {
+  --mat-button-filled-container-height: 48px;
+  width: 100%;
+  margin-top: auto;
+  font-size: var(--ap-font-size-md);
+}
+
+// ----- featured (home): smaller title, no status line
+
+:host([data-variant='featured']) {
+  .name {
+    margin-top: var(--ap-space-3);
+    font-size: var(--ap-font-size-xl);
+    letter-spacing: -0.01em;
+  }
+
+  .meta {
+    margin-bottom: var(--ap-space-4);
+    font-size: var(--ap-font-size-sm);
+  }
+
+  .action {
+    --mat-button-filled-container-height: var(--ap-button-height);
+    font-size: inherit;
   }
 }

@@ -54,11 +54,14 @@ export class SiteLayout {
     this.store.isStaff() ? '/staff/profile' : '/profile',
   );
 
+  private readonly route = computed(() => this.url().split(/[?#]/)[0]);
+
+  /** Left side of the bar. */
   protected readonly links = computed<NavLink[]>(() => {
-    const route = this.url().split(/[?#]/)[0];
+    const route = this.route();
     const links: NavLink[] = [
       { label: 'Inicio', path: '/inicio', active: route === '/inicio' },
-      { label: 'Mascotas', path: '/pets', active: route.startsWith('/pets') }
+      { label: 'Mascotas', path: '/pets', active: route.startsWith('/pets') },
     ];
     if (this.store.isAdopter()) {
       links.push(
@@ -75,14 +78,24 @@ export class SiteLayout {
       );
     } else if (this.store.isStaff()) {
       links.push({ label: 'Panel', path: '/staff/dashboard', active: false });
-    } else {
-      links.push(
-        { label: 'Iniciar sesión', path: '/login', active: route.startsWith('/login') },
-        { label: 'Crear cuenta', path: '/register', active: route.startsWith('/register') },
-      );
     }
     return links;
   });
+
+  /** Right side for visitors: "Iniciar sesión" and the "Crear cuenta" button. */
+  protected readonly loginActive = computed(() => this.route().startsWith('/login'));
+  protected readonly registerActive = computed(() => this.route().startsWith('/register'));
+
+  /** The mobile menu holds everything: left links plus the visitor actions. */
+  protected readonly menuLinks = computed<NavLink[]>(() =>
+    this.store.isAuthenticated()
+      ? this.links()
+      : [
+          ...this.links(),
+          { label: 'Iniciar sesión', path: '/login', active: this.loginActive() },
+          { label: 'Crear cuenta', path: '/register', active: this.registerActive() },
+        ],
+  );
 
   protected logout(): void {
     this.auth.logout();

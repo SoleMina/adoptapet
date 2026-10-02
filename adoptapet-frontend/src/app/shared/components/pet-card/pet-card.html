@@ -1,14 +1,17 @@
 <article class="card" [attr.aria-labelledby]="'pet-' + pet().id">
   <div class="media">
     <app-pet-photo [path]="pet().imageUrl" [name]="pet().name" [priority]="priority()" />
-    @if (variant() === 'featured') {
-      <span class="pill ap-tone" [attr.data-tone]="status().tone">{{ status().text }}</span>
-    }
+    <span class="pill ap-tone" [attr.data-tone]="status().tone">{{ status().text }}</span>
   </div>
   <h3 class="name" [id]="'pet-' + pet().id">{{ pet().name }}</h3>
   <p class="meta">{{ meta() }} · {{ pet() | petAge }}</p>
-  @if (variant() === 'default') {
+  @if (variant() === 'catalog') {
     <p class="status ap-tone" [attr.data-tone]="status().tone">{{ status().text }}</p>
   }
-  <a matButton="filled" class="action" [routerLink]="['/pets', pet().id]">Conocer mascota</a>
+  <a matButton="filled" class="action" [routerLink]="['/pets', pet().id]">
+    Conocer mascota
+    @if (variant() === 'catalog') {
+      <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon>
+    }
+  </a>
 </article>

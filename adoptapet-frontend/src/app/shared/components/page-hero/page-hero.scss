@@ -1,0 +1,152 @@
+@use 'breakpoints' as bp;
+
+:host {
+  /** How much the next block climbs over the bottom of the hero. */
+  --hero-overlap: 32px;
+  /** Subtitle size: the catalog uses a bigger one. */
+  --hero-subtitle-size: var(--ap-font-size-md);
+
+  display: block;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: var(--hero-overlap);
+  background:
+    // fade into the page so the next block has no hard edge behind it
+    linear-gradient(to bottom, transparent 70%, var(--ap-color-page)),
+    // peach wave on the right
+    radial-gradient(38% 70% at 100% 55%, var(--ap-color-peach), transparent 70%),
+    // lavender waves
+    radial-gradient(55% 60% at 70% 95%, var(--ap-color-primary-soft), transparent 70%),
+    radial-gradient(50% 80% at 0% 100%, var(--ap-color-primary-soft), transparent 70%),
+    var(--ap-color-primary-faint);
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--ap-space-5);
+}
+
+.crumbs {
+  display: flex;
+  gap: var(--ap-space-1);
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.text {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--ap-space-5) var(--ap-space-8);
+
+  @include bp.up(bp.$md) {
+    max-width: 62%;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px var(--ap-space-4) 6px var(--ap-space-3);
+  border-radius: 999px;
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+
+  .mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    font-variation-settings: 'FILL' 1;
+  }
+}
+
+.title {
+  margin-top: var(--ap-space-3);
+  font-size: var(--ap-font-size-4xl);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin-top: var(--ap-space-2);
+  font-size: var(--hero-subtitle-size);
+  color: var(--ap-color-text-muted);
+}
+
+// ----- decorations (right side)
+
+.decor {
+  display: none;
+
+  @include bp.up(bp.$md) {
+    display: block;
+    position: absolute;
+    inset: 0 0 0 55%;
+    pointer-events: none;
+  }
+}
+
+.paw {
+  position: absolute;
+  color: var(--ap-color-primary);
+  opacity: 0.2;
+  font-variation-settings: 'FILL' 1;
+
+  &--1 {
+    top: 22%;
+    left: 22%;
+    width: 52px;
+    height: 52px;
+    font-size: 52px;
+    transform: rotate(-16deg);
+  }
+
+  &--2 {
+    top: 48%;
+    left: 62%;
+    width: 56px;
+    height: 56px;
+    font-size: 56px;
+    transform: rotate(14deg);
+  }
+}
+
+// Two short orange strokes ("✦" of the design).
+.sparkle {
+  position: absolute;
+  top: 12%;
+  right: 4%;
+  display: flex;
+  gap: 8px;
+  transform: rotate(20deg);
+
+  i {
+    width: 5px;
+    height: 26px;
+    border-radius: 3px;
+    background-color: var(--ap-color-accent);
+
+    &:last-child {
+      height: 18px;
+      margin-top: 10px;
+      transform: rotate(-45deg);
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import {
   ADOPTION_STATUS_TONE,
@@ -13,16 +14,16 @@ import { PetResponse } from '@core/models/pet';
 import { PetAgePipe } from '@shared/pipes/pet-age-pipe';
 import { PetPhoto } from '../pet-photo/pet-photo';
 
-export type PetCardVariant = 'default' | 'featured';
+export type PetCardVariant = 'catalog' | 'featured';
 
 /**
- * Pet card: photo, name, "Perro · Hembra · 2 años", status and "Conocer mascota".
- * `default` (catalog): bordered card with the status under the meta line.
- * `featured` (home): elevated card with the status as a pill over the photo.
+ * Pet card: photo with the status pill, name, "Perro · Hembra · 2 años" and "Conocer mascota".
+ * `catalog`: also repeats the status under the meta line and adds an arrow to the button.
+ * `featured` (home): more compact, only the pill.
  */
 @Component({
   selector: 'app-pet-card',
-  imports: [MatButtonModule, RouterLink, PetPhoto, PetAgePipe],
+  imports: [MatButtonModule, MatIconModule, RouterLink, PetPhoto, PetAgePipe],
   templateUrl: './pet-card.html',
   styleUrl: './pet-card.scss',
   host: { '[attr.data-variant]': 'variant()' },
@@ -30,7 +31,7 @@ export type PetCardVariant = 'default' | 'featured';
 export class PetCard {
   readonly pet = input.required<PetResponse>();
   readonly priority = input(false);
-  readonly variant = input<PetCardVariant>('default');
+  readonly variant = input<PetCardVariant>('catalog');
 
   protected readonly meta = computed(() => {
     const pet = this.pet();

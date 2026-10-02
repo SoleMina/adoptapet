@@ -44,7 +44,7 @@ src/
 │   │   ├── storage/          # safe localStorage access
 │   │   ├── ui/               # Notify (snackbar), Loading, Theme (light/dark)
 │   │   └── utils/            # multipart FormData, protected file download
-│   ├── shared/               # reusable UI: page-header, pet-card, pet-photo, field-error, empty/error states,
+│   ├── shared/               # reusable UI: page-hero (home, catalog), page-header, pet-card, pet-photo, field-error, empty/error states,
 │   │                         # skeletons, coming-soon; pipes (petAge, limaDate); validators
 │   ├── layouts/
 │   │   ├── site-layout/      # visitor + adopter: top bar of the Figma, mobile menu

@@ -1,3 +1,4 @@
+@use 'breakpoints' as bp;
 :host {
   display: block;
   margin-bottom: var(--ap-space-6);
@@ -33,14 +34,45 @@
 }
 
 .heading {
-  margin-top: var(--ap-space-5);
-  font-size: var(--ap-font-size-2xl);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  margin-top: var(--ap-space-3);
+  font-size: var(--ap-font-size-4xl);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
   margin-top: var(--ap-space-4);
   color: var(--ap-color-text-muted);
+}
+
+.text {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--ap-space-5) var(--ap-space-8);
+
+  @include bp.up(bp.$md) {
+    max-width: 62%;
+  }
+
+}
+
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px var(--ap-space-4) 6px var(--ap-space-3);
+  border-radius: 999px;
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+
+  .mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    font-variation-settings: 'FILL' 1;
+  }
 }

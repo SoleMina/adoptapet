@@ -1,34 +1,22 @@
-<section class="hero" aria-labelledby="home-title">
-  <div class="ap-container hero__inner">
-    <nav class="crumbs" aria-label="Ruta de navegación">
-      <a routerLink="/inicio">AdoptaPet</a>
-      <span aria-hidden="true">/</span>
-      <span aria-current="page">Inicio</span>
-    </nav>
+<app-page-hero
+  heading="Inicio"
+  subtitle="Una nueva familia comienza con una oportunidad."
+  [decorated]="false"
+>
+  <p class="headline">
+    <span class="accent">Adoptar cambia dos vidas.</span>
+    Encuentra a tu próximo mejor amigo.
+  </p>
 
-    <div class="hero__text">
-      <p class="chip">
-        <mat-icon aria-hidden="true">pets</mat-icon>
-        {{ greeting() }}
-      </p>
-      <h1 id="home-title" class="title">Inicio</h1>
-      <p class="subtitle">Una nueva familia comienza con una oportunidad.</p>
-      <p class="headline">
-        <span class="accent">Adoptar cambia dos vidas.</span>
-        Encuentra a tu próximo mejor amigo.
-      </p>
-    </div>
-
-    <div class="hero__art" aria-hidden="true">
-      <mat-icon class="paw paw--1">pets</mat-icon>
-      <mat-icon class="paw paw--2">pets</mat-icon>
-      <!-- Replace public/images/hero-pets.png with the illustration exported from Figma (2x). -->
-      <img src="images/hero-pets.png" alt="" width="454" height="272" fetchpriority="high" />
-    </div>
+  <div heroArt class="hero-art" aria-hidden="true">
+    <mat-icon class="paw paw--1">pets</mat-icon>
+    <mat-icon class="paw paw--2">pets</mat-icon>
+    <!-- Replace public/images/hero-pets.png with the illustration exported from Figma (2x). -->
+    <img src="images/hero-pets.png" alt="" width="454" height="272" fetchpriority="high" />
   </div>
-</section>
+</app-page-hero>
 
-<div class="ap-container body">
+<div class="ap-container ap-container--wide body">
   <h2 class="cdk-visually-hidden">Mascotas destacadas</h2>
 
   @if (pets.isLoading()) {

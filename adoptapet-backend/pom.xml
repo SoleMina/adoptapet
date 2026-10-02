@@ -24,7 +24,7 @@
 
 	<modules>
 		<module>shared-security</module>
-		<module>discovery-server</module>
+		<module>eureka-server</module>
 		<module>api-gateway</module>
 		<module>user-service</module>
 		<module>pet-service</module>

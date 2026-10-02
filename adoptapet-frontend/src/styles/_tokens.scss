@@ -8,6 +8,8 @@
   --ap-color-on-primary: light-dark(#ffffff, #1f005f);
   --ap-color-primary-soft: light-dark(#f1eafc, #2e2350);
   --ap-color-primary-faint: light-dark(#f5f3fd, #1e1a2c); // steps strip, hero
+  --ap-color-peach: light-dark(#fce9de, #2b2024); // hero blob
+  --ap-color-accent: #f2956b; // hero sparkles
   --ap-color-on-primary-soft: light-dark(#541dce, #e7deff);
 
   // Text
@@ -39,7 +41,8 @@
   --ap-font-size-sm: 0.8125rem; // 13px: meta, labels
   --ap-font-size-md: 0.9375rem; // 15px: body, inputs
   --ap-font-size-lg: 1.25rem; // 20px: card titles
-  --ap-font-size-xl: 1.375rem; // 22px: logo
+  --ap-font-size-xl: 1.375rem; // 22px: featured card titles
+  --ap-font-size-logo: 1.625rem; // 26px
   --ap-font-size-2xl: 1.875rem; // 30px: page titles
   --ap-font-size-3xl: clamp(1.625rem, 1.1rem + 2vw, 2.25rem); // 26-36px: home headline
   --ap-font-size-4xl: clamp(2.25rem, 1.6rem + 2.4vw, 2.875rem); // 36-46px: home title
@@ -61,10 +64,12 @@
   // Elevation
   --ap-shadow-sm: 0 1px 2px rgb(19 10 49 / 5%);
   --ap-shadow-md: 0 8px 24px rgb(19 10 49 / 8%);
+  --ap-shadow-lg: 0 14px 32px rgb(19 10 49 / 12%);
 
   // Layout
-  --ap-content-max-width: 900px;
-  --ap-nav-height: 72px;
+  --ap-content-max-width: 900px; // forms and detail pages
+  --ap-wide-max-width: 1200px; // header, home and catalog
+  --ap-nav-height: 80px;
   --ap-control-height: 44px;
   --ap-button-height: 42px;
 }

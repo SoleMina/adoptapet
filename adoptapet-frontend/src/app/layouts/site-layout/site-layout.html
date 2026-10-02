@@ -1,7 +1,7 @@
 <a class="skip-link" href="#main">Saltar al contenido</a>
 
 <header class="header">
-  <div class="bar">
+  <div class="ap-container ap-container--wide bar">
     <a class="ap-logo" routerLink="/inicio" aria-label="AdoptaPet, ir al inicio">
       <mat-icon class="ap-logo__icon" aria-hidden="true">pets</mat-icon>
       AdoptaPet
@@ -21,6 +21,25 @@
 
     <div class="tools">
       <app-theme-toggle />
+
+      @if (!store.isAuthenticated()) {
+        <div class="guest">
+          <a
+            class="nav-link"
+            routerLink="/login"
+            [class.active]="loginActive()"
+            [attr.aria-current]="loginActive() ? 'page' : null"
+            >Iniciar sesión</a
+          >
+          <a
+            class="register"
+            routerLink="/register"
+            [class.active]="registerActive()"
+            [attr.aria-current]="registerActive() ? 'page' : null"
+            >Crear cuenta</a
+          >
+        </div>
+      }
 
       @if (store.user(); as user) {
         <button matButton type="button" class="user-button" [matMenuTriggerFor]="userMenu">
@@ -54,7 +73,7 @@
         <mat-icon aria-hidden="true">menu</mat-icon>
       </button>
       <mat-menu #mobileMenu="matMenu" xPosition="before">
-        @for (link of links(); track link.label) {
+        @for (link of menuLinks(); track link.label) {
           <a
             mat-menu-item
             [routerLink]="link.path"

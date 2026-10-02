@@ -6,7 +6,7 @@ Spring Boot 4 · Spring Cloud (Eureka + Gateway) · Spring Security with JWT · 
 
 | Module | Port | Database | Responsibility |
 |---|---|---|---|
-| discovery-server | 8761 | – | Eureka registry |
+| eureka-server | 8761 | – | Eureka registry |
 | api-gateway | 8080 | – | Single entry point, routes `/api/**` by service name |
 | user-service | 8081 | `pets_users` | Register, login (issues the JWT), users, workers, activate/deactivate |
 | pet-service | 8082 | `pets_catalog` | Pet catalog and photos |
@@ -60,7 +60,7 @@ Optional overrides: `RABBITMQ_HOST`, `EUREKA_URL`, `EUREKA_ENABLED=false` (run u
 cp .env.example .env         # first time only, then fill it in
 mvn clean package -DskipTests
 
-java -jar discovery-server/target/discovery-server-0.1.0-SNAPSHOT.jar      # start first
+java -jar eureka-server/target/eureka-server-0.1.0-SNAPSHOT.jar            # start first
 java -jar user-service/target/user-service-0.1.0-SNAPSHOT.jar
 java -jar pet-service/target/pet-service-0.1.0-SNAPSHOT.jar
 java -jar adoption-service/target/adoption-service-0.1.0-SNAPSHOT.jar

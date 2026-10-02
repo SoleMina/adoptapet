@@ -1,12 +1,13 @@
 import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { PetApi } from '@core/api/pet-api';
 import { speciesLabel } from '@core/i18n/labels';
 import { EmptyState } from '@shared/components/empty-state/empty-state';
 import { ErrorState } from '@shared/components/error-state/error-state';
-import { PageHeader } from '@shared/components/page-header/page-header';
+import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetCard } from '@shared/components/pet-card/pet-card';
 import { PetCardSkeleton } from '@shared/components/pet-card-skeleton/pet-card-skeleton';
 
@@ -16,7 +17,15 @@ import { PetCardSkeleton } from '@shared/components/pet-card-skeleton/pet-card-s
  */
 @Component({
   selector: 'app-pet-catalog',
-  imports: [MatButtonModule, PageHeader, PetCard, PetCardSkeleton, EmptyState, ErrorState],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    PageHero,
+    PetCard,
+    PetCardSkeleton,
+    EmptyState,
+    ErrorState,
+  ],
   templateUrl: './pet-catalog.html',
   styleUrl: './pet-catalog.scss',
 })
@@ -54,6 +63,16 @@ export class PetCatalog {
   });
 
   protected readonly hasFilters = computed(() => !!this.search() || !!this.selectedSpecies());
+
+  /** "3 mascotas disponibles", "1 mascota encontrada"... */
+  protected readonly countText = computed(() => {
+    const count = this.filtered().length;
+    const noun = count === 1 ? 'mascota' : 'mascotas';
+    if (this.hasFilters()) {
+      return `${count} ${noun} ${count === 1 ? 'encontrada' : 'encontradas'}`;
+    }
+    return `${count} ${noun} ${count === 1 ? 'disponible' : 'disponibles'}`;
+  });
 
   protected onSearch(value: string): void {
     this.search.set(value);

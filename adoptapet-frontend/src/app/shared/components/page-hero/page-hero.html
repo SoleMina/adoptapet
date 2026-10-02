@@ -1,26 +1,31 @@
 <section class="hero" aria-labelledby="page-title">
-  <div class="top">
+  <div class="ap-container ap-container--wide inner">
     <nav class="crumbs" aria-label="Ruta de navegación">
       <a routerLink="/inicio">AdoptaPet</a>
       <span aria-hidden="true">/</span>
       <span aria-current="page">{{ crumbText() }}</span>
     </nav>
-  </div>
-</section>
-<section class="hero" aria-labelledby="page-title">
-  <div class="text">
+
+    <div class="text"> 
       <p class="chip">
         <mat-icon aria-hidden="true">pets</mat-icon>
         {{ greeting() }}
       </p>
-      <h1 class="heading">{{ heading() }}</h1>
+      <h1 id="page-title" class="title">{{ heading() }}</h1>
       @if (subtitle()) {
         <p class="subtitle">{{ subtitle() }}</p>
       }
-</div>
+      <ng-content />
+    </div>
 
+    @if (decorated()) {
+      <div class="decor" aria-hidden="true">
+        <mat-icon class="paw paw--1">pets</mat-icon>
+        <mat-icon class="paw paw--2">pets</mat-icon>
+        <span class="sparkle"><i></i><i></i></span>
+      </div>
+    }
+
+    <ng-content select="[heroArt]" />
+  </div>
 </section>
-
-
-
-

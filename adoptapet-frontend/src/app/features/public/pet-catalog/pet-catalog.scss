@@ -1,18 +1,88 @@
 @use 'breakpoints' as bp;
 
-.page {
-  padding-block: var(--ap-space-8) var(--ap-space-12);
+// The filters bar climbs over the bottom of the hero.
+$hero-overlap: 56px;
+
+:host {
+  display: block;
+  padding-bottom: var(--ap-space-12);
 }
 
-.content {
+app-page-hero {
+  --hero-overlap: #{$hero-overlap};
+  --hero-subtitle-size: var(--ap-font-size-lg);
+}
+
+.body {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: var(--ap-space-5);
+  margin-top: -$hero-overlap;
+}
+
+// ----- filters: "Buscar [🔍 Nombre o raza]  Especie [Todas ▾]" in one row on desktop
+
+.filters {
+  display: grid;
+  gap: var(--ap-space-2) var(--ap-space-5);
+  grid-template-columns: 1fr;
+  align-items: center;
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-md);
+
+  @include bp.up(bp.$md) {
+    grid-template-columns: auto minmax(0, 1.65fr) auto minmax(0, 1fr);
+    padding: var(--ap-space-5) var(--ap-space-6);
+  }
+
+  .ap-input {
+    height: 48px;
+  }
+}
+
+.filters__label {
+  font-weight: 700;
+
+  &:not(:first-child) {
+    margin-top: var(--ap-space-3);
+
+    @include bp.up(bp.$md) {
+      margin-top: 0;
+    }
+  }
+}
+
+.search {
+  position: relative;
+
+  .ap-input {
+    padding-left: 48px;
+  }
+}
+
+.search__icon {
+  position: absolute;
+  top: 50%;
+  left: var(--ap-space-4);
+  transform: translateY(-50%);
+  color: var(--ap-color-text-muted);
+  pointer-events: none;
+}
+
+// ----- results
+
+.count {
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
 }
 
 .grid {
   display: grid;
-  gap: var(--ap-space-4) var(--ap-space-6);
+  gap: var(--ap-space-4);
   grid-template-columns: 1fr;
 
   @include bp.up(bp.$sm) {

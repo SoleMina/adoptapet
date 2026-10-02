@@ -1,96 +1,14 @@
 @use 'breakpoints' as bp;
 
-// The home is wider than the other pages (three large cards side by side).
-:host {
-  --ap-content-max-width: 1080px;
+// Must match --hero-overlap of app-page-hero (default 32px): the cards climb over the illustration.
+$hero-overlap: 32px;
 
+:host {
   display: block;
   padding-bottom: var(--ap-space-12);
 }
 
-// ----- hero
-
-// How much the cards climb over the bottom of the hero (as in the design, they cover the pets' bodies).
-$cards-overlap: 20px;
-
-.hero {
-  position: relative;
-  overflow: hidden;
-  padding-bottom: $cards-overlap;
-  background:
-    linear-gradient(to bottom, transparent 75%, var(--ap-color-page)),
-    radial-gradient(60% 90% at 0% 100%, var(--ap-color-primary-soft), transparent 70%),
-    var(--ap-color-primary-faint);
-}
-
-.hero__inner {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding-top: var(--ap-space-5);
-
-  @include bp.up(bp.$md) {
-    min-height: 300px;
-  }
-}
-
-.crumbs {
-  display: flex;
-  gap: var(--ap-space-1);
-  font-size: var(--ap-font-size-xs);
-  color: var(--ap-color-text-muted);
-
-  a {
-    color: inherit;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.hero__text {
-  position: relative;
-  z-index: 1;
-  padding-block: var(--ap-space-5) var(--ap-space-6);
-
-  @include bp.up(bp.$md) {
-    max-width: 62%;
-  }
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px var(--ap-space-4) 6px var(--ap-space-3);
-  border-radius: 999px;
-  background-color: var(--ap-color-primary-soft);
-  color: var(--ap-color-primary);
-  font-size: var(--ap-font-size-sm);
-  font-weight: 700;
-
-  .mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-    font-variation-settings: 'FILL' 1;
-  }
-}
-
-.title {
-  margin-top: var(--ap-space-3);
-  font-size: var(--ap-font-size-4xl);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.subtitle {
-  margin-top: var(--ap-space-2);
-  color: var(--ap-color-text-muted);
-}
+// ----- hero content (projected into app-page-hero)
 
 .headline {
   display: flex;
@@ -106,24 +24,27 @@ $cards-overlap: 20px;
   }
 }
 
-.hero__art {
+.hero-art {
   position: relative;
   align-self: center;
   width: min(100%, 454px);
-  margin-bottom: -$cards-overlap;
+  margin-bottom: -$hero-overlap;
 
   img {
     display: block;
     width: 100%;
     height: auto;
     border-radius: 45% 45% 0 0 / 60% 60% 0 0;
+    // Hide the straight left edge of the cropped picture.
+    mask-image: linear-gradient(to right, transparent, #000 14%);
   }
 
   @include bp.up(bp.$md) {
     position: absolute;
     right: var(--ap-space-4);
-    bottom: -$cards-overlap;
+    bottom: -$hero-overlap;
     width: min(42%, 454px);
+    margin-bottom: 0;
   }
 }
 
@@ -160,7 +81,7 @@ $cards-overlap: 20px;
   display: flex;
   flex-direction: column;
   gap: var(--ap-space-6);
-  margin-top: -$cards-overlap;
+  margin-top: -$hero-overlap;
 }
 
 .grid {
