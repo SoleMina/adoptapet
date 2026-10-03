@@ -83,6 +83,14 @@
   }
 }
 
+textarea.ap-input {
+  height: auto;
+  min-height: 84px;
+  padding-block: var(--ap-space-3);
+  line-height: 1.5;
+  resize: vertical;
+}
+
 select.ap-input {
   appearance: none;
   padding-right: var(--ap-space-8);

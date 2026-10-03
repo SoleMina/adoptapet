@@ -71,6 +71,9 @@ java -jar api-gateway/target/api-gateway-0.1.0-SNAPSHOT.jar
 Give Eureka ~30 seconds after startup before calling through the gateway. On first start user-service creates the
 admin with `ADMIN_USERNAME` / `ADMIN_PASSWORD` from your `.env`.
 
+Test users (`admin.test`, `worker.test` and adopters `ana.torres…`, password `secreto123`) are in `database/test-users.sql`. Load them with
+`mysql -u root -p < database/test-users.sql`; it can be run again safely and new users are added by copying a row.
+
 ## API (through the gateway, http://localhost:8080)
 
 | Method | Path | Access |

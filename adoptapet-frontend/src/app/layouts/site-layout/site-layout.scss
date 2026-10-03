@@ -109,11 +109,52 @@
 }
 
 .user-button {
-  .user-name {
-    display: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  padding: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ap-color-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 120ms ease;
 
-    @include bp.up(bp.$sm) {
-      display: inline;
+  &:hover {
+    background-color: var(--ap-color-primary-faint);
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--ap-color-primary-soft);
+    color: var(--ap-color-primary);
+
+    .mat-icon {
+      font-variation-settings: 'FILL' 1;
+    }
+  }
+
+  .user-name,
+  .chevron {
+    display: none;
+  }
+
+  .chevron {
+    color: var(--ap-color-text-muted);
+  }
+
+  @include bp.up(bp.$sm) {
+    padding-right: var(--ap-space-2);
+
+    .user-name,
+    .chevron {
+      display: inline-block;
     }
   }
 }

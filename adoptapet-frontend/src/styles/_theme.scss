@@ -56,6 +56,12 @@ html {
       tonal-label-text-weight: 700,
       tonal-container-color: var(--ap-color-primary-soft),
       tonal-label-text-color: var(--ap-color-on-primary-soft),
+      outlined-container-shape: var(--ap-radius-sm),
+      outlined-container-height: var(--ap-button-height),
+      outlined-horizontal-padding: var(--ap-space-6),
+      outlined-label-text-weight: 700,
+      outlined-outline-color: var(--ap-color-primary),
+      outlined-outline-width: 1.5px,
       text-container-shape: var(--ap-radius-sm),
       text-label-text-weight: 600,
     )

@@ -8,11 +8,7 @@ export const ADOPTER_ROUTES: Routes = [
   {
     path: 'my-applications',
     title: 'Mis solicitudes',
-    loadComponent: comingSoon,
-    data: {
-      heading: 'Mis solicitudes',
-      description: 'El estado de tus postulaciones y tus citas de entrega.',
-    },
+    loadComponent: () => import('./my-applications/my-applications').then((m) => m.MyApplications),
   },
   {
     path: 'my-applications/:id',
@@ -23,11 +19,7 @@ export const ADOPTER_ROUTES: Routes = [
   {
     path: 'apply/:petId',
     title: 'Solicitud de adopción',
-    loadComponent: comingSoon,
-    data: {
-      heading: 'Solicitud de adopción',
-      description: 'Formulario y documentos para adoptar.',
-    },
+    loadComponent: () => import('./apply/apply').then((m) => m.Apply),
   },
   {
     path: 'notifications',

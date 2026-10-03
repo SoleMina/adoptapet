@@ -1,0 +1,71 @@
+<app-page-hero
+  heading="Mis solicitudes"
+  subtitle="Revisa el estado y los próximos pasos de tus postulaciones."
+/>
+
+<div class="ap-container ap-container--wide body">
+  <section class="panel">
+    @if (applications.isLoading()) {
+      <div class="loading" aria-busy="true" aria-label="Cargando solicitudes">
+        @for (row of [1, 2]; track row) {
+          <div class="loading__row"></div>
+        }
+      </div>
+    } @else if (applications.error()) {
+      <app-error-state [error]="applications.error()" (retry)="applications.reload()" />
+    } @else if (rows().length === 0) {
+      <app-empty-state
+        heading="Aún no tienes solicitudes"
+        message="Cuando postules para adoptar una mascota, aquí verás su estado y los siguientes pasos."
+      >
+        <a matButton="filled" routerLink="/pets">Ver mascotas</a>
+      </app-empty-state>
+    } @else {
+      <table class="table">
+        <caption class="cdk-visually-hidden">
+          Mis solicitudes de adopción
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Mascota</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Qué sigue</th>
+            <th scope="col"><span class="cdk-visually-hidden">Acciones</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.application.id) {
+            <tr>
+              <td class="pet">
+                <app-pet-photo [path]="row.imageUrl" [name]="row.application.petName" />
+                <strong>{{ row.application.petName }}</strong>
+              </td>
+              <td data-label="Fecha">{{ row.application.createdAt | limaDate }}</td>
+              <td data-label="Estado"><app-status-badge [status]="row.application.status" /></td>
+              <td data-label="Qué sigue" class="next">
+                @if (row.appointment; as appointment) {
+                  <mat-icon aria-hidden="true">calendar_month</mat-icon>
+                  Cita {{ appointment.date | limaDate }} ·
+                  {{ appointment.start | limaDate: 'time' }}–{{
+                    appointment.end | limaDate: 'time'
+                  }}
+                } @else {
+                  {{ row.next }}
+                }
+              </td>
+              <td class="action">
+                <a class="outline-button" [routerLink]="['/my-applications', row.application.id]">
+                  Ver detalle
+                  <span class="cdk-visually-hidden"
+                    >de la solicitud de {{ row.application.petName }}</span
+                  >
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+</div>

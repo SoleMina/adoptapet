@@ -67,7 +67,8 @@ src/
 |---|---|---|
 | `/inicio` (`/` redirects here), `/pets`, `/pets/:id` | everyone | ✅ built |
 | `/login`, `/register` | visitors only (`guestGuard`) | ✅ built |
-| `/my-applications`, `/my-applications/:id`, `/apply/:petId`, `/notifications`, `/profile` | ADOPTER | placeholder |
+| `/apply/:petId` (4 steps + "sent"), `/my-applications` | ADOPTER | ✅ built |
+| `/my-applications/:id`, `/notifications`, `/profile` | ADOPTER | placeholder |
 | `/staff/dashboard`, `applications`, `applications/:id`, `pets`, `delivery-calendar`, `adopters`, `adopters/:id`, `profile` | ADMIN, WORKER | placeholder |
 | `/staff/workers`, `/staff/users`, `/staff/reports` | ADMIN | placeholder |
 | `/forbidden`, `**` | everyone | ✅ built |

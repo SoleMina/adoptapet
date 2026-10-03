@@ -1,0 +1,336 @@
+<app-page-hero [heading]="heading()" [crumb]="heading()" [subtitle]="subtitle()" />
+
+<div class="ap-container ap-container--wide body">
+  @if (loading()) {
+    <div class="panel skeleton" aria-busy="true" aria-label="Cargando solicitud"></div>
+  } @else if (pet.error()) {
+    <div class="panel">
+      <app-error-state
+        [error]="pet.error()"
+        heading="No encontramos esta mascota"
+        (retry)="pet.reload()"
+      >
+        <a matButton="tonal" routerLink="/pets">Ver el catálogo</a>
+      </app-error-state>
+    </div>
+  } @else if (pet.value(); as current) {
+    @if (sent(); as application) {
+      <app-application-sent [pet]="current" [application]="application" />
+    } @else if (pendingApplication(); as pending) {
+      <section class="panel notice">
+        <mat-icon class="notice__icon" aria-hidden="true">schedule</mat-icon>
+        <h2 class="notice__title">Ya enviaste una solicitud para {{ current.name }}</h2>
+        <p class="notice__text">
+          El equipo la está revisando. Te avisaremos cuando cambie su estado.
+        </p>
+        <div class="notice__actions">
+          <a matButton="filled" [routerLink]="['/my-applications', pending.id]">Ver mi solicitud</a>
+          <a matButton="tonal" routerLink="/pets">Volver al catálogo</a>
+        </div>
+      </section>
+    } @else if (blockedReason(); as reason) {
+      <section class="panel notice">
+        <mat-icon class="notice__icon" aria-hidden="true">info</mat-icon>
+        <h2 class="notice__title">No es posible postular ahora</h2>
+        <p class="notice__text">{{ reason }}</p>
+        <div class="notice__actions">
+          <a matButton="filled" routerLink="/pets">Ver otras mascotas</a>
+        </div>
+      </section>
+    } @else {
+      <!-- ----- wizard -->
+      <section class="panel wizard">
+        <ol class="stepper" aria-label="Pasos de la solicitud">
+          @for (item of steps; track item.step) {
+            <li
+              class="stepper__item"
+              [class.done]="item.step < step()"
+              [class.current]="item.step === step()"
+              [attr.aria-current]="item.step === step() ? 'step' : null"
+            >
+              <span class="stepper__circle" aria-hidden="true">
+                @if (item.step < step()) {
+                  <mat-icon>check</mat-icon>
+                } @else {
+                  {{ item.step }}
+                }
+              </span>
+              <span class="stepper__label">{{ item.step }}. {{ item.label }}</span>
+            </li>
+          }
+        </ol>
+
+        <form [formGroup]="form" novalidate (ngSubmit)="step() === 4 ? submit(current) : next()">
+          @switch (step()) {
+            @case (1) {
+              <h2 class="step-title cdk-visually-hidden" tabindex="-1">Mascota</h2>
+              <div class="pet">
+                <app-pet-photo
+                  class="pet__photo"
+                  [path]="current.imageUrl"
+                  [name]="current.name"
+                  [priority]="true"
+                />
+                <div class="pet__info">
+                  <h3 class="pet__name">{{ current.name }}</h3>
+                  <ul class="pet__badges" aria-label="Estado">
+                    @for (badge of badges(); track badge.text) {
+                      <li class="ap-badge" [attr.data-tone]="badge.tone">
+                        <span class="ap-badge__dot" aria-hidden="true"></span>
+                        {{ badge.text }}
+                      </li>
+                    }
+                  </ul>
+                  <ul class="pet__facts">
+                    @for (fact of facts(); track fact.label) {
+                      <li>
+                        <mat-icon aria-hidden="true">{{ fact.icon }}</mat-icon>
+                        <span class="cdk-visually-hidden">{{ fact.label }}:</span>
+                        {{ fact.value }}
+                      </li>
+                    }
+                  </ul>
+                  <div class="pet__about">
+                    <h4>Sobre {{ current.name }}</h4>
+                    <p>
+                      {{
+                        current.observations ||
+                          'Pronto te contaremos más sobre ' + current.name + '.'
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+
+            @case (2) {
+              <h2 class="step-title" tabindex="-1">Cuéntanos sobre tu hogar</h2>
+              <div class="ap-form-grid">
+                <div class="ap-field">
+                  <label class="ap-field__label" for="adoptionReason">Motivo de adopción</label>
+                  <textarea
+                    id="adoptionReason"
+                    class="ap-input"
+                    formControlName="adoptionReason"
+                    rows="2"
+                    maxlength="1000"
+                    placeholder="¿Por qué quieres adoptar?"
+                    [attr.aria-invalid]="
+                      controls.adoptionReason.invalid && controls.adoptionReason.touched
+                    "
+                    aria-describedby="adoptionReason-error"
+                  ></textarea>
+                  <app-field-error
+                    [control]="controls.adoptionReason"
+                    errorId="adoptionReason-error"
+                  />
+                </div>
+
+                <div class="ap-field">
+                  <label class="ap-field__label" for="housingType">Tipo de vivienda</label>
+                  <select
+                    id="housingType"
+                    class="ap-input"
+                    formControlName="housingType"
+                    [attr.aria-invalid]="
+                      controls.housingType.invalid && controls.housingType.touched
+                    "
+                    aria-describedby="housingType-error"
+                  >
+                    <option value="" disabled>Selecciona una opción</option>
+                    @for (type of housingTypes; track type) {
+                      <option [value]="type">{{ type }}</option>
+                    }
+                  </select>
+                  <app-field-error [control]="controls.housingType" errorId="housingType-error" />
+                </div>
+
+                <div class="ap-field">
+                  <label class="ap-field__label" for="petExperience"
+                    >Experiencia con mascotas</label
+                  >
+                  <textarea
+                    id="petExperience"
+                    class="ap-input"
+                    formControlName="petExperience"
+                    rows="2"
+                    maxlength="1000"
+                    placeholder="¿Has cuidado mascotas antes?"
+                    [attr.aria-invalid]="
+                      controls.petExperience.invalid && controls.petExperience.touched
+                    "
+                    aria-describedby="petExperience-error"
+                  ></textarea>
+                  <app-field-error
+                    [control]="controls.petExperience"
+                    errorId="petExperience-error"
+                  />
+                </div>
+
+                <div class="ap-field">
+                  <label class="ap-field__label" for="otherPets">
+                    Otras mascotas <span class="optional">(opcional)</span>
+                  </label>
+                  <input
+                    id="otherPets"
+                    class="ap-input"
+                    formControlName="otherPets"
+                    maxlength="500"
+                    placeholder="Ninguna"
+                    [attr.aria-invalid]="controls.otherPets.invalid && controls.otherPets.touched"
+                    aria-describedby="otherPets-error"
+                  />
+                  <app-field-error [control]="controls.otherPets" errorId="otherPets-error" />
+                </div>
+
+                <div class="ap-field">
+                  <label class="ap-field__label" for="householdSize">Personas en el hogar</label>
+                  <input
+                    id="householdSize"
+                    class="ap-input"
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    max="30"
+                    formControlName="householdSize"
+                    [attr.aria-invalid]="
+                      controls.householdSize.invalid && controls.householdSize.touched
+                    "
+                    aria-describedby="householdSize-error"
+                  />
+                  <app-field-error
+                    [control]="controls.householdSize"
+                    errorId="householdSize-error"
+                  />
+                </div>
+
+                <div class="ap-field">
+                  <label class="ap-field__label" for="comments">
+                    Comentarios <span class="optional">(opcional)</span>
+                  </label>
+                  <textarea
+                    id="comments"
+                    class="ap-input"
+                    formControlName="comments"
+                    rows="2"
+                    maxlength="1000"
+                    [attr.aria-invalid]="controls.comments.invalid && controls.comments.touched"
+                    aria-describedby="comments-error"
+                  ></textarea>
+                  <app-field-error [control]="controls.comments" errorId="comments-error" />
+                </div>
+              </div>
+            }
+
+            @case (3) {
+              <h2 class="step-title" tabindex="-1">Adjunta tus documentos</h2>
+              <div class="documents">
+                <app-file-drop
+                  label="DNI"
+                  inputId="dniFile"
+                  [required]="true"
+                  [showRequiredError]="documentsTouched()"
+                  [(file)]="dniFile"
+                />
+                <app-file-drop
+                  label="Comprobante de domicilio"
+                  inputId="addressProofFile"
+                  [required]="true"
+                  [showRequiredError]="documentsTouched()"
+                  [(file)]="addressProofFile"
+                />
+              </div>
+              <p class="ap-banner info">
+                Máximo 5 MB por archivo. Ambos documentos son obligatorios.
+              </p>
+            }
+
+            @case (4) {
+              <h2 class="step-title" tabindex="-1">Revisa tu solicitud</h2>
+              <div class="review">
+                <div class="review__item">
+                  <app-pet-photo
+                    class="review__photo"
+                    [path]="current.imageUrl"
+                    [name]="current.name"
+                  />
+                  <div>
+                    <span class="review__label">Mascota</span>
+                    <strong class="review__value">{{ current.name }}</strong>
+                  </div>
+                </div>
+
+                <div class="review__item">
+                  <span class="review__icon" aria-hidden="true"><mat-icon>home</mat-icon></span>
+                  <div>
+                    <span class="review__label">Vivienda</span>
+                    <strong class="review__value">{{ homeSummary() }}</strong>
+                  </div>
+                </div>
+
+                <div class="review__item">
+                  <span class="review__icon" aria-hidden="true"
+                    ><mat-icon>description</mat-icon></span
+                  >
+                  <div class="review__docs">
+                    <span class="review__label">Documentos</span>
+                    <ul>
+                      @for (doc of reviewDocuments(); track doc.label) {
+                        <li>
+                          <mat-icon aria-hidden="true">draft</mat-icon>
+                          <span class="review__doc-label">{{ doc.label }}</span>
+                          <span class="review__doc-file">{{ doc.fileName }}</span>
+                          <span class="ap-badge" data-tone="success">
+                            <mat-icon aria-hidden="true">check</mat-icon>
+                            Adjunto
+                          </span>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <p class="ap-banner info">
+                <mat-icon aria-hidden="true">info</mat-icon>
+                Revisa tus datos antes de enviar. El albergue evaluará tu solicitud.
+              </p>
+
+              @if (error(); as message) {
+                <p class="ap-banner ap-banner--danger info" role="alert">
+                  <mat-icon aria-hidden="true">error</mat-icon>
+                  {{ message }}
+                </p>
+              }
+            }
+          }
+
+          <div class="footer">
+            <button
+              matButton="tonal"
+              type="button"
+              [disabled]="submitting()"
+              (click)="back(current)"
+            >
+              @if (step() > 1) {
+                <mat-icon aria-hidden="true">arrow_back</mat-icon>
+              }
+              Atrás
+            </button>
+            @if (step() < 4) {
+              <button matButton="filled" type="submit">
+                Continuar
+                <mat-icon iconPositionEnd aria-hidden="true">arrow_forward</mat-icon>
+              </button>
+            } @else {
+              <button matButton="filled" type="submit" [disabled]="submitting()">
+                <mat-icon aria-hidden="true">send</mat-icon>
+                {{ submitting() ? 'Enviando…' : 'Enviar solicitud' }}
+              </button>
+            }
+          </div>
+        </form>
+      </section>
+    }
+  }
+</div>

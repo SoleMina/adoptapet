@@ -1,17 +1,18 @@
-<div class="ap-container page">
-  <app-page-header
-    [heading]="heading()"
-    subtitle="Conoce su historia antes de dar el siguiente paso."
-  />
+<app-page-hero [heading]="heading()" subtitle="Conoce su historia antes de dar el siguiente paso.">
+  <a class="back" routerLink="/pets">
+    <mat-icon aria-hidden="true">arrow_back</mat-icon>
+    Volver al catálogo
+  </a>
+</app-page-hero>
 
-  <section class="ap-card content">
-    @if (pet.isLoading()) {
-      <div class="pet skeleton" aria-busy="true" aria-label="Cargando mascota">
-        <div class="block photo"></div>
-        <div class="block line wide"></div>
-        <div class="block line"></div>
-      </div>
-    } @else if (pet.error()) {
+<div class="ap-container ap-container--wide body">
+  @if (pet.isLoading()) {
+    <div class="layout skeleton" aria-busy="true" aria-label="Cargando mascota">
+      <div class="block block--photo"></div>
+      <div class="block block--sheet"></div>
+    </div>
+  } @else if (pet.error()) {
+    <div class="ap-card">
       <app-error-state
         [error]="pet.error()"
         heading="No encontramos esta mascota"
@@ -19,17 +20,56 @@
       >
         <a matButton="tonal" routerLink="/pets">Ver el catálogo</a>
       </app-error-state>
-    } @else if (pet.value(); as current) {
-      <article class="pet" aria-labelledby="pet-name">
-        <app-pet-photo
-          class="photo"
-          [path]="current.imageUrl"
-          [name]="current.name"
-          [priority]="true"
-        />
+    </div>
+  } @else if (pet.value(); as current) {
+    <div class="layout">
+      <app-pet-photo
+        class="photo"
+        [path]="current.imageUrl"
+        [name]="current.name"
+        [priority]="true"
+      />
+
+      <article class="sheet" aria-labelledby="pet-name">
         <h2 id="pet-name" class="name">{{ current.name }}</h2>
-        <p class="meta">{{ meta() }} · {{ current | petAge }}</p>
-        <p class="status ap-tone" [attr.data-tone]="status()?.tone">{{ status()?.text }}</p>
+
+        <ul class="badges" aria-label="Estado">
+          @for (badge of badges(); track badge.text) {
+            <li class="ap-badge" [attr.data-tone]="badge.tone">
+              @if (badge.icon) {
+                <mat-icon aria-hidden="true">{{ badge.icon }}</mat-icon>
+              } @else {
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+              }
+              {{ badge.text }}
+            </li>
+          }
+        </ul>
+
+        <div class="facts">
+          @for (column of facts(); track $index) {
+            <ul class="facts__column">
+              @for (fact of column; track fact.label) {
+                <li class="fact">
+                  <span class="fact__icon" aria-hidden="true">
+                    <mat-icon>{{ fact.icon }}</mat-icon>
+                  </span>
+                  <span class="fact__text">
+                    <span class="fact__label">{{ fact.label }}</span>
+                    <strong class="fact__value">{{ fact.value }}</strong>
+                  </span>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <section class="about" aria-labelledby="about-title">
+          <h3 id="about-title" class="about__title">Sobre {{ current.name }}</h3>
+          <p class="about__text">
+            {{ current.observations || 'Pronto te contaremos más sobre ' + current.name + '.' }}
+          </p>
+        </section>
 
         @if (action(); as act) {
           @if (act.visible) {
@@ -40,32 +80,28 @@
                 [routerLink]="act.link"
                 [queryParams]="act.queryParams"
               >
+                <mat-icon aria-hidden="true">pets</mat-icon>
                 {{ adoptLabel() }}
               </a>
             } @else {
               <button matButton="filled" class="adopt" type="button" disabled>
+                <mat-icon aria-hidden="true">pets</mat-icon>
                 {{ adoptLabel() }}
               </button>
             }
           }
+
+          <p class="note">
+            <mat-icon aria-hidden="true">info</mat-icon>
+            <span>
+              {{ act.note }}
+              @if (act.noteLink; as noteLink) {
+                <a [routerLink]="noteLink.path">{{ noteLink.label }}</a>
+              }
+            </span>
+          </p>
         }
-
-        <div class="details">
-          <p>{{ details() }}</p>
-          @if (current.observations) {
-            <p>{{ current.observations }}</p>
-          }
-        </div>
       </article>
-
-      @if (action(); as act) {
-        <p class="ap-banner note">
-          <span>{{ act.note }}</span>
-          @if (act.noteLink; as noteLink) {
-            <a [routerLink]="noteLink.path">{{ noteLink.label }}</a>
-          }
-        </p>
-      }
-    }
-  </section>
+    </div>
+  }
 </div>

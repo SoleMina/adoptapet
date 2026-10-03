@@ -77,6 +77,40 @@
   color: var(--ap-color-text-muted);
 }
 
+// Status chip: <span class="ap-badge" data-tone="success"><mat-icon>…</mat-icon> Disponible</span>
+.ap-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  padding: 6px var(--ap-space-4);
+  border-radius: 999px;
+  background-color: var(--ap-color-neutral-soft);
+  color: var(--ap-color-neutral);
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+  white-space: nowrap;
+
+  .mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+
+  @each $tone in success, warning, danger, info {
+    &[data-tone='#{$tone}'] {
+      background-color: var(--ap-color-#{$tone}-soft);
+      color: var(--ap-color-#{$tone});
+    }
+  }
+}
+
+.ap-badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
 // Status text colored by tone: <span class="ap-tone" data-tone="success">Disponible · Sana</span>
 .ap-tone {
   &[data-tone='success'] {

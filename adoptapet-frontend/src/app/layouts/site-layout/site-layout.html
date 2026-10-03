@@ -42,9 +42,15 @@
       }
 
       @if (store.user(); as user) {
-        <button matButton type="button" class="user-button" [matMenuTriggerFor]="userMenu">
-          <mat-icon aria-hidden="true">account_circle</mat-icon>
-          <span class="user-name">{{ user.firstName }}</span>
+        <button
+          type="button"
+          class="user-button"
+          aria-label="Menú de usuario"
+          [matMenuTriggerFor]="userMenu"
+        >
+          <span class="avatar" aria-hidden="true"><mat-icon>person</mat-icon></span>
+          <span class="user-name" aria-hidden="true">{{ user.firstName }}</span>
+          <mat-icon class="chevron" aria-hidden="true">expand_more</mat-icon>
         </button>
         <mat-menu #userMenu="matMenu" xPosition="before">
           <div class="menu-header">

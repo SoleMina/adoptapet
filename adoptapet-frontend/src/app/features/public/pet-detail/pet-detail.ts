@@ -6,14 +6,12 @@ import { RouterLink } from '@angular/router';
 import { ApplicationApi } from '@core/api/application-api';
 import { PetApi } from '@core/api/pet-api';
 import { AuthStore } from '@core/auth/auth-store';
-import { SEX_LABEL, speciesLabel, sterilizationLabel } from '@core/i18n/labels';
+import { PetBadge, PetFact, petBadges, petFacts } from '@shared/utils/pet-info';
 import { PetResponse } from '@core/models/pet';
 import { PageTitleStrategy } from '@core/routing/page-title-strategy';
 import { ErrorState } from '@shared/components/error-state/error-state';
-import { PageHeader } from '@shared/components/page-header/page-header';
-import { petStatus } from '@shared/components/pet-card/pet-card';
+import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
-import { PetAgePipe } from '@shared/pipes/pet-age-pipe';
 
 /** What the adopt button does for the current visitor. */
 interface AdoptAction {
@@ -30,15 +28,7 @@ interface AdoptAction {
 
 @Component({
   selector: 'app-pet-detail',
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    RouterLink,
-    PageHeader,
-    PetPhoto,
-    ErrorState,
-    PetAgePipe,
-  ],
+  imports: [MatButtonModule, MatIconModule, RouterLink, PageHero, PetPhoto, ErrorState],
   templateUrl: './pet-detail.html',
   styleUrl: './pet-detail.scss',
 })
@@ -67,19 +57,17 @@ export class PetDetail {
     return pet ? `Detalle de ${pet.name}` : 'Detalle de mascota';
   });
 
-  protected readonly meta = computed(() => {
+  protected readonly badges = computed<PetBadge[]>(() => {
     const pet = this.pet.value();
-    return pet ? `${speciesLabel(pet.species)} · ${SEX_LABEL[pet.sex]}` : '';
+    return pet ? petBadges(pet) : [];
   });
 
-  protected readonly status = computed(() => {
+  /** Two columns, as in the design: species/age/sterilization and sex/breed. */
+  protected readonly facts = computed<PetFact[][]>(() => {
     const pet = this.pet.value();
-    return pet ? petStatus(pet) : null;
-  });
-
-  protected readonly details = computed(() => {
-    const pet = this.pet.value();
-    return pet ? [sterilizationLabel(pet.sterilizationStatus, pet.sex), pet.breed].join(' · ') : '';
+    if (!pet) return [];
+    const facts = petFacts(pet);
+    return [facts.slice(0, 3), facts.slice(3)];
   });
 
   /** "Quiero adoptarla" / "Quiero adoptarlo". */

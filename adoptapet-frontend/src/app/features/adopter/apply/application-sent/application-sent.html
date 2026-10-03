@@ -1,0 +1,15 @@
+<div class="sent__art" aria-hidden="true">
+  <mat-icon class="deco deco--heart">favorite</mat-icon>
+  <mat-icon class="deco deco--paw-left">pets</mat-icon>
+  <span class="sent__check"><mat-icon>check</mat-icon></span>
+  <mat-icon class="deco deco--paw-right">pets</mat-icon>
+</div>
+<h2 id="sent-title" class="sent__title" tabindex="-1">¡Solicitud enviada!</h2>
+<app-pet-photo class="sent__photo" [path]="pet().imageUrl" [name]="pet().name" />
+<p class="sent__name">{{ pet().name }}</p>
+<app-status-badge [status]="application().status" label="Pendiente de revisión" />
+<p class="sent__text">Estamos revisando tu solicitud. Te avisaremos cuando cambie su estado.</p>
+<div class="sent__actions">
+  <a matButton="filled" routerLink="/my-applications">Ver mis solicitudes</a>
+  <a matButton="tonal" routerLink="/pets">Volver al catálogo</a>
+</div>

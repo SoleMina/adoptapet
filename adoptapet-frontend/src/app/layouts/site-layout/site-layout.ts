@@ -68,7 +68,7 @@ export class SiteLayout {
         {
           label: 'Mis solicitudes',
           path: '/my-applications',
-          active: route.startsWith('/my-applications'),
+          active: route.startsWith('/my-applications') || route.startsWith('/apply'),
         },
         {
           label: 'Notificaciones',

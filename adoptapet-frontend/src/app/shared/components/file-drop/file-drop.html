@@ -1,0 +1,53 @@
+<div
+  class="zone"
+  (dragover)="onDragOver($event)"
+  (dragleave)="dragging.set(false)"
+  (drop)="onDrop($event)"
+>
+  <p class="label" [id]="inputId() + '-label'">{{ label() }}</p>
+
+  @if (file(); as current) {
+    <div class="picked">
+      <mat-icon class="picked__icon" aria-hidden="true">description</mat-icon>
+      <div class="picked__text">
+        <strong>{{ current.name }}</strong>
+        <span>{{ size() }}</span>
+      </div>
+      <span class="ap-badge" data-tone="success">
+        <mat-icon aria-hidden="true">check</mat-icon>
+        Adjunto
+      </span>
+    </div>
+    <div class="actions">
+      <button matButton="outlined" type="button" (click)="picker.click()">Cambiar archivo</button>
+      <button matButton type="button" (click)="remove()">Quitar</button>
+    </div>
+  } @else {
+    <mat-icon class="upload" aria-hidden="true">cloud_upload</mat-icon>
+    <p class="hint">Arrastra o selecciona PDF, JPG o PNG</p>
+    <button
+      matButton="outlined"
+      type="button"
+      [attr.aria-describedby]="inputId() + '-label'"
+      (click)="picker.click()"
+    >
+      Seleccionar archivo
+    </button>
+    <p class="max">Máximo {{ maxMb() }} MB</p>
+  }
+
+  @if (message(); as text) {
+    <p class="error" role="alert">{{ text }}</p>
+  }
+
+  <input
+    #picker
+    class="cdk-visually-hidden"
+    type="file"
+    tabindex="-1"
+    [id]="inputId()"
+    [accept]="accept"
+    [attr.aria-labelledby]="inputId() + '-label'"
+    (change)="onPicked(picker)"
+  />
+</div>

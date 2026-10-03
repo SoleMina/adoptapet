@@ -71,12 +71,25 @@ export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
 
 export const APPLICATION_STATUS_TONE: Record<ApplicationStatus, Tone> = {
   PENDING: 'warning',
-  APPROVED: 'info',
+  APPROVED: 'success',
   REJECTED: 'danger',
   NO_SHOW: 'warning',
   COMPLETED: 'success',
   CANCELLED: 'neutral',
 };
+
+/** Material Symbols icon of each application status (badges). */
+export const APPLICATION_STATUS_ICON: Record<ApplicationStatus, string> = {
+  PENDING: 'schedule',
+  APPROVED: 'check_circle',
+  REJECTED: 'cancel',
+  NO_SHOW: 'event_busy',
+  COMPLETED: 'favorite',
+  CANCELLED: 'block',
+};
+
+/** Options of the adoption form. The backend stores the text as it is. */
+export const HOUSING_TYPES = ['Casa', 'Casa con patio', 'Departamento', 'Habitación', 'Otro'];
 
 export const APPOINTMENT_STATUS_LABEL: Record<AppointmentStatus, string> = {
   SCHEDULED: 'Programada',

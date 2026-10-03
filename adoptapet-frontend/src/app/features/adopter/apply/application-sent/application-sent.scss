@@ -1,0 +1,104 @@
+// "¡Solicitud enviada!" card shown after the last step of the application.
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ap-space-3);
+  max-width: 860px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.sent__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 260px;
+  height: 130px;
+}
+
+.sent__check {
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background-color: var(--ap-color-success-soft);
+  color: var(--ap-color-success);
+
+  .mat-icon {
+    width: 72px;
+    height: 72px;
+    font-size: 72px;
+    font-variation-settings:
+      'wght' 700,
+      'opsz' 48;
+  }
+}
+
+.deco {
+  position: absolute;
+  font-variation-settings: 'FILL' 1;
+}
+
+.deco--heart {
+  top: 8px;
+  left: 36px;
+  color: var(--ap-color-primary);
+  transform: rotate(-14deg);
+}
+
+.deco--paw-left,
+.deco--paw-right {
+  bottom: 18px;
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  color: var(--ap-color-primary);
+  opacity: 0.18;
+}
+
+.deco--paw-left {
+  left: 0;
+  transform: rotate(-12deg);
+}
+
+.deco--paw-right {
+  right: 0;
+  transform: rotate(14deg);
+}
+
+.sent__title {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  font-weight: 800;
+  outline: none;
+}
+
+.sent__photo {
+  --pet-photo-ratio: 1 / 1;
+  width: 144px;
+  border-radius: 50%;
+  box-shadow: var(--ap-shadow-md);
+}
+
+.sent__name {
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+}
+
+.sent__text {
+  color: var(--ap-color-text-muted);
+}
+
+.sent__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ap-space-3);
+  margin-top: var(--ap-space-3);
+
+  .mat-mdc-button-base {
+    min-width: 200px;
+  }
+}
