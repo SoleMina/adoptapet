@@ -1,0 +1,22 @@
+@if (user(); as current) {
+  <button type="button" class="trigger" aria-label="Menú de usuario" [matMenuTriggerFor]="menu">
+    <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+    <span class="label" aria-hidden="true">{{ label() }}</span>
+    <mat-icon class="chevron" aria-hidden="true">expand_more</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" xPosition="before">
+    <div class="ap-menu-header">
+      <strong>{{ current.firstName }} {{ current.lastName }}</strong>
+      <span>{{ roleLabel[current.role] }}</span>
+    </div>
+    <mat-divider />
+    <a mat-menu-item [routerLink]="profilePath()">
+      <mat-icon aria-hidden="true">person</mat-icon>
+      Mi perfil
+    </a>
+    <button mat-menu-item type="button" (click)="logout()">
+      <mat-icon aria-hidden="true">logout</mat-icon>
+      Cerrar sesión
+    </button>
+  </mat-menu>
+}

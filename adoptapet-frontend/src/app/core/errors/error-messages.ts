@@ -17,6 +17,14 @@ const EXACT: Record<string, string> = {
   'Invalid or expired JWT token': 'Tu sesión expiró. Inicia sesión de nuevo',
   // pets
   'Pet not found': 'Mascota no encontrada',
+  'An active pet with the same name, species and breed already exists':
+    'Ya existe una mascota activa con el mismo nombre, especie y raza',
+  'Only available pets can be deactivated': 'Solo se puede desactivar una mascota disponible',
+  'Only inactive pets can be activated': 'Solo se puede reactivar una mascota inactiva',
+  'The pet was modified by another user. Reload it and try again':
+    'Otro usuario modificó esta mascota. Recarga la ficha e inténtalo de nuevo',
+  'The pet version is required': 'Recarga la ficha e inténtalo de nuevo',
+  'Only JPG, PNG or WEBP images are allowed': 'Solo se permiten imágenes JPG, PNG o WEBP',
   'The pet is not available for adoption': 'Esta mascota ya no está disponible para adopción',
   'The pet is not fit for adoption right now':
     'La mascota no está apta para adopción en este momento',

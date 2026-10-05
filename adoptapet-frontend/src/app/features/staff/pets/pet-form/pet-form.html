@@ -1,0 +1,208 @@
+<app-panel-header [heading]="heading()" subtitle="Ficha de mascota">
+  <a class="back" routerLink="/staff/pets">
+    <mat-icon aria-hidden="true">arrow_back</mat-icon>
+    Volver a mascotas
+  </a>
+</app-panel-header>
+
+@if (pet.isLoading()) {
+  <div class="panel skeleton" aria-busy="true" aria-label="Cargando mascota"></div>
+} @else if (pet.error()) {
+  <section class="panel">
+    <app-error-state
+      [error]="pet.error()"
+      heading="No encontramos esta mascota"
+      (retry)="pet.reload()"
+    >
+      <a matButton="tonal" routerLink="/staff/pets">Volver a mascotas</a>
+    </app-error-state>
+  </section>
+} @else {
+  <form [formGroup]="form" novalidate (ngSubmit)="save()">
+    <section class="panel" aria-labelledby="basic-title">
+      <h2 id="basic-title" class="section-title">Datos básicos</h2>
+      <div class="ap-form-grid">
+        <div class="ap-field">
+          <label class="ap-field__label" for="name">Nombre</label>
+          <input
+            id="name"
+            class="ap-input"
+            formControlName="name"
+            placeholder="Completar"
+            maxlength="50"
+            autocomplete="off"
+            [attr.aria-invalid]="controls.name.invalid && controls.name.touched"
+            aria-describedby="name-error"
+          />
+          <app-field-error [control]="controls.name" errorId="name-error" />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="species">Especie</label>
+          <select id="species" class="ap-input" formControlName="species">
+            @for (option of speciesOptions(); track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="breed">Raza</label>
+          <input
+            id="breed"
+            class="ap-input"
+            formControlName="breed"
+            placeholder="Mestiza"
+            maxlength="50"
+            autocomplete="off"
+            [attr.aria-invalid]="controls.breed.invalid && controls.breed.touched"
+            aria-describedby="breed-error"
+          />
+          <app-field-error [control]="controls.breed" errorId="breed-error" />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="sex">Sexo</label>
+          <select id="sex" class="ap-input" formControlName="sex">
+            <option value="FEMALE">Hembra</option>
+            <option value="MALE">Macho</option>
+          </select>
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="ageYears">Edad · años</label>
+          <input
+            id="ageYears"
+            class="ap-input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="30"
+            formControlName="ageYears"
+            [attr.aria-invalid]="controls.ageYears.invalid && controls.ageYears.touched"
+            aria-describedby="ageYears-error"
+          />
+          <app-field-error [control]="controls.ageYears" errorId="ageYears-error" />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="ageMonths">Edad · meses</label>
+          <input
+            id="ageMonths"
+            class="ap-input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="11"
+            formControlName="ageMonths"
+            [attr.aria-invalid]="controls.ageMonths.invalid && controls.ageMonths.touched"
+            aria-describedby="ageMonths-error"
+          />
+          <app-field-error [control]="controls.ageMonths" errorId="ageMonths-error" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="care-title">
+      <h2 id="care-title" class="section-title">Salud y cuidados</h2>
+      <div class="ap-form-grid">
+        <div class="ap-field">
+          <label class="ap-field__label" for="healthStatus">Salud</label>
+          <select id="healthStatus" class="ap-input" formControlName="healthStatus">
+            @for (option of healthOptions(); track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <p class="ap-field__hint">Solo una mascota sana puede recibir solicitudes de adopción.</p>
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="sterilizationStatus">Esterilización</label>
+          <select id="sterilizationStatus" class="ap-input" formControlName="sterilizationStatus">
+            @for (option of sterilizationOptions(); track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="observations">
+            Observaciones <span class="optional">(opcional)</span>
+          </label>
+          <textarea
+            id="observations"
+            class="ap-input"
+            formControlName="observations"
+            rows="4"
+            maxlength="500"
+            placeholder="Carácter, cuidados especiales, con quién se lleva bien…"
+            [attr.aria-invalid]="controls.observations.invalid && controls.observations.touched"
+            aria-describedby="observations-error"
+          ></textarea>
+          <app-field-error [control]="controls.observations" errorId="observations-error" />
+        </div>
+
+        <div class="ap-field">
+          <span class="ap-field__label" id="photo-label">
+            Foto <span class="optional">(opcional)</span>
+          </span>
+          <div class="photo" [class.photo--invalid]="imageError()">
+            @if (preview(); as url) {
+              <img class="photo__preview" [src]="url" alt="Foto seleccionada" />
+            } @else {
+              <mat-icon class="photo__icon" aria-hidden="true">image</mat-icon>
+            }
+            <div class="photo__actions">
+              <button
+                matButton="tonal"
+                type="button"
+                aria-describedby="photo-label photo-hint"
+                (click)="picker.click()"
+              >
+                <mat-icon aria-hidden="true">image</mat-icon>
+                {{ preview() ? 'Cambiar imagen' : 'Seleccionar imagen' }}
+              </button>
+              @if (image()) {
+                <button matButton type="button" (click)="removeImage()">Quitar</button>
+              }
+            </div>
+            <input
+              #picker
+              class="cdk-visually-hidden"
+              type="file"
+              tabindex="-1"
+              accept="image/jpeg,image/png,image/webp"
+              aria-labelledby="photo-label"
+              (change)="onImagePicked(picker)"
+            />
+          </div>
+          @if (imageError(); as message) {
+            <p class="ap-field__error" role="alert">{{ message }}</p>
+          } @else {
+            <p class="ap-field__hint" id="photo-hint">JPG, PNG o WEBP. Máximo 5 MB.</p>
+          }
+        </div>
+      </div>
+    </section>
+
+    @if (error(); as message) {
+      <p class="ap-banner ap-banner--danger error" role="alert">
+        <mat-icon aria-hidden="true">error</mat-icon>
+        <span>{{ message }}</span>
+        @if (stale()) {
+          <button matButton type="button" (click)="reload()">Recargar ficha</button>
+        }
+      </p>
+    }
+
+    <div class="panel footer">
+      <a matButton="tonal" routerLink="/staff/pets">Cancelar</a>
+      <button matButton="filled" type="submit" [disabled]="saving() || stale()">
+        @if (editing()) {
+          <mat-icon aria-hidden="true">check</mat-icon>
+        }
+        {{ saving() ? 'Guardando…' : editing() ? 'Guardar cambios' : 'Crear mascota' }}
+      </button>
+    </div>
+  </form>
+}

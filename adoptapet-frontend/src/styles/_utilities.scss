@@ -146,3 +146,15 @@
   --mat-snack-bar-supporting-text-color: #fff;
   --mat-snack-bar-button-color: #fff;
 }
+
+// First block of an account menu (rendered in the overlay, outside the component).
+.ap-menu-header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ap-space-3) var(--ap-space-4);
+  font-size: var(--ap-font-size-sm);
+
+  span {
+    color: var(--ap-color-text-muted);
+  }
+}

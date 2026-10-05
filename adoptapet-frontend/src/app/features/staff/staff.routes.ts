@@ -9,9 +9,8 @@ export const STAFF_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   {
     path: 'dashboard',
-    title: 'Dashboard',
-    loadComponent: comingSoon,
-    data: { heading: 'Dashboard' },
+    title: 'Panel',
+    loadComponent: () => import('./dashboard/dashboard').then((m) => m.Dashboard),
   },
   {
     path: 'applications',
@@ -25,7 +24,21 @@ export const STAFF_ROUTES: Routes = [
     loadComponent: comingSoon,
     data: { heading: 'Revisión de solicitud' },
   },
-  { path: 'pets', title: 'Mascotas', loadComponent: comingSoon, data: { heading: 'Mascotas' } },
+  {
+    path: 'pets',
+    title: 'Mascotas',
+    loadComponent: () => import('./pets/pet-list/pet-list').then((m) => m.PetList),
+  },
+  {
+    path: 'pets/new',
+    title: 'Registrar mascota',
+    loadComponent: () => import('./pets/pet-form/pet-form').then((m) => m.PetForm),
+  },
+  {
+    path: 'pets/:id/edit',
+    title: 'Editar mascota',
+    loadComponent: () => import('./pets/pet-form/pet-form').then((m) => m.PetForm),
+  },
   {
     path: 'delivery-calendar',
     title: 'Agenda de entregas',
@@ -45,6 +58,13 @@ export const STAFF_ROUTES: Routes = [
     data: { heading: 'Detalle de adoptante' },
   },
   {
+    // Staff can see the users; only an ADMIN will be able to edit them.
+    path: 'users',
+    title: 'Usuarios',
+    loadComponent: comingSoon,
+    data: { heading: 'Usuarios' },
+  },
+  {
     path: 'profile',
     title: 'Mi perfil',
     loadComponent: comingSoon,
@@ -60,12 +80,6 @@ export const STAFF_ROUTES: Routes = [
         title: 'Trabajadores',
         loadComponent: comingSoon,
         data: { heading: 'Trabajadores' },
-      },
-      {
-        path: 'users',
-        title: 'Usuarios',
-        loadComponent: comingSoon,
-        data: { heading: 'Usuarios' },
       },
       {
         path: 'reports',

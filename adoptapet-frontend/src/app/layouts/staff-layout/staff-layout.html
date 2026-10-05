@@ -4,60 +4,61 @@
     class="sidenav"
     [mode]="isHandset() ? 'over' : 'side'"
     [opened]="!isHandset()"
-    [attr.role]="isHandset() ? 'dialog' : 'navigation'"
+    [attr.role]="isHandset() ? 'dialog' : null"
+    [attr.aria-label]="isHandset() ? 'Menú del panel' : null"
   >
-    <a class="logo ap-logo" routerLink="/staff/dashboard">
+    <a class="ap-logo logo" routerLink="/staff/dashboard">
       <mat-icon class="ap-logo__icon" aria-hidden="true">pets</mat-icon>
       AdoptaPet
     </a>
-    <mat-nav-list aria-label="Panel">
+    <p class="team">Equipo del albergue</p>
+
+    <nav class="menu" aria-label="Panel">
       @for (link of links(); track link.path) {
         <a
-          mat-list-item
+          class="menu__item"
           [routerLink]="link.path"
           routerLinkActive="active"
-          #rla="routerLinkActive"
-          [activated]="rla.isActive"
+          ariaCurrentWhenActive="page"
           (click)="isHandset() && drawer.close()"
         >
-          <mat-icon matListItemIcon aria-hidden="true">{{ link.icon }}</mat-icon>
-          <span matListItemTitle>{{ link.label }}</span>
+          <mat-icon aria-hidden="true">{{ link.icon }}</mat-icon>
+          {{ link.label }}
         </a>
       }
-    </mat-nav-list>
-    <div class="sidenav-footer">
-      <a routerLink="/pets">
-        <mat-icon aria-hidden="true">storefront</mat-icon>
-        Ver sitio público
-      </a>
-    </div>
+      <hr class="menu__divider" />
+      <button type="button" class="menu__item" (click)="logout()">
+        <mat-icon aria-hidden="true">logout</mat-icon>
+        Cerrar sesión
+      </button>
+    </nav>
   </mat-sidenav>
 
-  <mat-sidenav-content class="content">
-    <mat-toolbar class="toolbar">
+  <mat-sidenav-content class="content" [class.content--docked]="!isHandset()">
+    <header class="topbar">
       @if (isHandset()) {
         <button matIconButton type="button" aria-label="Abrir menú" (click)="drawer.toggle()">
           <mat-icon aria-hidden="true">menu</mat-icon>
         </button>
       }
+      <nav class="crumbs" aria-label="Ruta de navegación">
+        <a routerLink="/staff/dashboard">AdoptaPet</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{{ pageTitle() }}</span>
+      </nav>
+
       <span class="spacer"></span>
       <app-theme-toggle />
-      @if (store.user(); as user) {
-        <a matButton routerLink="/staff/profile" class="user">
-          <mat-icon aria-hidden="true">account_circle</mat-icon>
-          {{ user.firstName }} · {{ roleLabel[user.role] }}
-        </a>
-      }
-      <button matIconButton type="button" aria-label="Cerrar sesión" (click)="logout()">
-        <mat-icon aria-hidden="true">logout</mat-icon>
-      </button>
+      <span class="divider" aria-hidden="true"></span>
+      <app-user-menu show="role" />
+
       <mat-progress-bar
         class="progress"
         mode="indeterminate"
         [class.visible]="loading.active()"
         aria-label="Cargando"
       />
-    </mat-toolbar>
+    </header>
 
     <main class="main">
       <router-outlet />

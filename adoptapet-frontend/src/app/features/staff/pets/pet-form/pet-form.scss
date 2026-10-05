@@ -1,0 +1,121 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  color: var(--ap-color-primary);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-5);
+}
+
+.panel {
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-sm);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-6);
+  }
+}
+
+.skeleton {
+  min-height: 420px;
+}
+
+.section-title {
+  margin-bottom: var(--ap-space-4);
+  font-size: var(--ap-font-size-xl);
+  font-weight: 800;
+}
+
+.ap-form-grid .ap-input:not(textarea) {
+  height: 52px;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--ap-color-text-muted);
+}
+
+// ----- photo: preview (or icon) + "Seleccionar imagen"
+
+.photo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ap-space-4);
+  min-height: 116px;
+  padding: var(--ap-space-4);
+  border: 2px dashed var(--ap-color-border-strong);
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+
+  &--invalid {
+    border-color: var(--ap-color-danger);
+  }
+}
+
+.photo__preview {
+  width: 112px;
+  height: 112px;
+  border-radius: var(--ap-radius-md);
+  object-fit: cover;
+}
+
+.photo__icon {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  color: var(--ap-color-primary);
+  opacity: 0.6;
+}
+
+.photo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ap-space-2);
+}
+
+.error {
+  flex-wrap: wrap;
+
+  span {
+    flex: 1;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--ap-space-3);
+
+  .mat-mdc-button-base {
+    --mat-button-filled-container-height: 48px;
+    --mat-button-tonal-container-height: 48px;
+    flex: 1 1 160px;
+
+    @include bp.up(bp.$sm) {
+      flex: 0 0 auto;
+      min-width: 190px;
+    }
+  }
+}

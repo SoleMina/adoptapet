@@ -1,0 +1,77 @@
+<app-panel-header heading="Panel" subtitle="Prioriza solicitudes y organiza las entregas." />
+
+@if (error()) {
+  <section class="panel">
+    <app-error-state [error]="error()" (retry)="reload()" />
+  </section>
+} @else {
+  <ul class="kpis" aria-label="Resumen de hoy">
+    @for (kpi of kpis(); track kpi.label) {
+      <li class="kpi" [attr.aria-busy]="loading()">
+        <span class="kpi__icon" [attr.data-tone]="kpi.tone" aria-hidden="true">
+          <mat-icon>{{ kpi.icon }}</mat-icon>
+        </span>
+        <span class="kpi__text">
+          <span class="kpi__label">{{ kpi.label }}</span>
+          <strong class="kpi__value">{{ loading() ? '–' : kpi.value }}</strong>
+        </span>
+      </li>
+    }
+  </ul>
+
+  <section class="panel" aria-labelledby="review-title">
+    <header class="panel__header">
+      <h2 id="review-title" class="panel__title">Solicitudes para revisar</h2>
+      @if (total() > rows().length) {
+        <a class="panel__link" routerLink="/staff/applications">Ver las {{ total() }}</a>
+      }
+    </header>
+
+    @if (loading()) {
+      <div class="loading" aria-busy="true" aria-label="Cargando solicitudes">
+        <div class="loading__row"></div>
+        <div class="loading__row"></div>
+      </div>
+    } @else if (rows().length === 0) {
+      <app-empty-state
+        icon="task_alt"
+        heading="Todo al día"
+        message="No hay solicitudes pendientes ni entregas por atender."
+      />
+    } @else {
+      <table class="ap-table">
+        <thead>
+          <tr>
+            <th scope="col">Mascota</th>
+            <th scope="col">Adoptante</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.application.id) {
+            <tr>
+              <td class="ap-table__main">
+                <app-pet-photo [path]="row.imageUrl" [name]="row.application.petName" />
+                <strong>{{ row.application.petName }}</strong>
+              </td>
+              <td data-label="Adoptante">{{ row.adopter }}</td>
+              <td data-label="Estado"><app-status-badge [status]="row.application.status" /></td>
+              <td class="action">
+                <a
+                  class="ap-outline-button"
+                  [routerLink]="['/staff/applications', row.application.id]"
+                >
+                  {{ row.action }}
+                  <span class="cdk-visually-hidden">
+                    la solicitud de {{ row.adopter }} para {{ row.application.petName }}
+                  </span>
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+}

@@ -1,18 +1,15 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { Auth } from '@core/auth/auth';
 import { AuthStore } from '@core/auth/auth-store';
-import { ROLE_LABEL } from '@core/i18n/labels';
 import { UnreadNotifications } from '@core/notifications/unread-notifications';
 import { Loading } from '@core/ui/loading';
-import { initialsOf } from '@shared/utils/initials';
 import { ThemeToggle } from '@shared/components/theme-toggle/theme-toggle';
+import { UserMenu } from '@shared/components/user-menu/user-menu';
 import { filter, map } from 'rxjs';
 
 interface NavLink {
@@ -30,22 +27,20 @@ interface NavLink {
     RouterOutlet,
     RouterLink,
     MatButtonModule,
-    MatDividerModule,
     MatIconModule,
     MatMenuModule,
     MatProgressBarModule,
     ThemeToggle,
+    UserMenu,
   ],
   templateUrl: './site-layout.html',
   styleUrl: './site-layout.scss',
 })
 export class SiteLayout {
-  private readonly auth = inject(Auth);
   private readonly router = inject(Router);
   protected readonly store = inject(AuthStore);
   protected readonly loading = inject(Loading);
   private readonly unread = inject(UnreadNotifications);
-  protected readonly roleLabel = ROLE_LABEL;
 
   private readonly url = toSignal(
     this.router.events.pipe(
@@ -53,12 +48,6 @@ export class SiteLayout {
       map((event) => event.urlAfterRedirects),
     ),
     { initialValue: this.router.url },
-  );
-
-  protected readonly initials = computed(() => initialsOf(this.store.user() ?? {}));
-
-  protected readonly profilePath = computed(() =>
-    this.store.isStaff() ? '/staff/profile' : '/profile',
   );
 
   private readonly route = computed(() => this.url().split(/[?#]/)[0]);
@@ -104,8 +93,4 @@ export class SiteLayout {
           { label: 'Crear cuenta', path: '/register', active: this.registerActive() },
         ],
   );
-
-  protected logout(): void {
-    this.auth.logout();
-  }
 }

@@ -48,33 +48,7 @@
         </div>
       }
 
-      @if (store.user(); as user) {
-        <button
-          type="button"
-          class="user-button"
-          aria-label="Menú de usuario"
-          [matMenuTriggerFor]="userMenu"
-        >
-          <span class="avatar" aria-hidden="true">{{ initials() }}</span>
-          <span class="user-name" aria-hidden="true">{{ user.firstName }}</span>
-          <mat-icon class="chevron" aria-hidden="true">expand_more</mat-icon>
-        </button>
-        <mat-menu #userMenu="matMenu" xPosition="before">
-          <div class="menu-header">
-            <strong>{{ user.firstName }} {{ user.lastName }}</strong>
-            <span>{{ roleLabel[user.role] }}</span>
-          </div>
-          <mat-divider />
-          <a mat-menu-item [routerLink]="profilePath()">
-            <mat-icon aria-hidden="true">person</mat-icon>
-            Mi perfil
-          </a>
-          <button mat-menu-item type="button" (click)="logout()">
-            <mat-icon aria-hidden="true">logout</mat-icon>
-            Cerrar sesión
-          </button>
-        </mat-menu>
-      }
+      <app-user-menu />
 
       <button
         matIconButton

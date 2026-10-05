@@ -1,0 +1,121 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.new {
+  --mat-button-filled-container-height: 52px;
+}
+
+.panel {
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-sm);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-6);
+  }
+}
+
+.filters {
+  margin-bottom: var(--ap-space-5);
+
+  .ap-input {
+    height: 52px;
+  }
+}
+
+.health .mat-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+// ----- row actions
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-2);
+
+  @include bp.up(bp.$md) {
+    // keeps the cell as a table cell and its buttons in a row
+    display: table-cell;
+    white-space: nowrap;
+
+    .row-action + .row-action {
+      margin-left: var(--ap-space-2);
+    }
+  }
+}
+
+.row-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  height: 44px;
+  padding: 0 var(--ap-space-4);
+  border: 1px solid var(--ap-color-border-strong);
+  border-radius: var(--ap-radius-md);
+  background-color: var(--ap-color-surface);
+  color: var(--ap-color-text);
+  font: inherit;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+
+  &:hover {
+    background-color: var(--ap-color-primary-faint);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: progress;
+  }
+
+  &--danger {
+    border-color: var(--ap-color-danger);
+    background-color: var(--ap-color-danger-soft);
+    color: var(--ap-color-danger);
+
+    &:hover {
+      background-color: var(--ap-color-danger-soft);
+      filter: brightness(0.97);
+    }
+  }
+
+  &--success {
+    border-color: var(--ap-color-success);
+    background-color: var(--ap-color-success-soft);
+    color: var(--ap-color-success);
+
+    &:hover {
+      background-color: var(--ap-color-success-soft);
+      filter: brightness(0.97);
+    }
+  }
+}
+
+.note {
+  margin-top: var(--ap-space-5);
+  padding: var(--ap-space-4) var(--ap-space-5);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-3);
+}
+
+.loading__row {
+  height: 96px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+}

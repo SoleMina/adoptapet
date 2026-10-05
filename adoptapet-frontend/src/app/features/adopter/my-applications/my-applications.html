@@ -21,7 +21,7 @@
         <a matButton="filled" routerLink="/pets">Ver mascotas</a>
       </app-empty-state>
     } @else {
-      <table class="table">
+      <table class="ap-table">
         <caption class="cdk-visually-hidden">
           Mis solicitudes de adopción
         </caption>
@@ -37,7 +37,7 @@
         <tbody>
           @for (row of rows(); track row.application.id) {
             <tr>
-              <td class="pet">
+              <td class="ap-table__main">
                 <app-pet-photo [path]="row.imageUrl" [name]="row.application.petName" />
                 <strong>{{ row.application.petName }}</strong>
               </td>
@@ -54,8 +54,11 @@
                   {{ row.next }}
                 }
               </td>
-              <td class="action">
-                <a class="outline-button" [routerLink]="['/my-applications', row.application.id]">
+              <td class="ap-table__action">
+                <a
+                  class="ap-outline-button"
+                  [routerLink]="['/my-applications', row.application.id]"
+                >
                   Ver detalle
                   <span class="cdk-visually-hidden"
                     >de la solicitud de {{ row.application.petName }}</span

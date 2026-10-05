@@ -88,6 +88,9 @@ export const APPLICATION_STATUS_ICON: Record<ApplicationStatus, string> = {
   CANCELLED: 'block',
 };
 
+/** Species offered by the pet form. The backend stores the text as it is. */
+export const SPECIES_OPTIONS = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
+
 /** Options of the adoption form. The backend stores the text as it is. */
 export const HOUSING_TYPES = ['Casa', 'Casa con patio', 'Departamento', 'Habitación', 'Otro'];
 

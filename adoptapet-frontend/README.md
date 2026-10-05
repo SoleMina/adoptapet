@@ -53,7 +53,7 @@ src/
 │   │   ├── public/           # home, pet-catalog, pet-detail
 │   │   ├── auth/             # login, register (2 steps)
 │   │   ├── adopter/          # apply (wizard), my-applications, application-detail, notifications, profile
-│   │   ├── staff/            # routes only for now (coming soon), admin-only routes inside
+│   │   ├── staff/            # dashboard (Panel), pets (list + form); the rest are routes only for now
 │   │   └── errors/           # 403 / 404
 │   ├── app.config.ts         # router, HTTP + interceptors, locale es-PE, Material defaults, icons
 │   └── app.routes.ts
@@ -68,8 +68,9 @@ src/
 | `/inicio` (`/` redirects here), `/pets`, `/pets/:id` | everyone | ✅ built |
 | `/login`, `/register` | visitors only (`guestGuard`) | ✅ built |
 | `/apply/:petId` (4 steps + "sent"), `/my-applications`, `/my-applications/:id`, `/notifications`, `/profile` | ADOPTER | ✅ built |
-| `/staff/dashboard`, `applications`, `applications/:id`, `pets`, `delivery-calendar`, `adopters`, `adopters/:id`, `profile` | ADMIN, WORKER | placeholder |
-| `/staff/workers`, `/staff/users`, `/staff/reports` | ADMIN | placeholder |
+| `/staff/dashboard` (Panel), `/staff/pets`, `pets/new`, `pets/:id/edit` | ADMIN, WORKER | ✅ built |
+| `/staff/applications`, `applications/:id`, `delivery-calendar`, `adopters`, `adopters/:id`, `users`, `profile` | ADMIN, WORKER | placeholder |
+| `/staff/workers`, `/staff/reports` | ADMIN | placeholder |
 | `/forbidden`, `**` | everyone | ✅ built |
 
 After login an adopter goes to `returnUrl` or the catalog, staff to `/staff/dashboard` (as in the Figma). The session

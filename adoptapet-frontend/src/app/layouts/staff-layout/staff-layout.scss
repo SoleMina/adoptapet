@@ -1,3 +1,7 @@
+@use 'breakpoints' as bp;
+
+$sidenav-width: 292px;
+
 :host {
   display: block;
   height: 100%;
@@ -8,54 +12,130 @@
   background-color: var(--ap-color-page);
 }
 
+// ----- side menu
+
 .sidenav {
   --mat-sidenav-container-shape: 0;
-  width: 260px;
-  padding: var(--ap-space-4) var(--ap-space-2);
-  border-right: 1px solid var(--ap-color-border);
-  background-color: var(--ap-color-surface);
+  --mat-sidenav-container-background-color: var(--ap-color-surface);
+  --mat-sidenav-container-divider-color: transparent;
+
+  width: $sidenav-width;
+  padding: var(--ap-space-6) var(--ap-space-5);
+  box-shadow: var(--ap-shadow-sm);
 }
 
 .logo {
-  padding: var(--ap-space-2) var(--ap-space-4) var(--ap-space-4);
+  padding-inline: var(--ap-space-2);
 }
 
-.active {
-  --mat-list-active-indicator-color: var(--ap-color-primary-soft);
-  --mat-list-list-item-label-text-color: var(--ap-color-primary);
-  --mat-list-list-item-leading-icon-color: var(--ap-color-primary);
-  font-weight: 700;
+.team {
+  margin: var(--ap-space-4) 0 var(--ap-space-5);
+  padding-inline: var(--ap-space-2);
+  color: var(--ap-color-text-muted);
 }
 
-.sidenav-footer {
-  margin-top: var(--ap-space-6);
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-2);
+}
+
+.menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-4);
+  width: 100%;
   padding: var(--ap-space-4);
-  font-size: var(--ap-font-size-sm);
+  border: 0;
+  border-radius: var(--ap-radius-lg);
+  background: none;
+  color: var(--ap-color-text);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 120ms ease;
 
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--ap-space-2);
+  .mat-icon {
+    flex-shrink: 0;
     color: var(--ap-color-text-muted);
-    text-decoration: none;
+  }
+
+  &:hover {
+    background-color: var(--ap-color-primary-faint);
+  }
+
+  &.active {
+    background-color: var(--ap-color-primary-soft);
+    color: var(--ap-color-primary);
+    font-weight: 700;
+
+    .mat-icon {
+      color: var(--ap-color-primary);
+    }
   }
 }
 
-.toolbar {
+.menu__divider {
+  width: 100%;
+  margin: var(--ap-space-4) 0;
+  border: 0;
+  border-top: 1px solid var(--ap-color-border);
+}
+
+// Material sets this margin by measuring the drawer when it starts, which can happen before the drawer has
+// its final width. The width is fixed, so the margin is too.
+.content--docked {
+  margin-left: $sidenav-width !important;
+}
+
+// ----- top bar
+
+.topbar {
   position: sticky;
   top: 0;
   z-index: 2;
-  gap: var(--ap-space-1);
-  background-color: var(--ap-color-surface);
-  box-shadow: var(--ap-shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  min-height: var(--ap-nav-height);
+  padding-inline: var(--ap-space-4);
+  background-color: var(--ap-color-page);
+
+  @include bp.up(bp.$md) {
+    padding-inline: var(--ap-space-8);
+  }
+}
+
+.crumbs {
+  display: flex;
+  gap: var(--ap-space-2);
+  color: var(--ap-color-text-muted);
+  white-space: nowrap;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  [aria-current] {
+    color: var(--ap-color-text);
+  }
 }
 
 .spacer {
   flex: 1;
 }
 
-.user {
-  font-weight: 600;
+.divider {
+  width: 1px;
+  height: 28px;
+  margin-inline: var(--ap-space-2);
+  background-color: var(--ap-color-border);
 }
 
 .progress {
@@ -65,5 +145,15 @@
 
   &.visible {
     visibility: visible;
+  }
+}
+
+// ----- page
+
+.main {
+  padding: var(--ap-space-4) var(--ap-space-4) var(--ap-space-12);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-6) var(--ap-space-8) var(--ap-space-12);
   }
 }

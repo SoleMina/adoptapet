@@ -1,0 +1,139 @@
+<app-panel-header
+  heading="Mascotas"
+  subtitle="Administra la ficha y disponibilidad de cada mascota."
+>
+  <a matButton="filled" class="new" routerLink="/staff/pets/new">
+    <mat-icon aria-hidden="true">add</mat-icon>
+    Registrar mascota
+  </a>
+</app-panel-header>
+
+<section class="panel">
+  <form class="ap-form-grid filters" (submit)="$event.preventDefault()">
+    <div class="ap-field">
+      <label class="ap-field__label" for="status">Estado</label>
+      <select #statusSelect id="status" class="ap-input" (change)="onStatus(statusSelect.value)">
+        <option value="" [selected]="status() === ''">Todas</option>
+        @for (option of statusOptions; track option.value) {
+          <option [value]="option.value" [selected]="option.value === status()">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+    </div>
+    <div class="ap-field">
+      <label class="ap-field__label" for="species">Especie</label>
+      <select
+        #speciesSelect
+        id="species"
+        class="ap-input"
+        (change)="species.set(speciesSelect.value)"
+      >
+        <option value="" [selected]="species() === ''">Todas</option>
+        @for (option of speciesOptions(); track option.value) {
+          <option [value]="option.value" [selected]="option.value === species()">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+    </div>
+  </form>
+
+  @if (pets.isLoading()) {
+    <div class="loading" aria-busy="true" aria-label="Cargando mascotas">
+      <div class="loading__row"></div>
+      <div class="loading__row"></div>
+      <div class="loading__row"></div>
+    </div>
+  } @else if (pets.error()) {
+    <app-error-state [error]="pets.error()" (retry)="pets.reload()" />
+  } @else if (rows().length === 0) {
+    @if (hasFilters()) {
+      <app-empty-state
+        icon="search_off"
+        heading="Ninguna mascota coincide con los filtros"
+        message="Prueba con otro estado u otra especie."
+      >
+        <button matButton="tonal" type="button" (click)="clearFilters()">Limpiar filtros</button>
+      </app-empty-state>
+    } @else {
+      <app-empty-state
+        heading="Aún no hay mascotas registradas"
+        message="Registra la primera para que aparezca en el catálogo."
+      >
+        <a matButton="filled" routerLink="/staff/pets/new">Registrar mascota</a>
+      </app-empty-state>
+    }
+  } @else {
+    <p class="cdk-visually-hidden" aria-live="polite">{{ rows().length }} mascotas</p>
+    <table class="ap-table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Especie</th>
+          <th scope="col">Salud</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.pet.id) {
+          <tr>
+            <td class="ap-table__main">
+              <app-pet-photo [path]="row.pet.imageUrl" [name]="row.pet.name" />
+              <strong>{{ row.pet.name }}</strong>
+            </td>
+            <td data-label="Especie">{{ row.species }}</td>
+            <td data-label="Salud">
+              <span class="ap-badge health" [attr.data-tone]="row.health.tone">
+                <mat-icon aria-hidden="true">favorite</mat-icon>
+                {{ row.health.text }}
+              </span>
+            </td>
+            <td data-label="Estado">
+              <span class="ap-badge" [attr.data-tone]="row.status.tone">
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+                {{ row.status.text }}
+              </span>
+            </td>
+            <td class="actions">
+              <a class="row-action" [routerLink]="['/staff/pets', row.pet.id, 'edit']">
+                <mat-icon aria-hidden="true">edit</mat-icon>
+                Editar
+                <span class="cdk-visually-hidden">a {{ row.pet.name }}</span>
+              </a>
+              @if (row.pet.adoptionStatus === 'AVAILABLE') {
+                <button
+                  type="button"
+                  class="row-action row-action--danger"
+                  [disabled]="busyId() === row.pet.id"
+                  (click)="deactivate(row.pet)"
+                >
+                  <mat-icon aria-hidden="true">block</mat-icon>
+                  Desactivar
+                  <span class="cdk-visually-hidden">a {{ row.pet.name }}</span>
+                </button>
+              } @else if (row.pet.adoptionStatus === 'INACTIVE') {
+                <button
+                  type="button"
+                  class="row-action row-action--success"
+                  [disabled]="busyId() === row.pet.id"
+                  (click)="reactivate(row.pet)"
+                >
+                  <mat-icon aria-hidden="true">autorenew</mat-icon>
+                  Reactivar
+                  <span class="cdk-visually-hidden">a {{ row.pet.name }}</span>
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <p class="ap-banner note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    Desactivar conserva el registro. Solo se permite cuando la mascota está disponible.
+  </p>
+</section>
