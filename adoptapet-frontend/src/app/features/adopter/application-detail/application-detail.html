@@ -1,0 +1,104 @@
+<app-page-hero [heading]="heading()" [crumb]="heading()" [trail]="trail" [subtitle]="reference()">
+  <a class="back" routerLink="/my-applications">
+    <mat-icon aria-hidden="true">arrow_back</mat-icon>
+    Volver a mis solicitudes
+  </a>
+</app-page-hero>
+
+<div class="ap-container ap-container--wide body">
+  @if (application.isLoading()) {
+    <div class="panel skeleton" aria-busy="true" aria-label="Cargando solicitud"></div>
+  } @else if (application.error()) {
+    <div class="panel">
+      <app-error-state
+        [error]="application.error()"
+        heading="No pudimos mostrar esta solicitud"
+        (retry)="application.reload()"
+      >
+        <a matButton="tonal" routerLink="/my-applications">Ver mis solicitudes</a>
+      </app-error-state>
+    </div>
+  } @else if (application.value(); as current) {
+    <section class="panel" aria-labelledby="status-title">
+      <div class="summary">
+        <app-pet-photo class="summary__photo" [path]="imageUrl()" [name]="current.petName" />
+        <div>
+          <p class="summary__title">{{ reference() }}</p>
+          <app-status-badge [status]="current.status" />
+        </div>
+      </div>
+
+      <h2 id="status-title" class="section-title">Estado de tu solicitud</h2>
+
+      <ol class="timeline">
+        @for (step of timeline(); track step.label) {
+          <li class="timeline__step" [attr.data-state]="step.state">
+            <span class="timeline__dot" aria-hidden="true">
+              @if (step.icon) {
+                <mat-icon>{{ step.icon }}</mat-icon>
+              }
+            </span>
+            <span class="timeline__label">{{ step.label }}</span>
+          </li>
+        }
+      </ol>
+
+      @if (current.appointment; as appointment) {
+        @if (current.status === 'APPROVED') {
+          <div class="appointment">
+            <span class="appointment__icon" aria-hidden="true"
+              ><mat-icon>calendar_month</mat-icon></span
+            >
+            <div>
+              <p>Te esperamos el {{ appointment.deliveryDate | limaDate }} de</p>
+              <p class="appointment__time">
+                {{ appointment.startTime | limaDate: 'time' }} a
+                {{ appointment.endTime | limaDate: 'time' }}
+              </p>
+              <p>
+                Límite de recojo: {{ appointment.pickupDeadline | limaDate: 'time' }}. Trae tu DNI.
+              </p>
+              @if (appointment.observation) {
+                <p class="appointment__observation">{{ appointment.observation }}</p>
+              }
+            </div>
+          </div>
+        }
+      }
+      @if (current.status === 'COMPLETED') {
+        <div class="congrats">
+          <app-pet-photo class="congrats__photo" [path]="imageUrl()" [name]="current.petName" />
+          <mat-icon class="congrats__heart" aria-hidden="true">favorite</mat-icon>
+          <p>¡Felicidades por tu adopción!</p>
+        </div>
+      } @else if (note(); as message) {
+        <p class="note" [attr.data-tone]="message.tone">
+          <mat-icon aria-hidden="true">{{ message.icon }}</mat-icon>
+          {{ message.text }}
+        </p>
+      }
+    </section>
+
+    <section class="panel" aria-labelledby="documents-title">
+      <h2 id="documents-title" class="section-title section-title--first">Documentos</h2>
+      <ul class="documents">
+        @for (document of documents(); track document.type) {
+          <li>
+            <span class="documents__icon" aria-hidden="true"><mat-icon>draft</mat-icon></span>
+            <span class="documents__label">{{ document.label }}</span>
+            <button
+              matButton="outlined"
+              type="button"
+              [disabled]="downloading() === document.type"
+              (click)="download(current, document)"
+            >
+              <mat-icon aria-hidden="true">download</mat-icon>
+              {{ downloading() === document.type ? 'Descargando…' : 'Descargar' }}
+              <span class="cdk-visually-hidden">{{ document.label }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+</div>

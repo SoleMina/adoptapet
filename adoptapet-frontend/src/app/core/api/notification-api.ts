@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { apiUrl } from '@core/http/api-url';
+import { SILENT_REQUEST } from '@core/http/loading-interceptor';
 import { NotificationResponse, UnreadCountResponse } from '@core/models/notification';
 import { Observable } from 'rxjs';
 
@@ -13,8 +14,11 @@ export class NotificationApi {
     return this.http.get<NotificationResponse[]>(apiUrl('/notifications/me'));
   }
 
+  /** Polled in the background, so it does not show the progress bar. */
   unreadCount(): Observable<UnreadCountResponse> {
-    return this.http.get<UnreadCountResponse>(apiUrl('/notifications/me/unread-count'));
+    return this.http.get<UnreadCountResponse>(apiUrl('/notifications/me/unread-count'), {
+      context: new HttpContext().set(SILENT_REQUEST, true),
+    });
   }
 
   markAsRead(id: number): Observable<NotificationResponse> {

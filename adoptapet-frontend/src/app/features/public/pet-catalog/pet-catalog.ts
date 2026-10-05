@@ -10,6 +10,7 @@ import { ErrorState } from '@shared/components/error-state/error-state';
 import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetCard } from '@shared/components/pet-card/pet-card';
 import { PetCardSkeleton } from '@shared/components/pet-card-skeleton/pet-card-skeleton';
+import { valueOf } from '@shared/utils/resource';
 
 /**
  * Available pets. The list is loaded once and filtered in the browser (instant feedback);
@@ -46,7 +47,7 @@ export class PetCatalog {
   });
 
   protected readonly speciesOptions = computed(() => {
-    const values = new Set((this.pets.value() ?? []).map((pet) => pet.species));
+    const values = new Set((valueOf(this.pets) ?? []).map((pet) => pet.species));
     return [...values]
       .map((value) => ({ value, label: speciesLabel(value) }))
       .sort((a, b) => a.label.localeCompare(b.label, 'es'));
@@ -55,7 +56,7 @@ export class PetCatalog {
   protected readonly filtered = computed(() => {
     const term = normalize(this.search());
     const species = this.selectedSpecies();
-    return (this.pets.value() ?? []).filter(
+    return (valueOf(this.pets) ?? []).filter(
       (pet) =>
         (!species || pet.species === species) &&
         (!term || normalize(`${pet.name} ${pet.breed}`).includes(term)),

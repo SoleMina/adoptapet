@@ -1,0 +1,190 @@
+@use 'breakpoints' as bp;
+
+$hero-overlap: 40px;
+
+:host {
+  display: block;
+  padding-bottom: var(--ap-space-12);
+}
+
+app-page-hero {
+  --hero-overlap: #{$hero-overlap};
+  --hero-subtitle-size: var(--ap-font-size-lg);
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  margin-top: -$hero-overlap;
+}
+
+.panel {
+  padding: var(--ap-space-4);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-md);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-6);
+  }
+}
+
+// ----- header: bell, title, "1 sin leer", "Marcar todas como leídas"
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ap-space-3) var(--ap-space-4);
+  margin-bottom: var(--ap-space-5);
+}
+
+.header__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+
+  .mat-icon {
+    font-variation-settings: 'FILL' 1;
+  }
+}
+
+.header__title {
+  font-size: var(--ap-font-size-xl);
+  font-weight: 800;
+}
+
+.header__action {
+  margin-left: auto;
+}
+
+.pill {
+  padding: 4px var(--ap-space-4);
+  border-radius: 999px;
+  background-color: var(--ap-color-neutral-soft);
+  color: var(--ap-color-text-muted);
+  font-size: var(--ap-font-size-sm);
+  font-weight: 700;
+  white-space: nowrap;
+
+  &--unread {
+    background-color: var(--ap-color-primary-soft);
+    color: var(--ap-color-primary);
+  }
+}
+
+// ----- list
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: var(--ap-space-3) var(--ap-space-4);
+  padding: var(--ap-space-4);
+  border: 1px solid var(--ap-color-border);
+  border-radius: var(--ap-radius-lg);
+
+  &--unread {
+    border-color: transparent;
+    background-color: var(--ap-color-primary-faint);
+  }
+
+  // phone: dot, icon and photo on the first row; text, pill and button below
+  .item__text,
+  .mat-mdc-button-base {
+    grid-column: 1 / -1;
+  }
+
+  .pill {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  @include bp.up(bp.$md) {
+    grid-template-columns: auto auto auto 1fr auto auto;
+    gap: var(--ap-space-5);
+    padding: var(--ap-space-4) var(--ap-space-5);
+
+    .item__text,
+    .pill,
+    .mat-mdc-button-base {
+      grid-column: auto;
+    }
+  }
+}
+
+.item__dot {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--ap-color-border-strong);
+  border-radius: 50%;
+
+  .item--unread & {
+    border-color: var(--ap-color-primary);
+    background-color: var(--ap-color-primary);
+  }
+}
+
+.item__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--ap-color-neutral-soft);
+  color: var(--ap-color-text-muted);
+
+  @each $tone in success, danger {
+    &[data-tone='#{$tone}'] {
+      background-color: var(--ap-color-#{$tone});
+      color: #fff;
+    }
+  }
+
+  &[data-tone='warning'] {
+    background-color: var(--ap-color-warning-strong);
+    color: #fff;
+  }
+
+  &[data-tone='info'] {
+    background-color: var(--ap-color-primary-soft);
+    color: var(--ap-color-primary);
+  }
+}
+
+.item__photo {
+  --pet-photo-ratio: 1 / 1;
+  width: 72px;
+  border-radius: var(--ap-radius-md);
+}
+
+.item__text {
+  font-size: var(--ap-font-size-md);
+}
+
+// ----- loading
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-4);
+}
+
+.loading__row {
+  height: 104px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+}

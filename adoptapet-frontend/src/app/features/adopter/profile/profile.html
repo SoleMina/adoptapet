@@ -1,0 +1,180 @@
+<app-page-hero heading="Mi perfil" subtitle="Actualiza tus datos personales." />
+
+<div class="ap-container ap-container--wide body">
+  @if (profile.isLoading()) {
+    <div class="panel skeleton" aria-busy="true" aria-label="Cargando perfil"></div>
+  } @else if (profile.error()) {
+    <div class="panel">
+      <app-error-state [error]="profile.error()" (retry)="profile.reload()" />
+    </div>
+  } @else if (user(); as current) {
+    <div class="layout">
+      <aside class="panel card" aria-label="Resumen de la cuenta">
+        <span class="card__avatar" aria-hidden="true">{{ initials() }}</span>
+        <p class="card__name">{{ current.firstName }} {{ current.lastName }}</p>
+        <p class="card__username">{{ current.username }}</p>
+        <span class="card__role">
+          <mat-icon aria-hidden="true">person</mat-icon>
+          {{ roleLabel[current.role] }}
+        </span>
+      </aside>
+
+      <form class="panel" [formGroup]="form" novalidate (ngSubmit)="save()">
+        <h2 class="section-title">
+          <mat-icon aria-hidden="true">person</mat-icon>
+          Datos de la cuenta
+        </h2>
+        <div class="ap-form-grid">
+          <div class="ap-field">
+            <label class="ap-field__label" for="username">Usuario · solo lectura</label>
+            <div class="locked">
+              <mat-icon aria-hidden="true">lock</mat-icon>
+              <input id="username" class="ap-input" [value]="current.username" readonly />
+            </div>
+          </div>
+          <div class="ap-field">
+            <label class="ap-field__label" for="role">Rol · solo lectura</label>
+            <div class="locked">
+              <mat-icon aria-hidden="true">lock</mat-icon>
+              <input id="role" class="ap-input" [value]="roleLabel[current.role]" readonly />
+            </div>
+          </div>
+        </div>
+
+        <h2 class="section-title section-title--divided">
+          <mat-icon aria-hidden="true">person</mat-icon>
+          Datos personales
+        </h2>
+        <div class="ap-form-grid">
+          <div class="ap-field">
+            <label class="ap-field__label" for="firstName">Nombres</label>
+            <input
+              id="firstName"
+              class="ap-input"
+              formControlName="firstName"
+              autocomplete="given-name"
+              maxlength="100"
+              [attr.aria-invalid]="controls.firstName.invalid && controls.firstName.touched"
+              aria-describedby="firstName-error"
+            />
+            <app-field-error [control]="controls.firstName" errorId="firstName-error" />
+          </div>
+
+          <div class="ap-field">
+            <label class="ap-field__label" for="lastName">Apellidos</label>
+            <input
+              id="lastName"
+              class="ap-input"
+              formControlName="lastName"
+              autocomplete="family-name"
+              maxlength="100"
+              [attr.aria-invalid]="controls.lastName.invalid && controls.lastName.touched"
+              aria-describedby="lastName-error"
+            />
+            <app-field-error [control]="controls.lastName" errorId="lastName-error" />
+          </div>
+
+          <div class="ap-field">
+            <label class="ap-field__label" for="email">Correo</label>
+            <input
+              id="email"
+              class="ap-input"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              maxlength="150"
+              [attr.aria-invalid]="controls.email.invalid && controls.email.touched"
+              aria-describedby="email-error"
+            />
+            <app-field-error [control]="controls.email" errorId="email-error" />
+          </div>
+
+          <div class="ap-field">
+            <label class="ap-field__label" for="dni">DNI</label>
+            <input
+              id="dni"
+              class="ap-input"
+              formControlName="dni"
+              inputmode="numeric"
+              maxlength="8"
+              autocomplete="off"
+              [attr.aria-invalid]="controls.dni.invalid && controls.dni.touched"
+              aria-describedby="dni-error"
+            />
+            <app-field-error [control]="controls.dni" errorId="dni-error" />
+          </div>
+
+          <div class="ap-field">
+            <label class="ap-field__label" for="birthDate">Nacimiento</label>
+            <input
+              id="birthDate"
+              class="ap-input"
+              type="date"
+              formControlName="birthDate"
+              autocomplete="bday"
+              min="1900-01-01"
+              [max]="maxBirthDate"
+              [attr.aria-invalid]="controls.birthDate.invalid && controls.birthDate.touched"
+              aria-describedby="birthDate-error"
+            />
+            <app-field-error [control]="controls.birthDate" errorId="birthDate-error" />
+          </div>
+
+          <div class="ap-field">
+            <label class="ap-field__label" for="phone">Teléfono</label>
+            <input
+              id="phone"
+              class="ap-input"
+              type="tel"
+              formControlName="phone"
+              inputmode="numeric"
+              maxlength="9"
+              autocomplete="tel-national"
+              [attr.aria-invalid]="controls.phone.invalid && controls.phone.touched"
+              aria-describedby="phone-error"
+            />
+            <app-field-error [control]="controls.phone" errorId="phone-error" />
+          </div>
+
+          <div class="ap-field field--wide">
+            <label class="ap-field__label" for="address">
+              Dirección <span class="optional">(opcional)</span>
+            </label>
+            <input
+              id="address"
+              class="ap-input"
+              formControlName="address"
+              autocomplete="street-address"
+              maxlength="250"
+              [attr.aria-invalid]="controls.address.invalid && controls.address.touched"
+              aria-describedby="address-error"
+            />
+            <app-field-error [control]="controls.address" errorId="address-error" />
+          </div>
+        </div>
+
+        @if (error(); as message) {
+          <p class="ap-banner ap-banner--danger error" role="alert">
+            <mat-icon aria-hidden="true">error</mat-icon>
+            {{ message }}
+          </p>
+        }
+
+        <div class="footer">
+          <button
+            matButton="tonal"
+            type="button"
+            [disabled]="form.pristine || saving()"
+            (click)="cancel()"
+          >
+            Cancelar
+          </button>
+          <button matButton="filled" type="submit" [disabled]="form.pristine || saving()">
+            <mat-icon aria-hidden="true">check</mat-icon>
+            {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

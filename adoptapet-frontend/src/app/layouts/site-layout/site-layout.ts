@@ -9,7 +9,9 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { Auth } from '@core/auth/auth';
 import { AuthStore } from '@core/auth/auth-store';
 import { ROLE_LABEL } from '@core/i18n/labels';
+import { UnreadNotifications } from '@core/notifications/unread-notifications';
 import { Loading } from '@core/ui/loading';
+import { initialsOf } from '@shared/utils/initials';
 import { ThemeToggle } from '@shared/components/theme-toggle/theme-toggle';
 import { filter, map } from 'rxjs';
 
@@ -17,6 +19,8 @@ interface NavLink {
   label: string;
   path: string;
   active: boolean;
+  /** Small counter next to the label (unread notifications). */
+  badge?: number;
 }
 
 /** Visitor and adopter area: top bar from the Figma + content. */
@@ -40,6 +44,7 @@ export class SiteLayout {
   private readonly router = inject(Router);
   protected readonly store = inject(AuthStore);
   protected readonly loading = inject(Loading);
+  private readonly unread = inject(UnreadNotifications);
   protected readonly roleLabel = ROLE_LABEL;
 
   private readonly url = toSignal(
@@ -49,6 +54,8 @@ export class SiteLayout {
     ),
     { initialValue: this.router.url },
   );
+
+  protected readonly initials = computed(() => initialsOf(this.store.user() ?? {}));
 
   protected readonly profilePath = computed(() =>
     this.store.isStaff() ? '/staff/profile' : '/profile',
@@ -74,6 +81,7 @@ export class SiteLayout {
           label: 'Notificaciones',
           path: '/notifications',
           active: route.startsWith('/notifications'),
+          badge: this.unread.count(),
         },
       );
     } else if (this.store.isStaff()) {

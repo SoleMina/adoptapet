@@ -7,6 +7,7 @@ import { ErrorState } from '@shared/components/error-state/error-state';
 import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetCard } from '@shared/components/pet-card/pet-card';
 import { PetCardSkeleton } from '@shared/components/pet-card-skeleton/pet-card-skeleton';
+import { valueOf } from '@shared/utils/resource';
 
 const FEATURED = 3;
 
@@ -38,7 +39,7 @@ export class Home {
 
   /** Healthy pets first: those are the ones that can be adopted right now. */
   protected readonly featured = computed(() =>
-    [...(this.pets.value() ?? [])]
+    [...(valueOf(this.pets) ?? [])]
       .sort((a, b) => Number(b.healthStatus === 'HEALTHY') - Number(a.healthStatus === 'HEALTHY'))
       .slice(0, FEATURED),
   );

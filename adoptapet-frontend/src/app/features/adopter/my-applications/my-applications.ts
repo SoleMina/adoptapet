@@ -12,6 +12,7 @@ import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
 import { StatusBadge } from '@shared/components/status-badge/status-badge';
 import { LimaDatePipe } from '@shared/pipes/lima-date-pipe';
+import { valueOf } from '@shared/utils/resource';
 
 /** One row of the table, with what the adopter has to know about it. */
 interface ApplicationRow {
@@ -46,14 +47,14 @@ export class MyApplications {
 
   /** Only for the photos: an application stores the pet id and name, not the image. */
   private readonly pets = rxResource({
-    params: () => (this.applications.value()?.length ? true : undefined),
+    params: () => (valueOf(this.applications)?.length ? true : undefined),
     stream: () => this.petApi.list(),
     defaultValue: [],
   });
 
   protected readonly rows = computed<ApplicationRow[]>(() => {
-    const images = new Map(this.pets.value().map((pet) => [pet.id, pet.imageUrl]));
-    return [...(this.applications.value() ?? [])]
+    const images = new Map((valueOf(this.pets) ?? []).map((pet) => [pet.id, pet.imageUrl]));
+    return [...(valueOf(this.applications) ?? [])]
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
       .map((application) => ({
         application,

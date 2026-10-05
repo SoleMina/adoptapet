@@ -1,0 +1,57 @@
+<app-page-hero heading="Notificaciones" subtitle="Novedades sobre tus solicitudes." />
+
+<div class="ap-container ap-container--wide body">
+  <section class="panel" aria-labelledby="list-title">
+    <header class="header">
+      <span class="header__icon" aria-hidden="true"><mat-icon>notifications</mat-icon></span>
+      <h2 id="list-title" class="header__title">Notificaciones</h2>
+      @if (unreadCount() > 0) {
+        <span class="pill pill--unread" aria-live="polite">{{ unreadCount() }} sin leer</span>
+      }
+      <button
+        matButton="outlined"
+        type="button"
+        class="header__action"
+        [disabled]="unreadCount() === 0 || markingAll()"
+        (click)="markAllAsRead()"
+      >
+        Marcar todas como leídas
+      </button>
+    </header>
+
+    @if (notifications.isLoading()) {
+      <div class="loading" aria-busy="true" aria-label="Cargando notificaciones">
+        <div class="loading__row"></div>
+        <div class="loading__row"></div>
+      </div>
+    } @else if (notifications.error()) {
+      <app-error-state [error]="notifications.error()" (retry)="notifications.reload()" />
+    } @else if (rows().length === 0) {
+      <app-empty-state
+        icon="notifications_off"
+        heading="No tienes notificaciones"
+        message="Aquí te avisaremos cuando haya novedades sobre tus solicitudes."
+      />
+    } @else {
+      <ul class="list">
+        @for (row of rows(); track row.notification.id) {
+          <li class="item" [class.item--unread]="!row.notification.read">
+            <span class="item__dot" aria-hidden="true"></span>
+            <span class="item__icon" [attr.data-tone]="row.tone" aria-hidden="true">
+              <mat-icon>{{ row.icon }}</mat-icon>
+            </span>
+            <app-pet-photo class="item__photo" [path]="row.imageUrl" [name]="row.petName" />
+            <p class="item__text">{{ row.text }}</p>
+            <span class="pill" [class.pill--unread]="!row.notification.read">
+              {{ row.notification.read ? 'Leída' : 'Sin leer' }}
+            </span>
+            <button matButton="outlined" type="button" (click)="open(row.notification)">
+              Ver solicitud
+              <span class="cdk-visually-hidden">de {{ row.petName }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

@@ -52,7 +52,7 @@ src/
 │   ├── features/             # pages, lazy loaded by area
 │   │   ├── public/           # home, pet-catalog, pet-detail
 │   │   ├── auth/             # login, register (2 steps)
-│   │   ├── adopter/          # routes only for now (coming soon)
+│   │   ├── adopter/          # apply (wizard), my-applications, application-detail, notifications, profile
 │   │   ├── staff/            # routes only for now (coming soon), admin-only routes inside
 │   │   └── errors/           # 403 / 404
 │   ├── app.config.ts         # router, HTTP + interceptors, locale es-PE, Material defaults, icons
@@ -67,8 +67,7 @@ src/
 |---|---|---|
 | `/inicio` (`/` redirects here), `/pets`, `/pets/:id` | everyone | ✅ built |
 | `/login`, `/register` | visitors only (`guestGuard`) | ✅ built |
-| `/apply/:petId` (4 steps + "sent"), `/my-applications` | ADOPTER | ✅ built |
-| `/my-applications/:id`, `/notifications`, `/profile` | ADOPTER | placeholder |
+| `/apply/:petId` (4 steps + "sent"), `/my-applications`, `/my-applications/:id`, `/notifications`, `/profile` | ADOPTER | ✅ built |
 | `/staff/dashboard`, `applications`, `applications/:id`, `pets`, `delivery-calendar`, `adopters`, `adopters/:id`, `profile` | ADMIN, WORKER | placeholder |
 | `/staff/workers`, `/staff/users`, `/staff/reports` | ADMIN | placeholder |
 | `/forbidden`, `**` | everyone | ✅ built |
@@ -101,6 +100,8 @@ the asset exported from Figma at 2x (908×544) keeping the same name.
   Angular 22 is zoneless and `OnPush` by default, so components do not declare it.
 * File names follow the Angular 20+ style guide (`pet-card.ts`, `auth-guards.ts`, `pet-age-pipe.ts`).
 * Components never use `HttpClient`: they call `core/api` services and read with `rxResource`.
+  Read a resource inside a `computed` with `valueOf(resource)` (`shared/utils/resource.ts`): `resource.value()`
+  throws when the request failed.
 * Code in English, UI text in Spanish (Peru). Dates with the `limaDate` pipe (`America/Lima`, UTC-5).
 * Form fields use the design's own inputs (`.ap-field` / `.ap-input`, label above). Material is used for buttons,
   icons, menus, side nav, snackbar and progress bar.

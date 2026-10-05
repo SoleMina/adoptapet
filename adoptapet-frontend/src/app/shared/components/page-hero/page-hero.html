@@ -3,6 +3,10 @@
     <nav class="crumbs" aria-label="Ruta de navegación">
       <a routerLink="/inicio">AdoptaPet</a>
       <span aria-hidden="true">/</span>
+      @for (item of trail(); track item.path) {
+        <a [routerLink]="item.path">{{ item.label }}</a>
+        <span aria-hidden="true">/</span>
+      }
       <span aria-current="page">{{ crumbText() }}</span>
     </nav>
 

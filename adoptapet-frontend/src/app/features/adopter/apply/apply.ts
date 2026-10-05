@@ -19,6 +19,7 @@ import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
 import { petBadges, petFacts } from '@shared/utils/pet-info';
 import { ApplicationSent } from './application-sent/application-sent';
+import { valueOf } from '@shared/utils/resource';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -96,15 +97,15 @@ export class Apply {
   protected readonly loading = computed(() => this.pet.isLoading() || this.mine.isLoading());
 
   protected readonly pendingApplication = computed(() => {
-    const pet = this.pet.value();
-    return this.mine
-      .value()
-      ?.find((application) => application.petId === pet?.id && application.status === 'PENDING');
+    const pet = valueOf(this.pet);
+    return valueOf(this.mine)?.find(
+      (application) => application.petId === pet?.id && application.status === 'PENDING',
+    );
   });
 
   /** Why this pet cannot receive an application right now (null = it can). */
   protected readonly blockedReason = computed(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     if (!pet) return null;
     if (pet.adoptionStatus !== 'AVAILABLE')
       return `${pet.name} ya no está disponible para adopción.`;
@@ -121,19 +122,19 @@ export class Apply {
   });
 
   protected readonly subtitle = computed(() => {
-    const name = this.pet.value()?.name ?? 'tu mascota';
+    const name = valueOf(this.pet)?.name ?? 'tu mascota';
     return this.sent()
       ? `Recibimos tu solicitud para ${name}.`
       : `Tu solicitud para adoptar a ${name}`;
   });
 
   protected readonly badges = computed(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     return pet ? petBadges(pet) : [];
   });
 
   protected readonly facts = computed(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     return pet ? petFacts(pet) : [];
   });
 

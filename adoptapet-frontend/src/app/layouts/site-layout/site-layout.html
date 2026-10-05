@@ -14,13 +14,20 @@
           [class.active]="link.active"
           [attr.aria-current]="link.active ? 'page' : null"
           [routerLink]="link.path"
-          >{{ link.label }}</a
         >
+          {{ link.label }}
+          @if (link.badge) {
+            <span class="nav-badge">
+              {{ link.badge }}<span class="cdk-visually-hidden"> sin leer</span>
+            </span>
+          }
+        </a>
       }
     </nav>
 
     <div class="tools">
       <app-theme-toggle />
+      <span class="divider" aria-hidden="true"></span>
 
       @if (!store.isAuthenticated()) {
         <div class="guest">
@@ -48,7 +55,7 @@
           aria-label="Menú de usuario"
           [matMenuTriggerFor]="userMenu"
         >
-          <span class="avatar" aria-hidden="true"><mat-icon>person</mat-icon></span>
+          <span class="avatar" aria-hidden="true">{{ initials() }}</span>
           <span class="user-name" aria-hidden="true">{{ user.firstName }}</span>
           <mat-icon class="chevron" aria-hidden="true">expand_more</mat-icon>
         </button>

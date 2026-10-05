@@ -1,0 +1,302 @@
+@use 'breakpoints' as bp;
+
+$hero-overlap: 40px;
+
+:host {
+  display: block;
+  padding-bottom: var(--ap-space-12);
+}
+
+app-page-hero {
+  --hero-overlap: #{$hero-overlap};
+  --hero-subtitle-size: var(--ap-font-size-lg);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  margin-top: var(--ap-space-5);
+  color: var(--ap-color-primary);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-5);
+  margin-top: -$hero-overlap;
+}
+
+.panel {
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-md);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-6) var(--ap-space-8);
+  }
+}
+
+.skeleton {
+  min-height: 360px;
+}
+
+.section-title {
+  margin: var(--ap-space-6) 0 var(--ap-space-5);
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+
+  &--first {
+    margin-top: 0;
+  }
+}
+
+// ----- summary: photo, "Solicitud #12 · Luna" and the status
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-5);
+  padding-bottom: var(--ap-space-5);
+  border-bottom: 1px solid var(--ap-color-border);
+}
+
+.summary__photo {
+  --pet-photo-ratio: 1 / 1;
+  flex-shrink: 0;
+  width: 96px;
+  border-radius: var(--ap-radius-lg);
+}
+
+.summary__title {
+  margin-bottom: var(--ap-space-2);
+  font-size: var(--ap-font-size-lg);
+  font-weight: 700;
+}
+
+// ----- timeline: four dots joined by a line
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__step {
+  // Each state sets these two; the line to the next step takes the color of the next step.
+  --dot-bg: var(--ap-color-neutral-soft);
+  --dot-color: var(--ap-color-text-muted);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ap-space-2);
+  color: var(--ap-color-text-muted);
+  font-size: var(--ap-font-size-sm);
+  text-align: center;
+
+  // line from the previous dot to this one
+  &:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: calc(50% + 28px);
+    width: calc(100% - 56px);
+    border-top: 2px solid var(--line-color, var(--dot-bg));
+  }
+
+  &[data-state='done'] {
+    --dot-bg: var(--ap-color-primary);
+    --dot-color: var(--ap-color-on-primary);
+    color: var(--ap-color-text);
+  }
+
+  &[data-state='success'] {
+    --dot-bg: var(--ap-color-success);
+    --dot-color: #fff;
+    color: var(--ap-color-text);
+  }
+
+  &[data-state='current'] {
+    --dot-bg: var(--ap-color-primary-soft);
+    --dot-color: var(--ap-color-primary);
+    --line-color: var(--ap-color-primary);
+    color: var(--ap-color-primary);
+    font-weight: 700;
+  }
+
+  &[data-state='warning'] {
+    --dot-bg: var(--ap-color-warning-strong);
+    --dot-color: #fff;
+    color: var(--ap-color-warning);
+    font-weight: 700;
+  }
+
+  &[data-state='error'] {
+    --dot-bg: var(--ap-color-danger);
+    --dot-color: #fff;
+    --line-color: var(--ap-color-primary);
+    color: var(--ap-color-text);
+    font-weight: 700;
+  }
+
+  &[data-state='cancelled'] {
+    --dot-bg: var(--ap-color-text-muted);
+    --dot-color: #fff;
+    --line-color: var(--ap-color-border-strong);
+  }
+
+  &[data-state='upcoming']::before {
+    border-top-style: dashed;
+    border-top-color: var(--ap-color-border-strong);
+  }
+}
+
+.timeline__dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--dot-bg);
+  color: var(--dot-color);
+
+  .mat-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 22px;
+  }
+}
+
+// ----- what happens now
+
+.appointment,
+.congrats,
+.note {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-4);
+  margin: var(--ap-space-5) 0 0;
+  padding: var(--ap-space-4) var(--ap-space-5);
+  border-radius: var(--ap-radius-lg);
+}
+
+.appointment {
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+}
+
+.appointment__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-surface);
+
+  .mat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 36px;
+  }
+}
+
+.appointment__time {
+  font-size: var(--ap-font-size-2xl);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.appointment__observation {
+  margin-top: var(--ap-space-2);
+  color: var(--ap-color-text);
+}
+
+.congrats {
+  position: relative;
+  background-color: var(--ap-color-success-soft);
+  color: var(--ap-color-success);
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+}
+
+.congrats__photo {
+  --pet-photo-ratio: 1 / 1;
+  flex-shrink: 0;
+  width: 64px;
+  border-radius: var(--ap-radius-md);
+}
+
+.congrats__heart {
+  position: absolute;
+  top: var(--ap-space-2);
+  left: 72px;
+  color: #e8527a;
+  font-variation-settings: 'FILL' 1;
+}
+
+.note {
+  background-color: var(--ap-color-info-soft);
+  color: var(--ap-color-info);
+
+  @each $tone in warning, danger {
+    &[data-tone='#{$tone}'] {
+      background-color: var(--ap-color-#{$tone}-soft);
+      color: var(--ap-color-#{$tone});
+    }
+  }
+
+  .mat-icon {
+    flex-shrink: 0;
+  }
+}
+
+// ----- documents
+
+.documents {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ap-space-4);
+    padding-block: var(--ap-space-3);
+
+    & + li {
+      border-top: 1px solid var(--ap-color-border);
+    }
+  }
+}
+
+.documents__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--ap-radius-md);
+  background-color: var(--ap-color-primary-faint);
+  color: var(--ap-color-primary);
+}
+
+.documents__label {
+  flex: 1;
+  min-width: 8rem;
+}

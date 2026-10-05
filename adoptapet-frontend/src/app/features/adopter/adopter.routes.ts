@@ -1,9 +1,6 @@
 import { Routes } from '@angular/router';
 
-const comingSoon = () =>
-  import('@shared/components/coming-soon/coming-soon').then((m) => m.ComingSoon);
-
-/** Adopter area. Screens not built yet use ComingSoon with their final route, title and guard. */
+/** Adopter area (authGuard + roleGuard are on the parent route). */
 export const ADOPTER_ROUTES: Routes = [
   {
     path: 'my-applications',
@@ -13,8 +10,8 @@ export const ADOPTER_ROUTES: Routes = [
   {
     path: 'my-applications/:id',
     title: 'Detalle de solicitud',
-    loadComponent: comingSoon,
-    data: { heading: 'Detalle de solicitud' },
+    loadComponent: () =>
+      import('./application-detail/application-detail').then((m) => m.ApplicationDetail),
   },
   {
     path: 'apply/:petId',
@@ -24,13 +21,11 @@ export const ADOPTER_ROUTES: Routes = [
   {
     path: 'notifications',
     title: 'Notificaciones',
-    loadComponent: comingSoon,
-    data: { heading: 'Notificaciones' },
+    loadComponent: () => import('./notifications/notifications').then((m) => m.Notifications),
   },
   {
     path: 'profile',
     title: 'Mi perfil',
-    loadComponent: comingSoon,
-    data: { heading: 'Mi perfil' },
+    loadComponent: () => import('./profile/profile').then((m) => m.Profile),
   },
 ];

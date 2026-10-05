@@ -22,6 +22,8 @@ export class PageHero {
   readonly heading = input.required<string>();
   /** Last breadcrumb item; defaults to the heading. */
   readonly crumb = input<string>();
+  /** Breadcrumb items between "AdoptaPet" and the last one. */
+  readonly trail = input<{ label: string; path: string }[]>([]);
   readonly subtitle = input<string>();
   /** Paws and sparkles on the right (turn off when the page projects its own art). */
   readonly decorated = input(true);

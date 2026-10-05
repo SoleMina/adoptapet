@@ -12,6 +12,7 @@ import { PageTitleStrategy } from '@core/routing/page-title-strategy';
 import { ErrorState } from '@shared/components/error-state/error-state';
 import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
+import { valueOf } from '@shared/utils/resource';
 
 /** What the adopt button does for the current visitor. */
 interface AdoptAction {
@@ -53,18 +54,18 @@ export class PetDetail {
   });
 
   protected readonly heading = computed(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     return pet ? `Detalle de ${pet.name}` : 'Detalle de mascota';
   });
 
   protected readonly badges = computed<PetBadge[]>(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     return pet ? petBadges(pet) : [];
   });
 
   /** Two columns, as in the design: species/age/sterilization and sex/breed. */
   protected readonly facts = computed<PetFact[][]>(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     if (!pet) return [];
     const facts = petFacts(pet);
     return [facts.slice(0, 3), facts.slice(3)];
@@ -72,16 +73,16 @@ export class PetDetail {
 
   /** "Quiero adoptarla" / "Quiero adoptarlo". */
   protected readonly adoptLabel = computed(() =>
-    this.pet.value()?.sex === 'MALE' ? 'Quiero adoptarlo' : 'Quiero adoptarla',
+    valueOf(this.pet)?.sex === 'MALE' ? 'Quiero adoptarlo' : 'Quiero adoptarla',
   );
 
   protected readonly action = computed<AdoptAction | null>(() => {
-    const pet = this.pet.value();
+    const pet = valueOf(this.pet);
     return pet ? this.actionFor(pet) : null;
   });
 
   constructor() {
-    effect(() => this.titles.setPageTitle(this.pet.value()?.name ?? 'Detalle de mascota'));
+    effect(() => this.titles.setPageTitle(valueOf(this.pet)?.name ?? 'Detalle de mascota'));
   }
 
   private actionFor(pet: PetResponse): AdoptAction {
@@ -113,9 +114,9 @@ export class PetDetail {
         note: 'Para enviar una solicitud, inicia sesión. El equipo revisará tu postulación.',
       };
     }
-    const pending = this.myApplications
-      .value()
-      ?.find((application) => application.petId === pet.id && application.status === 'PENDING');
+    const pending = valueOf(this.myApplications)?.find(
+      (application) => application.petId === pet.id && application.status === 'PENDING',
+    );
     if (pending) {
       return {
         ...closed,

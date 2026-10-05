@@ -6,6 +6,7 @@ import { toApiError } from '@core/errors/api-error';
 import { Notify } from '@core/ui/notify';
 import { catchError, throwError } from 'rxjs';
 import { apiUrl } from './api-url';
+import { SILENT_REQUEST } from './loading-interceptor';
 
 /**
  * Turns every HTTP error into an `ApiError` (Spanish message + field errors).
@@ -26,6 +27,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const error = toApiError(response);
       if (error.status === 401 && !isLogin && store.isAuthenticated()) {
         auth.expire();
+        error.notified = true;
+      } else if (req.context.get(SILENT_REQUEST)) {
+        // Background request (polling): fail quietly.
         error.notified = true;
       } else if ((error.status === 403 && !isLogin) || error.status === 0 || error.status >= 500) {
         notify.error(error.message);
