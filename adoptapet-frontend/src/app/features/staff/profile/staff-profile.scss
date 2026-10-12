@@ -1,0 +1,103 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.skeleton {
+  min-height: 460px;
+}
+
+// ----- section heading: icon tile + title + hint
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-5);
+  margin-bottom: var(--ap-space-4);
+}
+
+.section__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+
+  &--warm {
+    background-color: var(--ap-color-peach);
+    color: var(--ap-color-accent);
+  }
+}
+
+.section__title {
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+}
+
+.section__hint {
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+// ----- read-only account data, in a tinted box
+
+.account {
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+}
+
+.locked {
+  position: relative;
+
+  .mat-icon {
+    position: absolute;
+    top: 50%;
+    right: var(--ap-space-4);
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    transform: translateY(-50%);
+    color: var(--ap-color-text-muted);
+    pointer-events: none;
+  }
+
+  .ap-input {
+    padding-right: 48px;
+    background-color: var(--ap-color-neutral-soft);
+    color: var(--ap-color-text-muted);
+    cursor: default;
+  }
+}
+
+.personal {
+  margin-top: var(--ap-space-6);
+  padding-top: var(--ap-space-6);
+  border-top: 1px solid var(--ap-color-border);
+}
+
+.error {
+  margin-top: var(--ap-space-4);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-4);
+  margin-top: var(--ap-space-6);
+
+  .mat-mdc-button-base {
+    --mat-button-filled-container-height: 52px;
+    --mat-button-outlined-container-height: 52px;
+    flex: 1 1 160px;
+
+    @include bp.up(bp.$sm) {
+      flex: 0 0 auto;
+      min-width: 170px;
+    }
+  }
+}

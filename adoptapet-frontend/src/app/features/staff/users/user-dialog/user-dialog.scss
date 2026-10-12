@@ -1,0 +1,56 @@
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-5);
+  margin-bottom: var(--ap-space-5);
+}
+
+.identity__name {
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+}
+
+.identity__username {
+  color: var(--ap-color-text-muted);
+}
+
+.identity__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-2);
+  margin-top: var(--ap-space-2);
+}
+
+.data {
+  display: grid;
+  gap: var(--ap-space-3) var(--ap-space-5);
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  margin: 0;
+  padding: var(--ap-space-4);
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+
+  dt {
+    font-size: var(--ap-font-size-sm);
+    color: var(--ap-color-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--ap-color-text);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+}
+
+.note {
+  margin-top: var(--ap-space-4);
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+.danger {
+  --mat-button-outlined-outline-color: var(--ap-color-danger);
+  --mat-button-outlined-label-text-color: var(--ap-color-danger);
+  --mat-button-outlined-state-layer-color: var(--ap-color-danger);
+}

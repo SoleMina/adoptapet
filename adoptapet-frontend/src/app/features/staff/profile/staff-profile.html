@@ -1,0 +1,72 @@
+<app-panel-header heading="Mi perfil" subtitle="Actualiza tus datos personales." />
+
+@if (editor.profile.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando perfil"></div>
+} @else if (editor.profile.error()) {
+  <section class="ap-panel">
+    <app-error-state [error]="editor.profile.error()" (retry)="editor.profile.reload()" />
+  </section>
+} @else if (editor.user(); as current) {
+  <form class="ap-panel" [formGroup]="editor.form" novalidate (ngSubmit)="editor.save()">
+    <section aria-labelledby="account-title">
+      <header class="section">
+        <span class="section__icon" aria-hidden="true"><mat-icon>lock</mat-icon></span>
+        <div>
+          <h2 id="account-title" class="section__title">Información de la cuenta</h2>
+          <p class="section__hint">Estos datos no se pueden modificar.</p>
+        </div>
+      </header>
+      <div class="ap-form-grid account">
+        <div class="ap-field">
+          <label class="ap-field__label" for="username">Usuario · solo lectura</label>
+          <div class="locked">
+            <input id="username" class="ap-input" [value]="current.username" readonly />
+            <mat-icon aria-hidden="true">lock</mat-icon>
+          </div>
+        </div>
+        <div class="ap-field">
+          <label class="ap-field__label" for="role">Rol · solo lectura</label>
+          <div class="locked">
+            <input id="role" class="ap-input" [value]="editor.roleLabel[current.role]" readonly />
+            <mat-icon aria-hidden="true">lock</mat-icon>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="personal" aria-labelledby="personal-title">
+      <header class="section">
+        <span class="section__icon section__icon--warm" aria-hidden="true"
+          ><mat-icon>person</mat-icon></span
+        >
+        <div>
+          <h2 id="personal-title" class="section__title">Datos personales</h2>
+          <p class="section__hint">Completa tu información personal.</p>
+        </div>
+      </header>
+      <app-profile-fields [form]="editor.form" [emailFirst]="true" />
+    </section>
+
+    @if (editor.error(); as message) {
+      <p class="ap-banner ap-banner--danger error" role="alert">
+        <mat-icon aria-hidden="true">error</mat-icon>
+        {{ message }}
+      </p>
+    }
+
+    <div class="footer">
+      <button matButton="filled" type="submit" [disabled]="editor.form.pristine || editor.saving()">
+        <mat-icon aria-hidden="true">save</mat-icon>
+        {{ editor.saving() ? 'Guardando…' : 'Guardar cambios' }}
+      </button>
+      <button
+        matButton="outlined"
+        type="button"
+        [disabled]="editor.form.pristine || editor.saving()"
+        (click)="editor.cancel()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+}

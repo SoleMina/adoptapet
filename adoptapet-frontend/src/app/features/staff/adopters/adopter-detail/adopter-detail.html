@@ -1,0 +1,134 @@
+<a class="back" routerLink="/staff/adopters">
+  <mat-icon aria-hidden="true">arrow_back</mat-icon>
+  Volver a adoptantes
+</a>
+
+@if (adopter.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando adoptante"></div>
+} @else if (adopter.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="adopter.error()"
+      heading="No encontramos a este adoptante"
+      (retry)="adopter.reload()"
+    >
+      <a matButton="tonal" routerLink="/staff/adopters">Volver a adoptantes</a>
+    </app-error-state>
+  </section>
+} @else if (adopter.value(); as current) {
+  <header class="heading">
+    <div>
+      <h1 class="heading__title">Detalle del adoptante</h1>
+      <p class="heading__subtitle">
+        {{ current.firstName }} {{ current.lastName }} · Historial de adopción
+      </p>
+    </div>
+    @if (isAdmin()) {
+      <button
+        matButton="outlined"
+        type="button"
+        [class.danger]="current.active"
+        [disabled]="saving()"
+        (click)="toggleActive(current)"
+      >
+        <mat-icon aria-hidden="true">{{ current.active ? 'block' : 'autorenew' }}</mat-icon>
+        {{ current.active ? 'Desactivar cuenta' : 'Reactivar cuenta' }}
+      </button>
+    }
+  </header>
+
+  <section class="ap-panel contact" aria-label="Datos de contacto">
+    <div class="contact__who">
+      <app-avatar [person]="current" size="large" />
+      <div>
+        <p class="contact__name">{{ current.firstName }} {{ current.lastName }}</p>
+        <span class="ap-badge" [attr.data-tone]="current.active ? 'success' : 'neutral'">
+          <span class="ap-badge__dot" aria-hidden="true"></span>
+          {{ current.active ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+    </div>
+    <dl class="contact__data">
+      <div>
+        <span class="contact__icon" aria-hidden="true"><mat-icon>badge</mat-icon></span>
+        <span>
+          <dt>DNI</dt>
+          <dd>{{ current.dni }}</dd>
+        </span>
+      </div>
+      <div>
+        <span class="contact__icon" aria-hidden="true"><mat-icon>mail</mat-icon></span>
+        <span>
+          <dt>Correo</dt>
+          <dd>{{ current.email }}</dd>
+        </span>
+      </div>
+      <div>
+        <span class="contact__icon" aria-hidden="true"><mat-icon>call</mat-icon></span>
+        <span>
+          <dt>Teléfono</dt>
+          <dd>{{ current.phone }}</dd>
+        </span>
+      </div>
+      <div>
+        <span class="contact__icon" aria-hidden="true"><mat-icon>location_on</mat-icon></span>
+        <span>
+          <dt>Dirección</dt>
+          <dd>{{ current.address || '—' }}</dd>
+        </span>
+      </div>
+    </dl>
+  </section>
+
+  <section class="ap-panel" aria-labelledby="history-title">
+    <h2 id="history-title" class="ap-panel__title">Historial de solicitudes</h2>
+    @if (history.isLoading()) {
+      <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando historial">
+        <div></div>
+        <div></div>
+      </div>
+    } @else if (history.error()) {
+      <app-error-state [error]="history.error()" (retry)="history.reload()" />
+    } @else if (rows().length === 0) {
+      <app-empty-state
+        icon="inbox"
+        heading="Sin solicitudes"
+        message="Este adoptante todavía no ha postulado a ninguna mascota."
+      />
+    } @else {
+      <table class="ap-table">
+        <thead>
+          <tr>
+            <th scope="col">Mascota</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+            <th scope="col"><span class="cdk-visually-hidden">Acción</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.application.id) {
+            <tr>
+              <td class="ap-table__main">
+                <app-pet-photo [path]="row.imageUrl" [name]="row.application.petName" />
+                <span>{{ row.application.petName }}</span>
+              </td>
+              <td data-label="Fecha">{{ row.application.createdAt | limaDate }}</td>
+              <td data-label="Estado">
+                <span class="ap-badge" [attr.data-tone]="row.status.tone">
+                  <span class="ap-badge__dot" aria-hidden="true"></span>
+                  {{ row.status.text }}
+                </span>
+              </td>
+              <td class="ap-table__action">
+                <a class="link" [routerLink]="['/staff/applications', row.application.id]">
+                  Ver solicitud
+                  <span class="cdk-visually-hidden">de {{ row.application.petName }}</span>
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </section>
+}

@@ -13,6 +13,7 @@ import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
 import { StatusBadge } from '@shared/components/status-badge/status-badge';
 import { LimaDatePipe } from '@shared/pipes/lima-date-pipe';
 import { valueOf } from '@shared/utils/resource';
+import { translateMessage } from '@core/errors/error-messages';
 
 /** One row of the table, with what the adopter has to know about it. */
 interface ApplicationRow {
@@ -85,11 +86,11 @@ function nextStep(application: ApplicationResponse): string {
       return '¡Felicidades por tu adopción!';
     case 'REJECTED':
       return application.rejectionReason
-        ? `Motivo: ${application.rejectionReason}`
+        ? `Motivo: ${translateMessage(application.rejectionReason)}`
         : 'Tu solicitud no fue aprobada';
     case 'CANCELLED':
       return application.cancellationReason
-        ? `Motivo: ${application.cancellationReason}`
+        ? `Motivo: ${translateMessage(application.cancellationReason)}`
         : 'La adopción fue cancelada';
   }
 }

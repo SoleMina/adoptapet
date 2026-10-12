@@ -1,0 +1,115 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+// ----- tabs: one pill per status
+
+.tabs {
+  display: flex;
+  gap: var(--ap-space-2);
+  margin-bottom: var(--ap-space-5);
+  padding: var(--ap-space-3);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-sm);
+  overflow-x: auto;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  padding: var(--ap-space-3) var(--ap-space-5);
+  border-radius: 999px;
+  color: var(--ap-color-text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 120ms ease;
+
+  &:hover {
+    background-color: var(--ap-color-primary-faint);
+  }
+
+  &.active {
+    background-color: var(--ap-color-primary-soft);
+    color: var(--ap-color-primary);
+    font-weight: 700;
+  }
+}
+
+.tab__count {
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background-color: var(--ap-color-neutral-soft);
+  color: var(--ap-color-text-muted);
+  font-size: var(--ap-font-size-xs);
+  font-weight: 700;
+  text-align: center;
+
+  .active & {
+    background-color: var(--ap-color-primary);
+    color: var(--ap-color-on-primary);
+  }
+}
+
+// ----- table
+
+.panel {
+  padding: var(--ap-space-4);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-sm);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-5);
+  }
+}
+
+.id {
+  font-weight: 700;
+}
+
+.ap-table__main {
+  app-pet-photo {
+    width: 72px;
+  }
+}
+
+.review {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ap-space-2);
+  height: 44px;
+  padding: 0 var(--ap-space-5);
+  border: 1px solid var(--ap-color-border-strong);
+  border-radius: var(--ap-radius-md);
+  background-color: var(--ap-color-primary-faint);
+  color: var(--ap-color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: var(--ap-color-primary-soft);
+  }
+
+  @media (max-width: 899.98px) {
+    width: 100%;
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-3);
+}
+
+.loading__row {
+  height: 88px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+}

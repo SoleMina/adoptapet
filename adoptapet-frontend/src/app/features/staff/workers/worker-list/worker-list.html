@@ -1,0 +1,82 @@
+<app-panel-header heading="Trabajadores" subtitle="Personal del albergue con acceso al panel.">
+  <a matButton="filled" routerLink="/staff/workers/new">
+    <mat-icon aria-hidden="true">person_add</mat-icon>
+    Crear trabajador
+  </a>
+</app-panel-header>
+
+<section class="ap-panel">
+  @if (workers.isLoading()) {
+    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando trabajadores">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  } @else if (workers.error()) {
+    <app-error-state [error]="workers.error()" (retry)="workers.reload()" />
+  } @else if (rows().length === 0) {
+    <app-empty-state
+      icon="badge"
+      heading="Aún no hay trabajadores"
+      message="Crea la primera cuenta para que tu equipo pueda atender solicitudes."
+    >
+      <a matButton="filled" routerLink="/staff/workers/new">Crear trabajador</a>
+    </app-empty-state>
+  } @else {
+    <div class="ap-table-scroll">
+      <table class="ap-table">
+        <thead>
+          <tr>
+            <th scope="col">Trabajador</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (worker of rows(); track worker.id) {
+            <tr>
+              <td class="who">
+                <app-avatar [person]="worker" />
+                <span>
+                  <span class="ap-table__main">{{ worker.firstName }} {{ worker.lastName }}</span>
+                  <span class="username">{{ worker.username }}</span>
+                </span>
+              </td>
+              <td class="email" data-label="Correo">{{ worker.email }}</td>
+              <td data-label="Teléfono">{{ worker.phone }}</td>
+              <td data-label="Estado">
+                <span class="ap-badge" [attr.data-tone]="worker.active ? 'success' : 'neutral'">
+                  <span class="ap-badge__dot" aria-hidden="true"></span>
+                  {{ worker.active ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="ap-table__actions">
+                <a class="ap-row-action" [routerLink]="['/staff/workers', worker.id, 'edit']">
+                  <mat-icon aria-hidden="true">edit</mat-icon>
+                  Editar
+                  <span class="cdk-visually-hidden">a {{ worker.firstName }}</span>
+                </a>
+                <button
+                  type="button"
+                  class="ap-row-action"
+                  [class.ap-row-action--danger]="worker.active"
+                  [class.ap-row-action--success]="!worker.active"
+                  [disabled]="busyId() === worker.id"
+                  (click)="toggle(worker)"
+                >
+                  <mat-icon aria-hidden="true">{{
+                    worker.active ? 'block' : 'autorenew'
+                  }}</mat-icon>
+                  {{ worker.active ? 'Desactivar' : 'Activar' }}
+                  <span class="cdk-visually-hidden">a {{ worker.firstName }}</span>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

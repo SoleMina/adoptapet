@@ -1,0 +1,118 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ap-space-4);
+  margin-bottom: var(--ap-space-6);
+}
+
+.heading__title {
+  font-size: var(--ap-font-size-4xl);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.heading__subtitle {
+  margin-top: var(--ap-space-3);
+  font-size: var(--ap-font-size-lg);
+  color: var(--ap-color-text-muted);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  color: var(--ap-color-primary);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.skeleton {
+  min-height: 460px;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-4);
+  margin-bottom: var(--ap-space-4);
+}
+
+.section__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+
+  &--warm {
+    background-color: var(--ap-color-peach);
+    color: var(--ap-color-accent);
+  }
+}
+
+.section__title {
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+}
+
+.section__hint {
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+// The username cannot be changed on edit.
+.ap-input:disabled {
+  background-color: var(--ap-color-neutral-soft);
+  opacity: 1;
+  color: var(--ap-color-text-muted);
+}
+
+.personal {
+  margin-top: var(--ap-space-6);
+  padding-top: var(--ap-space-6);
+  border-top: 1px solid var(--ap-color-border);
+}
+
+.error {
+  margin-top: var(--ap-space-4);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-4);
+  margin-top: var(--ap-space-6);
+  padding-top: var(--ap-space-5);
+  border-top: 1px solid var(--ap-color-border);
+
+  .mat-mdc-button-base {
+    --mat-button-filled-container-height: 52px;
+    --mat-button-outlined-container-height: 52px;
+    flex: 1 1 160px;
+
+    @include bp.up(bp.$sm) {
+      flex: 0 0 auto;
+      min-width: 180px;
+    }
+  }
+}

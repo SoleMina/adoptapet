@@ -96,8 +96,8 @@
                 {{ row.status.text }}
               </span>
             </td>
-            <td class="actions">
-              <a class="row-action" [routerLink]="['/staff/pets', row.pet.id, 'edit']">
+            <td class="ap-table__actions">
+              <a class="ap-row-action" [routerLink]="['/staff/pets', row.pet.id, 'edit']">
                 <mat-icon aria-hidden="true">edit</mat-icon>
                 Editar
                 <span class="cdk-visually-hidden">a {{ row.pet.name }}</span>
@@ -105,7 +105,7 @@
               @if (row.pet.adoptionStatus === 'AVAILABLE') {
                 <button
                   type="button"
-                  class="row-action row-action--danger"
+                  class="ap-row-action ap-row-action--danger"
                   [disabled]="busyId() === row.pet.id"
                   (click)="deactivate(row.pet)"
                 >
@@ -116,7 +116,7 @@
               } @else if (row.pet.adoptionStatus === 'INACTIVE') {
                 <button
                   type="button"
-                  class="row-action row-action--success"
+                  class="ap-row-action ap-row-action--success"
                   [disabled]="busyId() === row.pet.id"
                   (click)="reactivate(row.pet)"
                 >

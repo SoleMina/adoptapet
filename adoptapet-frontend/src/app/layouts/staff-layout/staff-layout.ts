@@ -5,21 +5,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {
-  ActivatedRouteSnapshot,
-  NavigationEnd,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Auth } from '@core/auth/auth';
 import { AuthStore } from '@core/auth/auth-store';
 import { Role } from '@core/models/user';
+import { PageTitleStrategy } from '@core/routing/page-title-strategy';
 import { Loading } from '@core/ui/loading';
 import { ThemeToggle } from '@shared/components/theme-toggle/theme-toggle';
 import { UserMenu } from '@shared/components/user-menu/user-menu';
-import { filter, map, startWith } from 'rxjs';
+import { map } from 'rxjs';
 
 interface StaffLink {
   label: string;
@@ -42,8 +36,8 @@ const LINKS: StaffLink[] = [
     roles: STAFF,
   },
   { label: 'Adoptantes', icon: 'group', path: '/staff/adopters', roles: STAFF },
-  { label: 'Usuarios', icon: 'person', path: '/staff/users', roles: STAFF },
   { label: 'Trabajadores', icon: 'badge', path: '/staff/workers', roles: ADMIN },
+  { label: 'Usuarios', icon: 'person', path: '/staff/users', roles: STAFF },
   { label: 'Reportes', icon: 'bar_chart', path: '/staff/reports', roles: ADMIN },
   { label: 'Mi perfil', icon: 'settings', path: '/staff/profile', roles: STAFF },
 ];
@@ -68,7 +62,6 @@ const LINKS: StaffLink[] = [
 export class StaffLayout {
   private readonly auth = inject(Auth);
   private readonly store = inject(AuthStore);
-  private readonly router = inject(Router);
   protected readonly loading = inject(Loading);
 
   protected readonly isHandset = toSignal(
@@ -83,25 +76,15 @@ export class StaffLayout {
     return LINKS.filter((link) => !!role && link.roles.includes(role));
   });
 
-  /** Title of the current page (route `title`), for the breadcrumb. */
-  protected readonly pageTitle = toSignal(
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      startWith(null),
-      map(() => deepestTitle(this.router.routerState.snapshot.root)),
-    ),
-    { initialValue: '' },
+  /** Text under the logo. */
+  protected readonly area = computed(() =>
+    this.store.isAdmin() ? 'Administración' : 'Equipo del albergue',
   );
+
+  /** Title of the current page, for the breadcrumb (pages with a dynamic title update it). */
+  protected readonly pageTitle = inject(PageTitleStrategy).pageTitle;
 
   protected logout(): void {
     this.auth.logout();
   }
-}
-
-function deepestTitle(route: ActivatedRouteSnapshot): string {
-  let current = route;
-  while (current.firstChild) {
-    current = current.firstChild;
-  }
-  return current.title ?? '';
 }

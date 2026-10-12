@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>Ficha del usuario</h2>
+<mat-dialog-content>
+  <div class="identity">
+    <app-avatar [person]="user()" size="large" />
+    <div>
+      <p class="identity__name">{{ user().firstName }} {{ user().lastName }}</p>
+      <p class="identity__username">{{ user().username }}</p>
+      <div class="identity__badges">
+        <span class="ap-badge" [attr.data-tone]="roleTone[user().role]">{{
+          roleLabel[user().role]
+        }}</span>
+        <span class="ap-badge" [attr.data-tone]="user().active ? 'success' : 'neutral'">
+          <span class="ap-badge__dot" aria-hidden="true"></span>
+          {{ user().active ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <dl class="data">
+    <div>
+      <dt>Correo</dt>
+      <dd>{{ user().email }}</dd>
+    </div>
+    <div>
+      <dt>DNI</dt>
+      <dd>{{ user().dni || '—' }}</dd>
+    </div>
+    <div>
+      <dt>Teléfono</dt>
+      <dd>{{ user().phone || '—' }}</dd>
+    </div>
+    <div>
+      <dt>Nacimiento</dt>
+      <dd>{{ (user().birthDate | limaDate) || '—' }}</dd>
+    </div>
+    <div>
+      <dt>Dirección</dt>
+      <dd>{{ user().address || '—' }}</dd>
+    </div>
+    <div>
+      <dt>Registrado</dt>
+      <dd>{{ user().createdAt | limaDate }}</dd>
+    </div>
+  </dl>
+
+  @if (canToggle() && user().active) {
+    <p class="note">
+      Al desactivar la cuenta, esta persona no podrá iniciar sesión. Sus datos se conservan.
+    </p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (user().role === 'ADOPTER') {
+    <a matButton [routerLink]="['/staff/adopters', user().id]" (click)="close()">
+      <mat-icon aria-hidden="true">history</mat-icon>
+      Ver historial
+    </a>
+  }
+  @if (canToggle()) {
+    <button
+      matButton="outlined"
+      type="button"
+      [class.danger]="user().active"
+      [disabled]="saving()"
+      (click)="toggleActive()"
+    >
+      <mat-icon aria-hidden="true">{{ user().active ? 'block' : 'autorenew' }}</mat-icon>
+      {{ user().active ? 'Desactivar cuenta' : 'Reactivar cuenta' }}
+    </button>
+  }
+  <button matButton="filled" type="button" cdkFocusInitial (click)="close()">Cerrar</button>
+</mat-dialog-actions>

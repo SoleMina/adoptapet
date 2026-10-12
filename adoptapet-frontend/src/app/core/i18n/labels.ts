@@ -3,7 +3,7 @@ import { AdoptionStatus, HealthStatus, Sex, SterilizationStatus } from '@core/mo
 import { Role } from '@core/models/user';
 
 /** Visual tone of a status, mapped to the `--ap-color-*` tokens. */
-export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+export type Tone = 'success' | 'warning' | 'danger' | 'info' | 'sky' | 'neutral';
 
 /** Spanish adjectives agree with the pet: "Sana" / "Sano". */
 function bySex(sex: Sex | undefined, female: string, male: string): string {
@@ -50,7 +50,7 @@ export function sterilizationLabel(status: SterilizationStatus, sex?: Sex): stri
 export const ADOPTION_STATUS_TONE: Record<AdoptionStatus, Tone> = {
   AVAILABLE: 'success',
   RESERVED: 'info',
-  ADOPTED: 'info',
+  ADOPTED: 'sky',
   INACTIVE: 'neutral',
 };
 
@@ -105,6 +105,12 @@ export const ROLE_LABEL: Record<Role, string> = {
   ADMIN: 'Administrador',
   WORKER: 'Trabajador',
   ADOPTER: 'Adoptante',
+};
+
+export const ROLE_TONE: Record<Role, Tone> = {
+  ADMIN: 'warning',
+  WORKER: 'sky',
+  ADOPTER: 'info',
 };
 
 /** Species is free text in the backend; the common English values are shown in Spanish. */

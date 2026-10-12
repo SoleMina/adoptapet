@@ -67,6 +67,14 @@ html {
     )
   );
 
+  @include mat.dialog-overrides(
+    (
+      container-shape: var(--ap-radius-xl),
+      subhead-weight: 800,
+      subhead-size: var(--ap-font-size-lg),
+    )
+  );
+
   @include mat.progress-bar-overrides(
     (
       track-height: 3px,

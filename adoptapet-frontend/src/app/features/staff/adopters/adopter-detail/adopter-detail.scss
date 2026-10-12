@@ -1,0 +1,131 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-5);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--ap-space-2);
+  color: var(--ap-color-primary);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.skeleton {
+  min-height: 320px;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ap-space-4);
+}
+
+.heading__title {
+  font-size: var(--ap-font-size-4xl);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.heading__subtitle {
+  margin-top: var(--ap-space-2);
+  font-size: var(--ap-font-size-lg);
+  color: var(--ap-color-text-muted);
+}
+
+.danger {
+  --mat-button-outlined-outline-color: var(--ap-color-danger);
+  --mat-button-outlined-label-text-color: var(--ap-color-danger);
+  --mat-button-outlined-state-layer-color: var(--ap-color-danger);
+}
+
+// ----- contact card: who on the left, data in two columns
+
+.contact {
+  display: grid;
+  gap: var(--ap-space-6);
+
+  @include bp.up(bp.$md) {
+    grid-template-columns: minmax(240px, 1fr) 2fr;
+    align-items: center;
+  }
+}
+
+.contact__who {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-5);
+}
+
+.contact__name {
+  margin-bottom: var(--ap-space-2);
+  font-size: var(--ap-font-size-2xl);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.contact__data {
+  display: grid;
+  gap: var(--ap-space-5);
+  margin: 0;
+
+  @include bp.up(bp.$sm) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include bp.up(bp.$md) {
+    padding-left: var(--ap-space-6);
+    border-left: 1px solid var(--ap-color-border);
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: var(--ap-space-4);
+    min-width: 0;
+  }
+
+  dt {
+    font-size: var(--ap-font-size-sm);
+    color: var(--ap-color-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.0625rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+.contact__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-faint);
+  color: var(--ap-color-primary);
+}
+
+.link {
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

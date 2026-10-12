@@ -1,0 +1,82 @@
+<app-panel-header heading="Solicitudes" subtitle="Gestiona las solicitudes según su estado." />
+
+<nav class="tabs" aria-label="Estado de las solicitudes">
+  @for (tab of tabs; track tab.status) {
+    <a
+      class="tab"
+      routerLink="."
+      [queryParams]="{ status: tab.status || 'ALL' }"
+      [class.active]="tab.status === active()"
+      [attr.aria-current]="tab.status === active() ? 'page' : null"
+    >
+      {{ tab.label }}
+      @if (counts().get(tab.status); as count) {
+        <span class="tab__count">{{ count }}</span>
+      }
+    </a>
+  }
+</nav>
+
+<section class="panel">
+  @if (applications.isLoading()) {
+    <div class="loading" aria-busy="true" aria-label="Cargando solicitudes">
+      <div class="loading__row"></div>
+      <div class="loading__row"></div>
+    </div>
+  } @else if (applications.error()) {
+    <app-error-state [error]="applications.error()" (retry)="applications.reload()" />
+  } @else if (rows().length === 0) {
+    <app-empty-state
+      icon="inbox"
+      heading="No hay solicitudes en “{{ activeLabel() }}”"
+      message="Cuando una solicitud llegue a este estado aparecerá aquí."
+    />
+  } @else {
+    <table class="ap-table">
+      <caption class="cdk-visually-hidden">
+        Solicitudes:
+        {{
+          activeLabel()
+        }}
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Mascota</th>
+          <th scope="col">Adoptante</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.application.id) {
+          <tr>
+            <td data-label="ID" class="id">{{ row.application.id }}</td>
+            <td class="ap-table__main">
+              <app-pet-photo [path]="row.imageUrl" [name]="row.application.petName" />
+              <span>{{ row.application.petName }}</span>
+            </td>
+            <td data-label="Adoptante">{{ row.adopter }}</td>
+            <td data-label="Fecha">{{ row.application.createdAt | limaDate }}</td>
+            <td data-label="Estado">
+              <span class="ap-badge" [attr.data-tone]="row.status.tone">
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+                {{ row.status.text }}
+              </span>
+            </td>
+            <td class="action">
+              <a class="review" [routerLink]="[row.application.id]">
+                <mat-icon aria-hidden="true">visibility</mat-icon>
+                {{ row.action }}
+                <span class="cdk-visually-hidden">
+                  la solicitud {{ row.application.id }} de {{ row.adopter }}
+                </span>
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

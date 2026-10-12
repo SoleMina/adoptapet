@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { roleGuard, withRoles } from '@core/auth/auth-guards';
 
-const comingSoon = () =>
-  import('@shared/components/coming-soon/coming-soon').then((m) => m.ComingSoon);
+/** One form for the three ADMIN screens; `data.mode` says which one. */
+const userForm = () => import('./users/user-form/user-form').then((m) => m.UserForm);
 
 /** WORKER and ADMIN panel (authGuard + roleGuard are on the parent route). */
 export const STAFF_ROUTES: Routes = [
@@ -15,14 +15,16 @@ export const STAFF_ROUTES: Routes = [
   {
     path: 'applications',
     title: 'Solicitudes',
-    loadComponent: comingSoon,
-    data: { heading: 'Solicitudes' },
+    loadComponent: () =>
+      import('./applications/application-list/application-list').then((m) => m.ApplicationList),
   },
   {
     path: 'applications/:id',
     title: 'Revisión de solicitud',
-    loadComponent: comingSoon,
-    data: { heading: 'Revisión de solicitud' },
+    loadComponent: () =>
+      import('./applications/application-review/application-review').then(
+        (m) => m.ApplicationReview,
+      ),
   },
   {
     path: 'pets',
@@ -42,33 +44,29 @@ export const STAFF_ROUTES: Routes = [
   {
     path: 'delivery-calendar',
     title: 'Agenda de entregas',
-    loadComponent: comingSoon,
-    data: { heading: 'Agenda de entregas' },
+    loadComponent: () =>
+      import('./delivery-calendar/delivery-calendar').then((m) => m.DeliveryCalendar),
   },
   {
     path: 'adopters',
     title: 'Adoptantes',
-    loadComponent: comingSoon,
-    data: { heading: 'Adoptantes' },
+    loadComponent: () => import('./adopters/adopter-list/adopter-list').then((m) => m.AdopterList),
   },
   {
     path: 'adopters/:id',
-    title: 'Detalle de adoptante',
-    loadComponent: comingSoon,
-    data: { heading: 'Detalle de adoptante' },
+    title: 'Detalle del adoptante',
+    loadComponent: () =>
+      import('./adopters/adopter-detail/adopter-detail').then((m) => m.AdopterDetail),
   },
   {
-    // Staff can see the users; only an ADMIN will be able to edit them.
     path: 'users',
     title: 'Usuarios',
-    loadComponent: comingSoon,
-    data: { heading: 'Usuarios' },
+    loadComponent: () => import('./users/user-list/user-list').then((m) => m.UserList),
   },
   {
     path: 'profile',
     title: 'Mi perfil',
-    loadComponent: comingSoon,
-    data: { heading: 'Mi perfil' },
+    loadComponent: () => import('./profile/staff-profile').then((m) => m.StaffProfile),
   },
   {
     path: '',
@@ -78,14 +76,30 @@ export const STAFF_ROUTES: Routes = [
       {
         path: 'workers',
         title: 'Trabajadores',
-        loadComponent: comingSoon,
-        data: { heading: 'Trabajadores' },
+        loadComponent: () => import('./workers/worker-list/worker-list').then((m) => m.WorkerList),
+      },
+      {
+        path: 'workers/new',
+        title: 'Crear trabajador',
+        loadComponent: userForm,
+        data: { mode: 'create-worker' },
+      },
+      {
+        path: 'workers/:id/edit',
+        title: 'Editar trabajador',
+        loadComponent: userForm,
+        data: { mode: 'edit-worker' },
+      },
+      {
+        path: 'users/:id/edit',
+        title: 'Editar usuario',
+        loadComponent: userForm,
+        data: { mode: 'edit-user' },
       },
       {
         path: 'reports',
         title: 'Reportes',
-        loadComponent: comingSoon,
-        data: { heading: 'Reporte general' },
+        loadComponent: () => import('./reports/reports').then((m) => m.Reports),
       },
     ],
   },

@@ -1,0 +1,136 @@
+<app-panel-header heading="Agenda de entregas" subtitle="Cupos de entrega · Hora de Lima" />
+
+<section class="ap-panel" aria-labelledby="slots-title">
+  <h2 id="slots-title" class="ap-panel__title">Cupos por horario</h2>
+
+  <div class="ap-field date">
+    <label class="ap-field__label" for="date">Fecha</label>
+    <input
+      #dateInput
+      id="date"
+      class="ap-input"
+      type="date"
+      [value]="selected()"
+      (change)="onDate(dateInput.value)"
+    />
+  </div>
+
+  @if (slots.isLoading()) {
+    <div class="ap-loading-rows" aria-busy="true" aria-label="Consultando cupos">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  } @else if (slots.error()) {
+    <app-error-state [error]="slots.error()" (retry)="slots.reload()" />
+  } @else {
+    <table class="ap-table">
+      <caption class="cdk-visually-hidden">
+        Cupos del
+        {{
+          selected() | limaDate
+        }}
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Horario</th>
+          <th scope="col">Capacidad</th>
+          <th scope="col">Reservados</th>
+          <th scope="col">Libres</th>
+          <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of slotRows(); track row.slot.startTime) {
+          <tr>
+            <td class="time">
+              {{ row.slot.startTime | limaDate: 'time' }}–{{ row.slot.endTime | limaDate: 'time' }}
+            </td>
+            <td data-label="Capacidad">
+              <span class="capacity">
+                {{ row.slot.capacity }}
+                <span class="bar" [class.bar--full]="row.usage >= 100" aria-hidden="true">
+                  <span [style.width.%]="row.usage"></span>
+                </span>
+              </span>
+            </td>
+            <td data-label="Reservados">{{ row.slot.reserved }}</td>
+            <td data-label="Libres">{{ row.slot.free }}</td>
+            <td data-label="Estado">
+              <span class="ap-badge" [attr.data-tone]="row.state.tone">
+                @if (row.state.tone === 'success') {
+                  <span class="ap-badge__dot" aria-hidden="true"></span>
+                }
+                {{ row.state.text }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>
+
+<section class="ap-panel" aria-labelledby="deliveries-title">
+  <h2 id="deliveries-title" class="ap-panel__title">Entregas programadas</h2>
+
+  @if (applications.isLoading()) {
+    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando entregas">
+      <div></div>
+    </div>
+  } @else if (applications.error()) {
+    <app-error-state [error]="applications.error()" (retry)="applications.reload()" />
+  } @else if (deliveries().length === 0) {
+    <app-empty-state
+      icon="event_available"
+      heading="Sin entregas para este día"
+      message="Las entregas aparecen aquí cuando se aprueba una solicitud y se agenda su cita."
+    />
+  } @else {
+    <table class="ap-table">
+      <caption class="cdk-visually-hidden">
+        Entregas del
+        {{
+          selected() | limaDate
+        }}
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Mascota</th>
+          <th scope="col">Adoptante</th>
+          <th scope="col">Horario</th>
+          <th scope="col">Estado</th>
+          <th scope="col"><span class="cdk-visually-hidden">Acción</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of deliveries(); track row.application.id) {
+          <tr>
+            <td class="ap-table__main">
+              <app-pet-photo [path]="row.imageUrl" [name]="row.application.petName" />
+              <span>{{ row.application.petName }}</span>
+            </td>
+            <td data-label="Adoptante">{{ row.adopter }}</td>
+            <td data-label="Horario">
+              {{ row.appointment.startTime | limaDate: 'time' }}–{{
+                row.appointment.endTime | limaDate: 'time'
+              }}
+            </td>
+            <td data-label="Estado">
+              <span class="ap-badge" [attr.data-tone]="row.status.tone">
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+                {{ row.status.text }}
+              </span>
+            </td>
+            <td class="ap-table__action">
+              <a class="link" [routerLink]="['/staff/applications', row.application.id]">
+                Ver solicitud
+                <span class="cdk-visually-hidden">de {{ row.application.petName }}</span>
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

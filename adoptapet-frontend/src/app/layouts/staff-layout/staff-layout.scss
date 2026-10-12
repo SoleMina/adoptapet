@@ -110,6 +110,7 @@ $sidenav-width: 292px;
 .crumbs {
   display: flex;
   gap: var(--ap-space-2);
+  min-width: 0;
   color: var(--ap-color-text-muted);
   white-space: nowrap;
 
@@ -124,6 +125,12 @@ $sidenav-width: 292px;
 
   [aria-current] {
     color: var(--ap-color-text);
+  }
+
+  // long page titles shrink instead of pushing the user menu out on phones
+  [aria-current] {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 

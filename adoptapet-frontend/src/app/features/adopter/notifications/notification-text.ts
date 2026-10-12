@@ -1,6 +1,7 @@
 import { Tone } from '@core/i18n/labels';
 import { ApplicationResponse } from '@core/models/application';
 import { NotificationResponse } from '@core/models/notification';
+import { translateMessage } from '@core/errors/error-messages';
 
 /** Icon and color of a notification, by the event that produced it. */
 const LOOK: Record<string, { icon: string; tone: Tone }> = {
@@ -59,5 +60,6 @@ function appointmentText(application: ApplicationResponse): string | null {
 }
 
 function reason(text: string | null): string {
-  return text ? ` Motivo: ${text}` : '';
+  // Automatic reasons (another application was approved) come in English from the backend.
+  return text ? ` Motivo: ${translateMessage(text)}` : '';
 }

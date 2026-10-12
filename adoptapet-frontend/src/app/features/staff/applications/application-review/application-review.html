@@ -1,0 +1,467 @@
+<a class="back" routerLink="/staff/applications">
+  <mat-icon aria-hidden="true">arrow_back</mat-icon>
+  Volver a solicitudes
+</a>
+
+@if (application.isLoading()) {
+  <div class="panel skeleton" aria-busy="true" aria-label="Cargando solicitud"></div>
+} @else if (application.error()) {
+  <section class="panel">
+    <app-error-state
+      [error]="application.error()"
+      heading="No pudimos mostrar esta solicitud"
+      (retry)="application.reload()"
+    >
+      <a matButton="tonal" routerLink="/staff/applications">Volver a solicitudes</a>
+    </app-error-state>
+  </section>
+} @else if (application.value(); as current) {
+  <header class="heading">
+    <div>
+      <h1 class="heading__title">{{ heading() }}</h1>
+      <p class="heading__subtitle">Solicitud #{{ current.id }} · {{ current.petName }}</p>
+    </div>
+    <app-status-badge class="heading__badge" [status]="current.status" />
+  </header>
+
+  <!-- ----- summary -->
+  <section class="panel" aria-labelledby="summary-title">
+    <h2 id="summary-title" class="section-title">
+      <span class="section-title__icon" aria-hidden="true"><mat-icon>description</mat-icon></span>
+      Resumen de la solicitud
+    </h2>
+    <dl class="summary">
+      <div class="summary__item">
+        <span class="summary__icon" aria-hidden="true"><mat-icon>person</mat-icon></span>
+        <div>
+          <dt>Adoptante</dt>
+          <dd>{{ adopterText() }}</dd>
+          @if (adopterContact()) {
+            <dd class="summary__extra">{{ adopterContact() }}</dd>
+          }
+        </div>
+      </div>
+      <div class="summary__item">
+        <span class="summary__icon" aria-hidden="true"><mat-icon>pets</mat-icon></span>
+        <div>
+          <dt>Mascota</dt>
+          <dd>{{ petText() }}</dd>
+        </div>
+      </div>
+      <div class="summary__item">
+        <span class="summary__icon" aria-hidden="true"><mat-icon>flag</mat-icon></span>
+        <div>
+          <dt>Estado</dt>
+          <dd>{{ statusLabel[current.status] }}</dd>
+        </div>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ----- what the adopter wrote -->
+  <section class="panel" aria-labelledby="details-title">
+    <h2 id="details-title" class="section-title">
+      <span class="section-title__icon" aria-hidden="true"
+        ><mat-icon>format_list_bulleted</mat-icon></span
+      >
+      Detalles de la solicitud
+    </h2>
+    <dl class="details">
+      <div>
+        <dt>Recibida</dt>
+        <dd>{{ current.createdAt | limaDate: 'dateTime' }}</dd>
+      </div>
+      <div>
+        <dt>Motivo</dt>
+        <dd>{{ current.adoptionReason }}</dd>
+      </div>
+      <div>
+        <dt>Vivienda</dt>
+        <dd>{{ home() }}</dd>
+      </div>
+      <div>
+        <dt>Experiencia</dt>
+        <dd>{{ current.petExperience }}</dd>
+      </div>
+      @if (current.comments) {
+        <div>
+          <dt>Comentarios</dt>
+          <dd>{{ current.comments }}</dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+  <!-- ----- documents of the adopter -->
+  <section class="panel" aria-labelledby="documents-title">
+    <h2 id="documents-title" class="section-title">
+      <span class="section-title__icon" aria-hidden="true"><mat-icon>attach_file</mat-icon></span>
+      Documentación
+    </h2>
+    <div class="buttons">
+      <button
+        matButton="filled"
+        type="button"
+        [disabled]="!current.hasDni || busy() === 'DNI'"
+        (click)="view(current, 'DNI', 'DNI')"
+      >
+        <mat-icon aria-hidden="true">visibility</mat-icon>
+        Ver DNI
+      </button>
+      <button
+        matButton="tonal"
+        type="button"
+        [disabled]="!current.hasAddressProof || busy() === 'ADDRESS_PROOF'"
+        (click)="view(current, 'ADDRESS_PROOF', 'Comprobante de domicilio')"
+      >
+        <mat-icon aria-hidden="true">visibility</mat-icon>
+        Ver comprobante
+      </button>
+    </div>
+  </section>
+
+  @switch (current.status) {
+    <!-- ----- PENDING: approve or reject -->
+    @case ('PENDING') {
+      <section class="panel" aria-labelledby="actions-title">
+        <h2 id="actions-title" class="section-title">
+          <span class="section-title__icon" aria-hidden="true"><mat-icon>task_alt</mat-icon></span>
+          Acciones
+        </h2>
+        <p class="notice" data-tone="warning">
+          <mat-icon aria-hidden="true">error</mat-icon>
+          Al aprobar se rechazan las demás solicitudes pendientes para esta mascota.
+        </p>
+        <div class="buttons">
+          <button matButton="filled" type="button" [disabled]="!!busy()" (click)="approve(current)">
+            <mat-icon aria-hidden="true">check</mat-icon>
+            Aprobar y agendar
+          </button>
+          <button
+            matButton="outlined"
+            class="danger"
+            type="button"
+            [disabled]="!!busy()"
+            (click)="reject(current)"
+          >
+            <mat-icon aria-hidden="true">close</mat-icon>
+            Rechazar
+          </button>
+        </div>
+      </section>
+    }
+
+    <!-- ----- APPROVED: appointment + closing checklist -->
+    @case ('APPROVED') {
+      @if (current.appointment; as appointment) {
+        <section class="panel" aria-labelledby="appointment-title">
+          <h2 id="appointment-title" class="section-title">
+            <span class="section-title__icon" aria-hidden="true"
+              ><mat-icon>calendar_month</mat-icon></span
+            >
+            Cita programada
+          </h2>
+          <div class="appointment">
+            <p>
+              Cita {{ appointment.deliveryDate | limaDate }} ·
+              {{ appointment.startTime | limaDate: 'time' }}–{{
+                appointment.endTime | limaDate: 'time'
+              }}
+              · Límite de recojo {{ appointment.pickupDeadline | limaDate: 'time' }}
+              @if (appointment.observation) {
+                <span class="appointment__observation">{{ appointment.observation }}</span>
+              }
+            </p>
+            <div class="buttons">
+              @if (canReschedule()) {
+                <button
+                  matButton="filled"
+                  type="button"
+                  [disabled]="!!busy()"
+                  (click)="reschedule(current)"
+                >
+                  <mat-icon aria-hidden="true">event_repeat</mat-icon>
+                  Reprogramar
+                </button>
+              }
+              <button
+                matButton="outlined"
+                type="button"
+                [disabled]="!!busy()"
+                (click)="cancel(current)"
+              >
+                <mat-icon aria-hidden="true">close</mat-icon>
+                Cancelar
+              </button>
+            </div>
+          </div>
+          <p class="hint">
+            <mat-icon aria-hidden="true">info</mat-icon>
+            Reprogramaciones: {{ current.rescheduleCount }}/{{ maxReschedules }}.
+            @if (rescheduleLimitReached()) {
+              {{
+                isAdmin()
+                  ? 'Como administrador puedes autorizar una más indicando el motivo.'
+                  : 'Solo un administrador puede reprogramar de nuevo.'
+              }}
+            }
+          </p>
+        </section>
+
+        <section class="panel" aria-labelledby="closing-title">
+          <h2 id="closing-title" class="section-title">
+            <span class="section-title__icon" aria-hidden="true"
+              ><mat-icon>assignment_turned_in</mat-icon></span
+            >
+            Cierre de adopción
+          </h2>
+
+          <ol class="steps">
+            <li [class.done]="closingStep() > 1" [class.current]="closingStep() === 1">
+              <span class="steps__dot" aria-hidden="true">
+                @if (closingStep() > 1) {
+                  <mat-icon>check</mat-icon>
+                } @else {
+                  1
+                }
+              </span>
+              Generar acta
+            </li>
+            <li [class.done]="closingStep() > 2" [class.current]="closingStep() === 2">
+              <span class="steps__dot" aria-hidden="true">
+                @if (closingStep() > 2) {
+                  <mat-icon>check</mat-icon>
+                } @else {
+                  2
+                }
+              </span>
+              Subir acta firmada
+            </li>
+            <li [class.current]="closingStep() === 3">
+              <span class="steps__dot" aria-hidden="true">3</span>
+              Completar
+            </li>
+          </ol>
+
+          <div class="buttons">
+            <button
+              type="button"
+              [matButton]="closingStep() === 1 ? 'filled' : 'tonal'"
+              [disabled]="!!busy()"
+              (click)="generateAct(current)"
+            >
+              <mat-icon aria-hidden="true">description</mat-icon>
+              {{
+                busy() === 'act'
+                  ? 'Generando…'
+                  : current.hasAct
+                    ? 'Volver a generar acta'
+                    : 'Generar acta'
+              }}
+            </button>
+
+            <button
+              type="button"
+              [matButton]="closingStep() === 2 ? 'filled' : 'tonal'"
+              [disabled]="!current.hasAct || !clock().started || !!busy()"
+              (click)="signedActPicker.click()"
+            >
+              <mat-icon aria-hidden="true">upload</mat-icon>
+              {{ current.hasSignedAct ? 'Reemplazar acta firmada' : 'Subir acta firmada' }}
+            </button>
+            <input
+              #signedActPicker
+              class="cdk-visually-hidden"
+              type="file"
+              tabindex="-1"
+              accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+              aria-label="Acta firmada"
+              (change)="onSignedActPicked(current, signedActPicker)"
+            />
+
+            @if (!clock().overdue) {
+              <button
+                type="button"
+                [matButton]="closingStep() === 3 ? 'filled' : 'tonal'"
+                [disabled]="closingStep() < 3 || !clock().started || !!busy()"
+                (click)="complete(current)"
+              >
+                <mat-icon aria-hidden="true">check</mat-icon>
+                Completar adopción
+              </button>
+            } @else if (isAdmin()) {
+              <button
+                matButton="filled"
+                type="button"
+                [disabled]="closingStep() < 3 || !!busy()"
+                (click)="completeByContingency(current)"
+              >
+                <mat-icon aria-hidden="true">gavel</mat-icon>
+                Cerrar por contingencia
+              </button>
+            }
+          </div>
+
+          @if (current.hasAct || current.hasSignedAct) {
+            <div class="buttons buttons--links">
+              @if (current.hasAct) {
+                <button matButton type="button" (click)="view(current, 'ACT', 'Acta de adopción')">
+                  <mat-icon aria-hidden="true">visibility</mat-icon>
+                  Ver acta
+                </button>
+              }
+              @if (current.hasSignedAct) {
+                <button
+                  matButton
+                  type="button"
+                  (click)="view(current, 'SIGNED_ACT', 'Acta firmada')"
+                >
+                  <mat-icon aria-hidden="true">visibility</mat-icon>
+                  Ver acta firmada
+                </button>
+              }
+            </div>
+          }
+
+          @if (clock().overdue) {
+            <p class="notice" data-tone="warning">
+              <mat-icon aria-hidden="true">error</mat-icon>
+              Venció el plazo de recojo.
+              {{
+                isAdmin()
+                  ? 'Puedes cerrar la adopción por contingencia indicando el motivo, o cancelarla.'
+                  : 'Cancela la adopción con un motivo o pide a un administrador que la cierre por contingencia.'
+              }}
+            </p>
+          } @else if (!clock().started) {
+            <p class="hint">
+              <mat-icon aria-hidden="true">info</mat-icon>
+              El acta firmada y el cierre se habilitan cuando empieza la franja de entrega.
+            </p>
+          }
+
+          <div class="no-show">
+            <p class="hint">
+              <mat-icon aria-hidden="true">info</mat-icon>
+              No se presentó: habilitado después de terminar la franja.
+            </p>
+            <button
+              matButton="outlined"
+              type="button"
+              [disabled]="!clock().ended || !!busy()"
+              (click)="markNoShow(current)"
+            >
+              <mat-icon aria-hidden="true">event_busy</mat-icon>
+              Marcar no se presentó
+            </button>
+          </div>
+        </section>
+      }
+    }
+
+    <!-- ----- NO_SHOW: reschedule or cancel -->
+    @case ('NO_SHOW') {
+      <p class="notice notice--block" data-tone="warning">
+        <mat-icon aria-hidden="true">warning</mat-icon>
+        <span>
+          <strong>Reprogramaciones: {{ current.rescheduleCount }}/{{ maxReschedules }}.</strong>
+          @if (rescheduleLimitReached()) {
+            {{
+              isAdmin()
+                ? 'Como administrador puedes autorizar una más indicando el motivo.'
+                : 'Solo un administrador puede reprogramar de nuevo.'
+            }}
+          } @else {
+            El adoptante no asistió a su cita. Reprograma la entrega o cancela la adopción.
+          }
+        </span>
+      </p>
+      <section class="panel" aria-labelledby="actions-title">
+        <h2 id="actions-title" class="section-title">
+          <span class="section-title__icon" aria-hidden="true"><mat-icon>settings</mat-icon></span>
+          Acciones
+        </h2>
+        <div class="buttons">
+          @if (canReschedule()) {
+            <button
+              matButton="filled"
+              type="button"
+              [disabled]="!!busy()"
+              (click)="reschedule(current)"
+            >
+              <mat-icon aria-hidden="true">event_repeat</mat-icon>
+              Reprogramar
+            </button>
+          }
+          <button
+            matButton="outlined"
+            class="danger"
+            type="button"
+            [disabled]="!!busy()"
+            (click)="cancel(current)"
+          >
+            <mat-icon aria-hidden="true">delete</mat-icon>
+            Cancelar
+          </button>
+        </div>
+      </section>
+    }
+
+    <!-- ----- COMPLETED: read only -->
+    @case ('COMPLETED') {
+      <section class="panel" aria-labelledby="closed-title">
+        <h2 id="closed-title" class="section-title">
+          <span class="section-title__icon section-title__icon--success" aria-hidden="true">
+            <mat-icon>lock</mat-icon>
+          </span>
+          Adopción completada
+        </h2>
+        <p class="notice" data-tone="success">
+          Adopción completada. Esta solicitud es de solo lectura.
+        </p>
+        @if (current.contingencyReason) {
+          <p class="hint">
+            <mat-icon aria-hidden="true">gavel</mat-icon>
+            Cerrada por contingencia: {{ current.contingencyReason }}
+          </p>
+        }
+        <div class="buttons">
+          <button
+            matButton="filled"
+            type="button"
+            [disabled]="!current.hasAct || busy() === 'ACT'"
+            (click)="download(current, 'ACT', 'acta-adopcion.pdf')"
+          >
+            <mat-icon aria-hidden="true">download</mat-icon>
+            Descargar acta
+          </button>
+          <button
+            matButton="tonal"
+            type="button"
+            [disabled]="!current.hasSignedAct || busy() === 'SIGNED_ACT'"
+            (click)="download(current, 'SIGNED_ACT', 'acta-firmada')"
+          >
+            <mat-icon aria-hidden="true">download</mat-icon>
+            Descargar acta firmada
+          </button>
+        </div>
+      </section>
+    }
+
+    <!-- ----- REJECTED / CANCELLED: read only -->
+    @default {
+      <section class="panel" aria-labelledby="closed-title">
+        <h2 id="closed-title" class="section-title">
+          <span class="section-title__icon" aria-hidden="true"><mat-icon>lock</mat-icon></span>
+          {{ current.status === 'REJECTED' ? 'Solicitud rechazada' : 'Adopción cancelada' }}
+        </h2>
+        <p class="notice" [attr.data-tone]="current.status === 'REJECTED' ? 'danger' : 'neutral'">
+          <mat-icon aria-hidden="true">info</mat-icon>
+          {{
+            closingReason() ? 'Motivo: ' + closingReason() : 'Esta solicitud es de solo lectura.'
+          }}
+        </p>
+      </section>
+    }
+  }
+}

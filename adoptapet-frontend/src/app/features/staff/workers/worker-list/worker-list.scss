@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-4);
+}
+
+// the email is the only long value: it wraps so the actions stay inside the panel
+.email {
+  overflow-wrap: anywhere;
+
+  @media (min-width: 900px) {
+    min-width: 190px;
+  }
+}
+
+.who .ap-table__main {
+  display: block;
+  white-space: nowrap;
+}
+
+.username {
+  display: block;
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}

@@ -1,0 +1,107 @@
+<app-panel-header heading="Usuarios" subtitle="Cuentas registradas y roles." />
+
+<section class="ap-panel">
+  <h2 class="filters__title" id="role-filter">Filtrar por rol</h2>
+  <div class="filters" role="group" aria-labelledby="role-filter">
+    @for (filter of filters; track filter.role) {
+      <button
+        type="button"
+        class="filter"
+        [class.active]="filter.role === role()"
+        [attr.aria-pressed]="filter.role === role()"
+        (click)="role.set(filter.role)"
+      >
+        {{ filter.label }}
+      </button>
+    }
+  </div>
+
+  @if (users.isLoading()) {
+    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando usuarios">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  } @else if (users.error()) {
+    <app-error-state [error]="users.error()" (retry)="users.reload()" />
+  } @else if (rows().length === 0) {
+    <app-empty-state icon="person_off" heading="No hay usuarios con este rol" />
+  } @else {
+    <p class="cdk-visually-hidden" aria-live="polite">{{ rows().length }} usuarios</p>
+    <table class="ap-table">
+      <thead>
+        <tr>
+          <th scope="col">Usuario</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Rol</th>
+          <th scope="col">Estado</th>
+          <th scope="col">{{ isAdmin() ? 'Acciones' : 'Acción' }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of rows(); track user.id) {
+          <tr>
+            <td class="who">
+              <app-avatar [person]="user" />
+              <span>{{ user.username }}</span>
+            </td>
+            <td data-label="Nombre">{{ user.firstName }} {{ user.lastName }}</td>
+            <td data-label="Rol">
+              <span class="ap-badge" [attr.data-tone]="roleTone[user.role]">{{
+                roleLabel[user.role]
+              }}</span>
+            </td>
+            <td data-label="Estado">
+              <span class="ap-badge" [attr.data-tone]="user.active ? 'success' : 'neutral'">
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+                {{ user.active ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            @if (isAdmin()) {
+              <td class="ap-table__actions">
+                <a class="ap-row-action" [routerLink]="['/staff/users', user.id, 'edit']">
+                  <mat-icon aria-hidden="true">edit</mat-icon>
+                  Editar
+                  <span class="cdk-visually-hidden">a {{ user.username }}</span>
+                </a>
+                @if (canToggle(user)) {
+                  <button
+                    type="button"
+                    class="ap-row-action"
+                    [class.ap-row-action--danger]="user.active"
+                    [class.ap-row-action--success]="!user.active"
+                    [disabled]="busyId() === user.id"
+                    (click)="toggle(user)"
+                  >
+                    <mat-icon aria-hidden="true">{{
+                      user.active ? 'block' : 'autorenew'
+                    }}</mat-icon>
+                    {{ user.active ? 'Desactivar' : 'Activar' }}
+                    <span class="cdk-visually-hidden">a {{ user.username }}</span>
+                  </button>
+                }
+              </td>
+            } @else {
+              <td>
+                <button type="button" class="ap-outline-button view" (click)="open(user)">
+                  <mat-icon aria-hidden="true">visibility</mat-icon>
+                  Ver
+                  <span class="cdk-visually-hidden">a {{ user.username }}</span>
+                </button>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <p class="ap-banner note">
+    <mat-icon aria-hidden="true">{{ isAdmin() ? 'info' : 'lock' }}</mat-icon>
+    @if (isAdmin()) {
+      No puedes desactivar tu propia cuenta ni cuentas de administrador.
+    } @else {
+      Consulta de usuarios. La edición está reservada al administrador.
+    }
+  </p>
+</section>

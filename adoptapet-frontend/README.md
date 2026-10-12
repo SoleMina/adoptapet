@@ -46,6 +46,7 @@ src/
 │   │   └── utils/            # multipart FormData, protected file download
 │   ├── shared/               # reusable UI: page-hero (home, catalog), page-header, pet-card, pet-photo, field-error, empty/error states,
 │   │                         # skeletons, coming-soon; pipes (petAge, limaDate); validators
+│   │                         # shared/profile: ProfileEditor + fields used by both "Mi perfil" pages
 │   ├── layouts/
 │   │   ├── site-layout/      # visitor + adopter: top bar of the Figma, mobile menu
 │   │   └── staff-layout/     # WORKER + ADMIN: side menu (drawer on mobile), menu items by role
@@ -53,7 +54,7 @@ src/
 │   │   ├── public/           # home, pet-catalog, pet-detail
 │   │   ├── auth/             # login, register (2 steps)
 │   │   ├── adopter/          # apply (wizard), my-applications, application-detail, notifications, profile
-│   │   ├── staff/            # dashboard (Panel), pets (list + form); the rest are routes only for now
+│   │   ├── staff/            # dashboard (Panel), pets (list + form), applications (list, review, schedule dialog), delivery-calendar, adopters, users
 │   │   └── errors/           # 403 / 404
 │   ├── app.config.ts         # router, HTTP + interceptors, locale es-PE, Material defaults, icons
 │   └── app.routes.ts
@@ -68,9 +69,10 @@ src/
 | `/inicio` (`/` redirects here), `/pets`, `/pets/:id` | everyone | ✅ built |
 | `/login`, `/register` | visitors only (`guestGuard`) | ✅ built |
 | `/apply/:petId` (4 steps + "sent"), `/my-applications`, `/my-applications/:id`, `/notifications`, `/profile` | ADOPTER | ✅ built |
-| `/staff/dashboard` (Panel), `/staff/pets`, `pets/new`, `pets/:id/edit` | ADMIN, WORKER | ✅ built |
-| `/staff/applications`, `applications/:id`, `delivery-calendar`, `adopters`, `adopters/:id`, `users`, `profile` | ADMIN, WORKER | placeholder |
-| `/staff/workers`, `/staff/reports` | ADMIN | placeholder |
+| `/staff/dashboard` (Panel), `/staff/pets`, `pets/new`, `pets/:id/edit`, `/staff/applications`, `applications/:id` (review), `delivery-calendar`, `adopters`, `adopters/:id`, `users`, `profile` | ADMIN, WORKER | ✅ built |
+| `/staff/workers`, `/staff/workers/new`, `/staff/workers/:id/edit` | ADMIN | ✅ built (workers: list, create, edit) |
+| `/staff/users/:id/edit` | ADMIN | ✅ built (edit any account) |
+| `/staff/reports` | ADMIN | ✅ built (general PDF report with filters) |
 | `/forbidden`, `**` | everyone | ✅ built |
 
 After login an adopter goes to `returnUrl` or the catalog, staff to `/staff/dashboard` (as in the Figma). The session
@@ -104,6 +106,8 @@ the asset exported from Figma at 2x (908×544) keeping the same name.
   Read a resource inside a `computed` with `valueOf(resource)` (`shared/utils/resource.ts`): `resource.value()`
   throws when the request failed.
 * Code in English, UI text in Spanish (Peru). Dates with the `limaDate` pipe (`America/Lima`, UTC-5).
+* A `<form (ngSubmit)>` always needs `[formGroup]`: without it Angular does not handle the submit and the browser
+  reloads the page (it happened in the first version of the dialogs).
 * Form fields use the design's own inputs (`.ap-field` / `.ap-input`, label above). Material is used for buttons,
   icons, menus, side nav, snackbar and progress bar.
 * Errors: the interceptor handles 401 (logout), 403, connection and 5xx; each screen shows 400/404/409 next to the

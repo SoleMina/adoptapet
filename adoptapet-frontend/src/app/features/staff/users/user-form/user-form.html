@@ -1,0 +1,141 @@
+<header class="heading">
+  <div>
+    <h1 class="heading__title">{{ texts().heading }}</h1>
+    <p class="heading__subtitle">Datos de la cuenta</p>
+  </div>
+  <a class="back" [routerLink]="texts().backPath">
+    <mat-icon aria-hidden="true">arrow_back</mat-icon>
+    {{ texts().back }}
+  </a>
+</header>
+
+@if (user.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando usuario"></div>
+} @else if (user.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="user.error()"
+      heading="No encontramos este usuario"
+      (retry)="user.reload()"
+    >
+      <a matButton="tonal" [routerLink]="texts().backPath">{{ texts().back }}</a>
+    </app-error-state>
+  </section>
+} @else {
+  <form class="ap-panel" [formGroup]="form" novalidate (ngSubmit)="save()">
+    <section aria-labelledby="account-title">
+      <header class="section">
+        <span class="section__icon" aria-hidden="true"><mat-icon>person</mat-icon></span>
+        <div>
+          <h2 id="account-title" class="section__title">Información de la cuenta</h2>
+          @if (loaded(); as current) {
+            <p class="section__hint">
+              {{ roleLabel[current.role] }} ·
+              {{ current.active ? 'Cuenta activa' : 'Cuenta inactiva' }}
+            </p>
+          }
+        </div>
+      </header>
+
+      <div class="ap-form-grid">
+        <div class="ap-field" formGroupName="account">
+          <label class="ap-field__label" for="username">
+            Usuario
+            @if (!creating()) {
+              · solo lectura
+            }
+          </label>
+          <input
+            id="username"
+            class="ap-input"
+            formControlName="username"
+            placeholder="Completar"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+            maxlength="50"
+            [attr.aria-invalid]="account.username.invalid && account.username.touched"
+            aria-describedby="username-error"
+          />
+          <app-field-error [control]="account.username" errorId="username-error" />
+        </div>
+
+        <div class="ap-field" [formGroup]="person">
+          <label class="ap-field__label" for="email">Correo</label>
+          <input
+            id="email"
+            class="ap-input"
+            type="email"
+            formControlName="email"
+            autocomplete="off"
+            maxlength="150"
+            [attr.aria-invalid]="person.controls.email.invalid && person.controls.email.touched"
+            aria-describedby="email-error"
+          />
+          <app-field-error [control]="person.controls.email" errorId="email-error" />
+        </div>
+
+        @if (creating()) {
+          <div class="ap-field field--wide" formGroupName="account">
+            <label class="ap-field__label" for="password">Contraseña</label>
+            <div class="ap-input-group">
+              <input
+                id="password"
+                class="ap-input"
+                formControlName="password"
+                autocomplete="new-password"
+                maxlength="72"
+                [type]="showPassword() ? 'text' : 'password'"
+                [attr.aria-invalid]="account.password.invalid && account.password.touched"
+                aria-describedby="password-hint password-error"
+              />
+              <button
+                matIconButton
+                type="button"
+                class="ap-input-group__action"
+                [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                [attr.aria-pressed]="showPassword()"
+                (click)="showPassword.set(!showPassword())"
+              >
+                <mat-icon aria-hidden="true">{{
+                  showPassword() ? 'visibility_off' : 'visibility'
+                }}</mat-icon>
+              </button>
+            </div>
+            @if (!(account.password.invalid && account.password.touched)) {
+              <p class="ap-field__hint" id="password-hint">
+                Mínimo 8 caracteres. Entrégasela al trabajador de forma segura.
+              </p>
+            }
+            <app-field-error [control]="account.password" errorId="password-error" />
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="personal" aria-labelledby="personal-title">
+      <header class="section">
+        <span class="section__icon section__icon--warm" aria-hidden="true">
+          <mat-icon>description</mat-icon>
+        </span>
+        <h2 id="personal-title" class="section__title">Datos personales</h2>
+      </header>
+      <app-profile-fields [form]="person" [showEmail]="false" />
+    </section>
+
+    @if (error(); as message) {
+      <p class="ap-banner ap-banner--danger error" role="alert">
+        <mat-icon aria-hidden="true">error</mat-icon>
+        {{ message }}
+      </p>
+    }
+
+    <div class="footer">
+      <button matButton="filled" type="submit" [disabled]="saving()">
+        <mat-icon aria-hidden="true">{{ creating() ? 'person_add' : 'save' }}</mat-icon>
+        {{ saving() ? 'Guardando…' : texts().submit }}
+      </button>
+      <a matButton="outlined" [routerLink]="texts().backPath">Cancelar</a>
+    </div>
+  </form>
+}

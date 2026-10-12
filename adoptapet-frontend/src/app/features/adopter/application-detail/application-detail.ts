@@ -17,6 +17,7 @@ import { LimaDatePipe } from '@shared/pipes/lima-date-pipe';
 import { catchError, finalize, of } from 'rxjs';
 import { timelineOf } from './application-timeline';
 import { valueOf } from '@shared/utils/resource';
+import { translateMessage } from '@core/errors/error-messages';
 
 interface DocumentRow {
   type: DocumentType;
@@ -150,7 +151,7 @@ function noteOf(application: ApplicationResponse): StatusNote | null {
         tone: 'danger',
         icon: 'cancel',
         text: application.rejectionReason
-          ? `Motivo: ${application.rejectionReason}`
+          ? `Motivo: ${translateMessage(application.rejectionReason)}`
           : 'Tu solicitud no fue aprobada.',
       };
     case 'CANCELLED':
@@ -158,7 +159,7 @@ function noteOf(application: ApplicationResponse): StatusNote | null {
         tone: 'neutral',
         icon: 'info',
         text: application.cancellationReason
-          ? `Motivo: ${application.cancellationReason}`
+          ? `Motivo: ${translateMessage(application.cancellationReason)}`
           : 'La adopción fue cancelada.',
       };
     default:

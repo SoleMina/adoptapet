@@ -1,0 +1,61 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-5);
+}
+
+app-panel-header {
+  margin-bottom: 0;
+}
+
+.date {
+  max-width: 400px;
+  margin-bottom: var(--ap-space-5);
+
+  .ap-input {
+    height: 50px;
+  }
+}
+
+.time {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+// Capacity: number + how full the window is.
+.capacity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-4);
+}
+
+.bar {
+  display: block;
+  width: min(180px, 30vw);
+  height: 12px;
+  border-radius: 999px;
+  background-color: var(--ap-color-primary-soft);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--ap-color-primary);
+    transition: width 200ms ease;
+  }
+
+  &--full span {
+    background-color: var(--ap-color-accent);
+  }
+}
+
+.link {
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

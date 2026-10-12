@@ -1,0 +1,78 @@
+<app-panel-header heading="Adoptantes" subtitle="Datos de contacto e historial de solicitudes." />
+
+<section class="ap-panel">
+  <div class="search">
+    <label class="cdk-visually-hidden" for="search">Buscar adoptante</label>
+    <mat-icon class="search__icon" aria-hidden="true">search</mat-icon>
+    <input
+      #searchInput
+      id="search"
+      class="ap-input"
+      type="search"
+      placeholder="Buscar por nombre o DNI"
+      autocomplete="off"
+      [value]="search()"
+      (input)="search.set(searchInput.value)"
+    />
+  </div>
+
+  @if (adopters.isLoading()) {
+    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando adoptantes">
+      <div></div>
+      <div></div>
+    </div>
+  } @else if (adopters.error()) {
+    <app-error-state [error]="adopters.error()" (retry)="adopters.reload()" />
+  } @else if (rows().length === 0) {
+    <app-empty-state
+      icon="group_off"
+      [heading]="
+        search() ? 'Ningún adoptante coincide con la búsqueda' : 'Aún no hay adoptantes registrados'
+      "
+    />
+  } @else {
+    <p class="cdk-visually-hidden" aria-live="polite">{{ rows().length }} adoptantes</p>
+    <table class="ap-table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">DNI</th>
+          <th scope="col">Contacto</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Solicitudes</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (adopter of rows(); track adopter.id) {
+          <tr>
+            <td class="who">
+              <app-avatar [person]="adopter" />
+              <strong>{{ adopter.firstName }} {{ adopter.lastName }}</strong>
+            </td>
+            <td data-label="DNI">{{ adopter.dni }}</td>
+            <td data-label="Contacto">{{ adopter.phone }}</td>
+            <td data-label="Estado">
+              <span class="ap-badge" [attr.data-tone]="adopter.active ? 'success' : 'neutral'">
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+                {{ adopter.active ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td data-label="Solicitudes">
+              <span class="count">{{ adopter.totalApplications }}</span>
+            </td>
+            <td class="ap-table__action action">
+              <a class="ap-outline-button" [routerLink]="[adopter.id]">
+                <mat-icon aria-hidden="true">visibility</mat-icon>
+                Ver detalle
+                <span class="cdk-visually-hidden"
+                  >de {{ adopter.firstName }} {{ adopter.lastName }}</span
+                >
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

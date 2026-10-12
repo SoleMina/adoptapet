@@ -116,3 +116,82 @@
     background-color: var(--ap-color-primary-soft);
   }
 }
+
+// Cell with one or more row buttons ("Editar", "Desactivar").
+.ap-table__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-2);
+
+  @media (min-width: 900px) {
+    // keeps the cell as a table cell and its buttons in a row
+    display: table-cell;
+    white-space: nowrap;
+
+    .ap-row-action + .ap-row-action {
+      margin-left: var(--ap-space-2);
+    }
+  }
+}
+
+// Small bordered button of a table row. Variants: --danger (deactivate) and --success (reactivate).
+.ap-row-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ap-space-2);
+  height: 44px;
+  padding: 0 var(--ap-space-4);
+  border: 1px solid var(--ap-color-border-strong);
+  border-radius: var(--ap-radius-md);
+  background-color: var(--ap-color-surface);
+  color: var(--ap-color-text);
+  font: inherit;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+
+  &:hover {
+    background-color: var(--ap-color-primary-faint);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: progress;
+  }
+
+  &--danger {
+    border-color: var(--ap-color-danger);
+    background-color: var(--ap-color-danger-soft);
+    color: var(--ap-color-danger);
+
+    &:hover {
+      background-color: var(--ap-color-danger-soft);
+      filter: brightness(0.97);
+    }
+  }
+
+  &--success {
+    border-color: var(--ap-color-success);
+    background-color: var(--ap-color-success-soft);
+    color: var(--ap-color-success);
+
+    &:hover {
+      background-color: var(--ap-color-success-soft);
+      filter: brightness(0.97);
+    }
+  }
+}
+
+// Wrapper for tables with many columns: on narrow desktops the table scrolls sideways inside its panel.
+.ap-table-scroll {
+  @media (min-width: 900px) {
+    overflow-x: auto;
+  }
+}

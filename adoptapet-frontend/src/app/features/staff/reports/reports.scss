@@ -1,0 +1,126 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.layout {
+  display: grid;
+  gap: var(--ap-space-6);
+
+  @include bp.up(bp.$md) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+.filters {
+  display: grid;
+  gap: var(--ap-space-4);
+}
+
+.lead {
+  margin-top: calc(var(--ap-space-2) * -1);
+  color: var(--ap-color-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-3);
+  margin-top: var(--ap-space-2);
+}
+
+.art {
+  position: relative;
+  display: none;
+  place-items: center;
+  min-height: 320px;
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-primary-faint);
+
+  @include bp.up(bp.$md) {
+    display: grid;
+  }
+}
+
+.sheet {
+  display: grid;
+  gap: var(--ap-space-3);
+  width: 200px;
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-md);
+  transform: rotate(-4deg);
+}
+
+.sheet__icon {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  color: var(--ap-color-primary);
+}
+
+.sheet__line {
+  height: 8px;
+  border-radius: 999px;
+  background-color: var(--ap-color-primary-soft);
+
+  &--short {
+    width: 60%;
+  }
+}
+
+.sheet__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--ap-space-2);
+  height: 72px;
+  margin-top: var(--ap-space-2);
+
+  span {
+    flex: 1;
+    border-radius: var(--ap-radius-sm) var(--ap-radius-sm) 0 0;
+    background-color: var(--ap-color-primary);
+
+    &:nth-child(1) {
+      height: 45%;
+      opacity: 0.45;
+    }
+
+    &:nth-child(2) {
+      height: 75%;
+      opacity: 0.7;
+    }
+
+    &:nth-child(3) {
+      height: 55%;
+      background-color: var(--ap-color-accent);
+    }
+
+    &:nth-child(4) {
+      height: 100%;
+    }
+  }
+}
+
+.art__paw {
+  position: absolute;
+  right: 12%;
+  bottom: 12%;
+  width: 56px;
+  height: 56px;
+  font-size: 56px;
+  font-variation-settings: 'FILL' 1;
+  color: var(--ap-color-primary-soft);
+  transform: rotate(18deg);
+}
+
+.note {
+  padding: var(--ap-space-4) var(--ap-space-5);
+
+  @include bp.up(bp.$md) {
+    grid-column: 1 / -1;
+  }
+}

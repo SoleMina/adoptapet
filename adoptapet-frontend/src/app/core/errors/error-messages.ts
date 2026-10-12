@@ -50,6 +50,27 @@ const EXACT: Record<string, string> = {
   'Upload the signed act before completing the adoption': 'Sube el acta firmada antes de completar',
   'Contingency only applies once the normal pickup deadline has passed':
     'La contingencia solo aplica cuando venció el plazo de recojo',
+  'The pet is no longer available': 'La mascota ya no está disponible',
+  'This pet already has a completed adoption': 'Esta mascota ya tiene una adopción completada',
+  'The adoption cannot be completed because the pet is not fit':
+    'No se puede completar: la mascota no está apta en este momento',
+  'The signed act can only be uploaded once the delivery window starts':
+    'El acta firmada se sube cuando empieza la franja de entrega',
+  'The adoption cannot be completed before the delivery window':
+    'La adopción se completa a partir del inicio de la franja de entrega',
+  'Only scheduled appointments can be marked as no-show':
+    'Solo una cita programada se puede marcar como "no se presentó"',
+  'A completed or cancelled appointment cannot be rescheduled':
+    'Una cita completada o cancelada no se puede reprogramar',
+  'The pickup deadline cannot be before the delivery window':
+    'El límite de recojo no puede ser anterior a la franja',
+  'Could not book the delivery window, try again':
+    'No se pudo reservar la franja. Inténtalo de nuevo',
+  'Only pending applications can be approved': 'Solo se puede aprobar una solicitud pendiente',
+  'Only pending applications can be rejected': 'Solo se puede rechazar una solicitud pendiente',
+  'Only approved applications can be completed': 'Solo se puede completar una solicitud aprobada',
+  // stored by the backend as the rejection reason of the other applicants
+  'Another application was approved for this pet': 'Se aprobó otra solicitud para esta mascota',
   'You can only access your own applications': 'Solo puedes ver tus propias solicitudes',
   'Application not found': 'Solicitud no encontrada',
   'Document not found': 'Documento no encontrado',

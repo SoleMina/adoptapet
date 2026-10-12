@@ -1,0 +1,70 @@
+<app-panel-header heading="Reportes" subtitle="Descarga el reporte general en PDF." />
+
+<section class="ap-panel layout">
+  <form class="filters" [formGroup]="form" (ngSubmit)="download()">
+    <h2 class="ap-panel__title">Reporte general</h2>
+    <p class="lead">
+      Elige los filtros que necesites o déjalos en “Todos” para el reporte completo.
+    </p>
+
+    <div class="ap-field">
+      <label class="ap-field__label" for="applicationStatus">Estado de solicitud</label>
+      <select id="applicationStatus" class="ap-input" formControlName="applicationStatus">
+        <option value="">Todos</option>
+        @for (option of applicationStatuses; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="ap-field">
+      <label class="ap-field__label" for="petStatus">Estado de mascota</label>
+      <select id="petStatus" class="ap-input" formControlName="petStatus">
+        <option value="">Todos</option>
+        @for (option of petStatuses; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="ap-field">
+      <label class="ap-field__label" for="species">Especie</label>
+      <select id="species" class="ap-input" formControlName="species">
+        <option value="">Todas</option>
+        @for (option of speciesOptions(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="actions">
+      <button matButton="filled" type="submit" [disabled]="downloading()">
+        <mat-icon aria-hidden="true">download</mat-icon>
+        {{ downloading() ? 'Generando…' : 'Descargar PDF' }}
+      </button>
+      <button matButton="outlined" type="button" [disabled]="form.pristine" (click)="clear()">
+        Limpiar filtros
+      </button>
+    </div>
+  </form>
+
+  <div class="art" aria-hidden="true">
+    <div class="sheet">
+      <mat-icon class="sheet__icon">picture_as_pdf</mat-icon>
+      <span class="sheet__line"></span>
+      <span class="sheet__line sheet__line--short"></span>
+      <div class="sheet__bars">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <mat-icon class="art__paw">pets</mat-icon>
+  </div>
+
+  <p class="ap-banner note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    El PDF incluye las solicitudes y mascotas que cumplen los filtros, con sus totales.
+  </p>
+</section>

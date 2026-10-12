@@ -47,6 +47,37 @@
   font-variation-settings: 'FILL' 1;
 }
 
+// White panel of the staff pages (bigger radius and padding than .ap-card).
+.ap-panel {
+  padding: var(--ap-space-5);
+  border-radius: var(--ap-radius-xl);
+  background-color: var(--ap-color-surface);
+  box-shadow: var(--ap-shadow-sm);
+
+  @include bp.up(bp.$md) {
+    padding: var(--ap-space-6);
+  }
+}
+
+.ap-panel__title {
+  margin-bottom: var(--ap-space-4);
+  font-size: var(--ap-font-size-xl);
+  font-weight: 800;
+}
+
+// Placeholder rows while a table loads.
+.ap-loading-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ap-space-3);
+
+  > div {
+    height: 80px;
+    border-radius: var(--ap-radius-lg);
+    background-color: var(--ap-color-primary-faint);
+  }
+}
+
 // Lavender message strip ("Adoptar cambia dos vidas...").
 .ap-banner {
   display: flex;
@@ -96,7 +127,7 @@
     font-size: 18px;
   }
 
-  @each $tone in success, warning, danger, info {
+  @each $tone in success, warning, danger, info, sky {
     &[data-tone='#{$tone}'] {
       background-color: var(--ap-color-#{$tone}-soft);
       color: var(--ap-color-#{$tone});
@@ -131,6 +162,10 @@
 
   &[data-tone='neutral'] {
     color: var(--ap-color-neutral);
+  }
+
+  &[data-tone='sky'] {
+    color: var(--ap-color-sky);
   }
 }
 
