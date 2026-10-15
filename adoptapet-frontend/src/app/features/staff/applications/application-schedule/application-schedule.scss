@@ -1,0 +1,93 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.skeleton {
+  min-height: 420px;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-4);
+  margin-bottom: var(--ap-space-5);
+}
+
+.section__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--ap-radius-lg);
+  background-color: var(--ap-color-primary-soft);
+  color: var(--ap-color-primary);
+}
+
+.section__title {
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+}
+
+.section__hint {
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+// select + "1 cupo libre" side by side when there is room, the badge below on phones
+.slot-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ap-space-3);
+
+  select {
+    flex: 1 1 220px;
+  }
+}
+
+.required {
+  color: var(--ap-color-danger);
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.notes {
+  display: grid;
+  gap: var(--ap-space-3);
+  margin-top: var(--ap-space-5);
+
+  .ap-banner {
+    padding: var(--ap-space-4) var(--ap-space-5);
+    font-size: var(--ap-font-size-md);
+  }
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-4);
+  margin-top: var(--ap-space-5);
+
+  .mat-mdc-button-base {
+    --mat-button-filled-container-height: 52px;
+    --mat-button-outlined-container-height: 52px;
+    flex: 1 1 160px;
+
+    @include bp.up(bp.$sm) {
+      flex: 0 0 auto;
+      min-width: 160px;
+    }
+  }
+}

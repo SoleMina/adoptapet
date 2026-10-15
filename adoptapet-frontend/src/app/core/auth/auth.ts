@@ -2,7 +2,6 @@ import { Injectable, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthApi } from '@core/api/auth-api';
 import { LoginRequest, RegisterRequest, Role, UserResponse } from '@core/models/user';
-import { Notify } from '@core/ui/notify';
 import { Observable, map, switchMap } from 'rxjs';
 import { AuthStore } from './auth-store';
 import { expiresAt } from './jwt';
@@ -13,7 +12,6 @@ export class Auth {
   private readonly api = inject(AuthApi);
   private readonly store = inject(AuthStore);
   private readonly router = inject(Router);
-  private readonly notify = inject(Notify);
   private expiryTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
@@ -53,15 +51,14 @@ export class Auth {
     void this.router.navigateByUrl('/inicio');
   }
 
-  /** Token expired or rejected (401): back to login, remembering where the user was. */
+  /** Token expired or rejected (401): explains it, remembering where the user was for the login. */
   expire(): void {
     if (!this.store.isAuthenticated()) {
       return;
     }
     const returnUrl = this.router.url;
     this.store.clear();
-    this.notify.info('Tu sesión expiró. Inicia sesión de nuevo');
-    void this.router.navigate(['/login'], { queryParams: { returnUrl } });
+    void this.router.navigate(['/session-expired'], { queryParams: { returnUrl } });
   }
 
   /** Where each role lands after login (Figma: adopter → catalog, staff → panel). */

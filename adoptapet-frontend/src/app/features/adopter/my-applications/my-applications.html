@@ -14,12 +14,9 @@
     } @else if (applications.error()) {
       <app-error-state [error]="applications.error()" (retry)="applications.reload()" />
     } @else if (rows().length === 0) {
-      <app-empty-state
-        heading="Aún no tienes solicitudes"
-        message="Cuando postules para adoptar una mascota, aquí verás su estado y los siguientes pasos."
-      >
-        <a matButton="filled" routerLink="/pets">Ver mascotas</a>
-      </app-empty-state>
+      <app-state-view art="empty" message="Todavía no has enviado una solicitud.">
+        <a matButton="filled" routerLink="/pets">Explorar mascotas</a>
+      </app-state-view>
     } @else {
       <table class="ap-table">
         <caption class="cdk-visually-hidden">

@@ -16,6 +16,7 @@ public class UserResponse {
 	private String email;
 	private String role;
 	private Boolean active;
+	private String deactivationReason;
 	private String firstName;
 	private String lastName;
 	private String dni;
@@ -31,6 +32,7 @@ public class UserResponse {
 		response.setEmail(user.getEmail());
 		response.setRole(user.getRole().name());
 		response.setActive(user.getActive());
+		response.setDeactivationReason(user.getDeactivationReason());
 		response.setFirstName(user.getFirstName());
 		response.setLastName(user.getLastName());
 		response.setDni(user.getDni());

@@ -17,10 +17,7 @@
   </div>
 
   @if (adopters.isLoading()) {
-    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando adoptantes">
-      <div></div>
-      <div></div>
-    </div>
+    <app-loading-state />
   } @else if (adopters.error()) {
     <app-error-state [error]="adopters.error()" (retry)="adopters.reload()" />
   } @else if (rows().length === 0) {

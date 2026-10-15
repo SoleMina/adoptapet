@@ -13,6 +13,7 @@ import { ApplicationRequest, ApplicationResponse } from '@core/models/applicatio
 import { PetResponse } from '@core/models/pet';
 import { PageTitleStrategy } from '@core/routing/page-title-strategy';
 import { ErrorState } from '@shared/components/error-state/error-state';
+import { StateView } from '@shared/components/state-view/state-view';
 import { FieldError } from '@shared/components/field-error/field-error';
 import { FileDrop } from '@shared/components/file-drop/file-drop';
 import { PageHero } from '@shared/components/page-hero/page-hero';
@@ -47,6 +48,7 @@ const STEPS: { step: Step; label: string }[] = [
     FileDrop,
     ApplicationSent,
     ErrorState,
+    StateView,
   ],
   templateUrl: './apply.html',
   styleUrl: './apply.scss',
@@ -108,7 +110,7 @@ export class Apply {
     const pet = valueOf(this.pet);
     if (!pet) return null;
     if (pet.adoptionStatus !== 'AVAILABLE')
-      return `${pet.name} ya no está disponible para adopción.`;
+      return 'Esta mascota ya no está disponible para adopción.';
     if (pet.healthStatus !== 'HEALTHY') {
       return `${pet.name} está recibiendo cuidados y por ahora no puede ser adoptad${pet.sex === 'MALE' ? 'o' : 'a'}.`;
     }
@@ -117,7 +119,8 @@ export class Apply {
 
   protected readonly heading = computed(() => {
     if (this.sent()) return 'Solicitud enviada';
-    if (this.pendingApplication() || this.blockedReason()) return 'Solicitud de adopción';
+    if (this.pendingApplication()) return 'Solicitud existente';
+    if (this.blockedReason()) return 'Mascota no disponible';
     return `Solicitud · Paso ${this.step()}`;
   });
 

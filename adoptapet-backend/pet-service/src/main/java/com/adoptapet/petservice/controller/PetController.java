@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.adoptapet.petservice.dto.DeactivateRequest;
 import com.adoptapet.petservice.dto.PetRequest;
 import com.adoptapet.petservice.dto.PetResponse;
 import com.adoptapet.petservice.model.AdoptionStatus;
@@ -70,11 +72,12 @@ public class PetController {
 		return ResponseEntity.ok(service.update(id, request, image));
 	}
 
-	/** Logical delete: the pet becomes INACTIVE. */
+	/** Logical delete: the pet becomes INACTIVE. The body with the reason is optional. */
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN','WORKER')")
-	public ResponseEntity<PetResponse> deactivate(@PathVariable Long id, @RequestParam Long version) {
-		return ResponseEntity.ok(service.deactivate(id, version));
+	public ResponseEntity<PetResponse> deactivate(@PathVariable Long id, @RequestParam Long version,
+			@Valid @RequestBody(required = false) DeactivateRequest request) {
+		return ResponseEntity.ok(service.deactivate(id, version, request == null ? null : request.getReason()));
 	}
 
 	@PutMapping("/{id}/activate")

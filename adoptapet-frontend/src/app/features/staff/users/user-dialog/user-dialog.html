@@ -44,9 +44,10 @@
     </div>
   </dl>
 
-  @if (canToggle() && user().active) {
+  @if (!user().active && user().deactivationReason) {
     <p class="note">
-      Al desactivar la cuenta, esta persona no podrá iniciar sesión. Sus datos se conservan.
+      <strong>Motivo de desactivación:</strong>
+      {{ user().deactivationReason }}
     </p>
   }
 </mat-dialog-content>
@@ -57,18 +58,6 @@
       <mat-icon aria-hidden="true">history</mat-icon>
       Ver historial
     </a>
-  }
-  @if (canToggle()) {
-    <button
-      matButton="outlined"
-      type="button"
-      [class.danger]="user().active"
-      [disabled]="saving()"
-      (click)="toggleActive()"
-    >
-      <mat-icon aria-hidden="true">{{ user().active ? 'block' : 'autorenew' }}</mat-icon>
-      {{ user().active ? 'Desactivar cuenta' : 'Reactivar cuenta' }}
-    </button>
   }
   <button matButton="filled" type="button" cdkFocusInitial (click)="close()">Cerrar</button>
 </mat-dialog-actions>

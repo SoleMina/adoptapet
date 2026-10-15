@@ -90,7 +90,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserResponse setActive(Long id, boolean active, Long currentUserId) {
+	public UserResponse setActive(Long id, boolean active, String reason, Long currentUserId) {
 		User user = getUser(id);
 
 		if (user.getId().equals(currentUserId)) {
@@ -101,6 +101,7 @@ public class UserService {
 		}
 
 		user.setActive(active);
+		user.setDeactivationReason(active || reason == null || reason.isBlank() ? null : reason.trim());
 		return UserResponse.from(repository.save(user));
 	}
 

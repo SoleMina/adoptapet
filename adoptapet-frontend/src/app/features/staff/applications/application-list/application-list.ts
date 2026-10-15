@@ -9,6 +9,7 @@ import { APPLICATION_STATUS_LABEL, APPLICATION_STATUS_TONE } from '@core/i18n/la
 import { ApplicationStatus } from '@core/models/application';
 import { EmptyState } from '@shared/components/empty-state/empty-state';
 import { ErrorState } from '@shared/components/error-state/error-state';
+import { LoadingState } from '@shared/components/loading-state/loading-state';
 import { PanelHeader } from '@shared/components/panel-header/panel-header';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
 import { LimaDatePipe } from '@shared/pipes/lima-date-pipe';
@@ -34,7 +35,16 @@ const TABS: Tab[] = [
 /** Staff: every application, by status. The tab lives in the URL (?status=) so it survives "back". */
 @Component({
   selector: 'app-application-list',
-  imports: [MatIconModule, RouterLink, PanelHeader, PetPhoto, EmptyState, ErrorState, LimaDatePipe],
+  imports: [
+    MatIconModule,
+    RouterLink,
+    PanelHeader,
+    PetPhoto,
+    EmptyState,
+    ErrorState,
+    LoadingState,
+    LimaDatePipe,
+  ],
   templateUrl: './application-list.html',
   styleUrl: './application-list.scss',
 })

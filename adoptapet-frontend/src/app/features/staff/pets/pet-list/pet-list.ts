@@ -13,14 +13,15 @@ import {
   speciesLabel,
 } from '@core/i18n/labels';
 import { AdoptionStatus, PetResponse } from '@core/models/pet';
-import { Confirm } from '@core/ui/confirm';
 import { Notify } from '@core/ui/notify';
 import { EmptyState } from '@shared/components/empty-state/empty-state';
 import { ErrorState } from '@shared/components/error-state/error-state';
+import { LoadingState } from '@shared/components/loading-state/loading-state';
+import { NoResults } from '@shared/components/no-results/no-results';
 import { PanelHeader } from '@shared/components/panel-header/panel-header';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
 import { valueOf } from '@shared/utils/resource';
-import { EMPTY, Observable, catchError, finalize, forkJoin, map, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, finalize, forkJoin, map, tap } from 'rxjs';
 
 const STATUS_OPTIONS: { value: AdoptionStatus; label: string }[] = [
   { value: 'AVAILABLE', label: 'Disponible' },
@@ -40,13 +41,14 @@ const STATUS_OPTIONS: { value: AdoptionStatus; label: string }[] = [
     PetPhoto,
     EmptyState,
     ErrorState,
+    LoadingState,
+    NoResults,
   ],
   templateUrl: './pet-list.html',
   styleUrl: './pet-list.scss',
 })
 export class PetList {
   private readonly petApi = inject(PetApi);
-  private readonly confirm = inject(Confirm);
   private readonly notify = inject(Notify);
 
   protected readonly statusOptions = STATUS_OPTIONS;
@@ -101,18 +103,6 @@ export class PetList {
   protected clearFilters(): void {
     this.status.set('');
     this.species.set('');
-  }
-
-  protected deactivate(pet: PetResponse): void {
-    this.confirm
-      .ask({
-        title: `¿Desactivar a ${pet.name}?`,
-        message: `${pet.name} dejará de aparecer en el catálogo. Su ficha se conserva y puedes reactivarla cuando quieras.`,
-        confirmLabel: 'Desactivar',
-        tone: 'danger',
-      })
-      .pipe(switchMap(() => this.run(pet, this.petApi.deactivate(pet.id, pet.version))))
-      .subscribe((updated) => this.notify.success(`${updated.name} quedó inactiva en el catálogo`));
   }
 
   protected reactivate(pet: PetResponse): void {

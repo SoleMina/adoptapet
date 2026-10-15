@@ -133,20 +133,18 @@
           Al aprobar se rechazan las demás solicitudes pendientes para esta mascota.
         </p>
         <div class="buttons">
-          <button matButton="filled" type="button" [disabled]="!!busy()" (click)="approve(current)">
+          <a matButton="filled" [routerLink]="['/staff/applications', current.id, 'approve']">
             <mat-icon aria-hidden="true">check</mat-icon>
             Aprobar y agendar
-          </button>
-          <button
+          </a>
+          <a
             matButton="outlined"
             class="danger"
-            type="button"
-            [disabled]="!!busy()"
-            (click)="reject(current)"
+            [routerLink]="['/staff/applications', current.id, 'reject']"
           >
             <mat-icon aria-hidden="true">close</mat-icon>
             Rechazar
-          </button>
+          </a>
         </div>
       </section>
     }
@@ -174,25 +172,18 @@
             </p>
             <div class="buttons">
               @if (canReschedule()) {
-                <button
+                <a
                   matButton="filled"
-                  type="button"
-                  [disabled]="!!busy()"
-                  (click)="reschedule(current)"
+                  [routerLink]="['/staff/applications', current.id, 'reschedule']"
                 >
                   <mat-icon aria-hidden="true">event_repeat</mat-icon>
                   Reprogramar
-                </button>
+                </a>
               }
-              <button
-                matButton="outlined"
-                type="button"
-                [disabled]="!!busy()"
-                (click)="cancel(current)"
-              >
+              <a matButton="outlined" [routerLink]="['/staff/applications', current.id, 'cancel']">
                 <mat-icon aria-hidden="true">close</mat-icon>
                 Cancelar
-              </button>
+              </a>
             </div>
           </div>
           <p class="hint">
@@ -260,24 +251,20 @@
               }}
             </button>
 
-            <button
-              type="button"
-              [matButton]="closingStep() === 2 ? 'filled' : 'tonal'"
-              [disabled]="!current.hasAct || !clock().started || !!busy()"
-              (click)="signedActPicker.click()"
-            >
-              <mat-icon aria-hidden="true">upload</mat-icon>
-              {{ current.hasSignedAct ? 'Reemplazar acta firmada' : 'Subir acta firmada' }}
-            </button>
-            <input
-              #signedActPicker
-              class="cdk-visually-hidden"
-              type="file"
-              tabindex="-1"
-              accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
-              aria-label="Acta firmada"
-              (change)="onSignedActPicked(current, signedActPicker)"
-            />
+            @if (current.hasAct && clock().started) {
+              <a
+                [matButton]="closingStep() === 2 ? 'filled' : 'tonal'"
+                [routerLink]="['/staff/applications', current.id, 'signed-act']"
+              >
+                <mat-icon aria-hidden="true">upload</mat-icon>
+                {{ current.hasSignedAct ? 'Reemplazar acta firmada' : 'Subir acta firmada' }}
+              </a>
+            } @else {
+              <button [matButton]="closingStep() === 2 ? 'filled' : 'tonal'" type="button" disabled>
+                <mat-icon aria-hidden="true">upload</mat-icon>
+                Subir acta firmada
+              </button>
+            }
 
             @if (!clock().overdue) {
               <button
@@ -290,15 +277,20 @@
                 Completar adopción
               </button>
             } @else if (isAdmin()) {
-              <button
-                matButton="filled"
-                type="button"
-                [disabled]="closingStep() < 3 || !!busy()"
-                (click)="completeByContingency(current)"
-              >
-                <mat-icon aria-hidden="true">gavel</mat-icon>
-                Cerrar por contingencia
-              </button>
+              @if (closingStep() === 3) {
+                <a
+                  matButton="filled"
+                  [routerLink]="['/staff/applications', current.id, 'contingency']"
+                >
+                  <mat-icon aria-hidden="true">gavel</mat-icon>
+                  Cerrar por contingencia
+                </a>
+              } @else {
+                <button matButton="filled" type="button" disabled>
+                  <mat-icon aria-hidden="true">gavel</mat-icon>
+                  Cerrar por contingencia
+                </button>
+              }
             }
           </div>
 
@@ -383,26 +375,19 @@
         </h2>
         <div class="buttons">
           @if (canReschedule()) {
-            <button
-              matButton="filled"
-              type="button"
-              [disabled]="!!busy()"
-              (click)="reschedule(current)"
-            >
+            <a matButton="filled" [routerLink]="['/staff/applications', current.id, 'reschedule']">
               <mat-icon aria-hidden="true">event_repeat</mat-icon>
               Reprogramar
-            </button>
+            </a>
           }
-          <button
+          <a
             matButton="outlined"
             class="danger"
-            type="button"
-            [disabled]="!!busy()"
-            (click)="cancel(current)"
+            [routerLink]="['/staff/applications', current.id, 'cancel']"
           >
             <mat-icon aria-hidden="true">delete</mat-icon>
             Cancelar
-          </button>
+          </a>
         </div>
       </section>
     }

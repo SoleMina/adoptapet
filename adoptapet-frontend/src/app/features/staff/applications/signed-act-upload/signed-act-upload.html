@@ -1,0 +1,98 @@
+<app-panel-header heading="Subir acta firmada" subtitle="PDF, JPG o PNG · Máximo 5 MB." />
+
+@if (application.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando solicitud"></div>
+} @else if (application.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="application.error()"
+      heading="No encontramos esta solicitud"
+      (retry)="application.reload()"
+    >
+      <a matButton="tonal" routerLink="/staff/applications">Volver a solicitudes</a>
+    </app-error-state>
+  </section>
+} @else if (current(); as application) {
+  @if (blocked(); as message) {
+    <section class="ap-panel">
+      <p class="ap-banner ap-banner--warning">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        {{ message }}
+      </p>
+      <div class="footer">
+        <a matButton="outlined" [routerLink]="backPath()">Volver a la solicitud</a>
+      </div>
+    </section>
+  } @else {
+    <section class="ap-panel">
+      <h2 class="label" id="file-label">Archivo</h2>
+      <p class="context">
+        {{ application.petName }} · Solicitud #{{ application.id }}
+        @if (application.hasSignedAct) {
+          · Ya tiene un acta firmada: el archivo nuevo la reemplaza.
+        }
+      </p>
+
+      <div
+        class="zone"
+        [class.zone--dragging]="dragging()"
+        [class.zone--invalid]="!!error()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="dragging.set(false)"
+        (drop)="onDrop($event)"
+      >
+        <span class="zone__icon" aria-hidden="true">
+          <mat-icon>{{ file() ? 'task' : 'upload_file' }}</mat-icon>
+        </span>
+        @if (file(); as picked) {
+          <p class="zone__file">
+            <strong>{{ picked.name }}</strong>
+            <span>{{ size() }}</span>
+          </p>
+          <button
+            matButton="outlined"
+            type="button"
+            aria-describedby="file-label"
+            (click)="picker.click()"
+          >
+            Cambiar archivo
+          </button>
+        } @else {
+          <button
+            matButton="filled"
+            type="button"
+            aria-describedby="file-label"
+            (click)="picker.click()"
+          >
+            Seleccionar archivo
+          </button>
+          <p class="zone__hint">PDF, JPG o PNG · Máximo {{ maxMb }} MB.</p>
+        }
+        @if (error(); as message) {
+          <p class="zone__error" role="alert">{{ message }}</p>
+        }
+        <input
+          #picker
+          class="cdk-visually-hidden"
+          type="file"
+          tabindex="-1"
+          [accept]="accept"
+          aria-labelledby="file-label"
+          (change)="onPicked(picker)"
+        />
+      </div>
+
+      <div class="footer">
+        <button
+          matButton="filled"
+          type="button"
+          [disabled]="!file() || saving()"
+          (click)="upload(application)"
+        >
+          {{ saving() ? 'Subiendo…' : 'Subir archivo' }}
+        </button>
+        <a matButton="outlined" [routerLink]="backPath()">Volver</a>
+      </div>
+    </section>
+  }
+}

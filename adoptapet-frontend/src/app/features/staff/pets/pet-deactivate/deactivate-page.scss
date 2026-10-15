@@ -1,0 +1,101 @@
+// Shared by "Desactivar mascota" and "Desactivar usuario".
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.skeleton {
+  min-height: 360px;
+}
+
+.alert {
+  gap: var(--ap-space-4);
+  margin-bottom: var(--ap-space-5);
+  padding: var(--ap-space-4) var(--ap-space-5);
+  font-size: var(--ap-font-size-md);
+}
+
+.alert__title {
+  display: block;
+}
+
+.alert__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--ap-color-warning) 25%, transparent);
+
+  &--solid {
+    width: 36px;
+    height: 36px;
+    background-color: var(--ap-color-warning);
+    color: #fff;
+
+    .mat-icon {
+      width: 22px;
+      height: 22px;
+      font-size: 22px;
+    }
+  }
+}
+
+.subject {
+  display: flex;
+  align-items: center;
+  gap: var(--ap-space-5);
+  margin-bottom: var(--ap-space-5);
+}
+
+.subject__photo {
+  flex-shrink: 0;
+  width: 140px;
+  height: 134px;
+  overflow: hidden;
+  border-radius: var(--ap-radius-lg);
+}
+
+.subject__name {
+  font-size: var(--ap-font-size-lg);
+  font-weight: 800;
+
+  &--big {
+    font-size: var(--ap-font-size-2xl);
+  }
+}
+
+.subject__meta {
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-4);
+  margin-top: var(--ap-space-5);
+
+  &--divided {
+    padding-top: var(--ap-space-5);
+    border-top: 1px solid var(--ap-color-border);
+  }
+
+  .mat-mdc-button-base {
+    --mat-button-filled-container-height: 52px;
+    --mat-button-outlined-container-height: 52px;
+    flex: 1 1 160px;
+
+    @include bp.up(bp.$sm) {
+      flex: 0 0 auto;
+      min-width: 180px;
+    }
+  }
+}
+
+.danger {
+  --mat-button-filled-container-color: var(--ap-color-danger);
+  --mat-button-filled-label-text-color: #fff;
+}

@@ -17,6 +17,15 @@
       <a matButton="tonal" routerLink="/staff/pets">Volver a mascotas</a>
     </app-error-state>
   </section>
+} @else if (stale()) {
+  <section class="panel">
+    <app-state-view
+      art="conflict"
+      message="Otro usuario modificó este registro. Recárgalo antes de continuar."
+    >
+      <button matButton="filled" type="button" (click)="reload()">Recargar</button>
+    </app-state-view>
+  </section>
 } @else {
   <form [formGroup]="form" novalidate (ngSubmit)="save()">
     <section class="panel" aria-labelledby="basic-title">
@@ -189,15 +198,12 @@
       <p class="ap-banner ap-banner--danger error" role="alert">
         <mat-icon aria-hidden="true">error</mat-icon>
         <span>{{ message }}</span>
-        @if (stale()) {
-          <button matButton type="button" (click)="reload()">Recargar ficha</button>
-        }
       </p>
     }
 
     <div class="panel footer">
       <a matButton="tonal" routerLink="/staff/pets">Cancelar</a>
-      <button matButton="filled" type="submit" [disabled]="saving() || stale()">
+      <button matButton="filled" type="submit" [disabled]="saving()">
         @if (editing()) {
           <mat-icon aria-hidden="true">check</mat-icon>
         }

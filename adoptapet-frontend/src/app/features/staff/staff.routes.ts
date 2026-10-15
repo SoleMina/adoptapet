@@ -4,6 +4,15 @@ import { roleGuard, withRoles } from '@core/auth/auth-guards';
 /** One form for the three ADMIN screens; `data.mode` says which one. */
 const userForm = () => import('./users/user-form/user-form').then((m) => m.UserForm);
 
+/** Approve and reschedule share the page that picks the delivery appointment. */
+const schedule = () =>
+  import('./applications/application-schedule/application-schedule').then(
+    (m) => m.ApplicationSchedule,
+  );
+/** Reject and cancel share the page that asks for the reason. */
+const reason = () =>
+  import('./applications/application-reason/application-reason').then((m) => m.ApplicationReason);
+
 /** WORKER and ADMIN panel (authGuard + roleGuard are on the parent route). */
 export const STAFF_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -27,6 +36,36 @@ export const STAFF_ROUTES: Routes = [
       ),
   },
   {
+    path: 'applications/:id/approve',
+    title: 'Aprobar y agendar',
+    loadComponent: schedule,
+    data: { mode: 'approve' },
+  },
+  {
+    path: 'applications/:id/reschedule',
+    title: 'Reprogramar entrega',
+    loadComponent: schedule,
+    data: { mode: 'reschedule' },
+  },
+  {
+    path: 'applications/:id/reject',
+    title: 'Rechazar solicitud',
+    loadComponent: reason,
+    data: { mode: 'reject' },
+  },
+  {
+    path: 'applications/:id/cancel',
+    title: 'Cancelar solicitud',
+    loadComponent: reason,
+    data: { mode: 'cancel' },
+  },
+  {
+    path: 'applications/:id/signed-act',
+    title: 'Subir acta firmada',
+    loadComponent: () =>
+      import('./applications/signed-act-upload/signed-act-upload').then((m) => m.SignedActUpload),
+  },
+  {
     path: 'pets',
     title: 'Mascotas',
     loadComponent: () => import('./pets/pet-list/pet-list').then((m) => m.PetList),
@@ -40,6 +79,12 @@ export const STAFF_ROUTES: Routes = [
     path: 'pets/:id/edit',
     title: 'Editar mascota',
     loadComponent: () => import('./pets/pet-form/pet-form').then((m) => m.PetForm),
+  },
+  {
+    path: 'pets/:id/deactivate',
+    title: 'Desactivar mascota',
+    loadComponent: () =>
+      import('./pets/pet-deactivate/pet-deactivate').then((m) => m.PetDeactivate),
   },
   {
     path: 'delivery-calendar',
@@ -95,6 +140,18 @@ export const STAFF_ROUTES: Routes = [
         title: 'Editar usuario',
         loadComponent: userForm,
         data: { mode: 'edit-user' },
+      },
+      {
+        path: 'users/:id/deactivate',
+        title: 'Desactivar usuario',
+        loadComponent: () =>
+          import('./users/user-deactivate/user-deactivate').then((m) => m.UserDeactivate),
+      },
+      {
+        path: 'applications/:id/contingency',
+        title: 'Cierre por contingencia',
+        loadComponent: reason,
+        data: { mode: 'contingency' },
       },
       {
         path: 'reports',

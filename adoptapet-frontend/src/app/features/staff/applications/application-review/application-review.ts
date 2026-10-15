@@ -12,7 +12,7 @@ import { AuthStore } from '@core/auth/auth-store';
 import { ApiError } from '@core/errors/api-error';
 import { translateMessage } from '@core/errors/error-messages';
 import { APPLICATION_STATUS_LABEL, healthStatusLabel } from '@core/i18n/labels';
-import { ApplicationResponse, DocumentType, ScheduleRequest } from '@core/models/application';
+import { ApplicationResponse, DocumentType } from '@core/models/application';
 import { PageTitleStrategy } from '@core/routing/page-title-strategy';
 import { Confirm } from '@core/ui/confirm';
 import { Notify } from '@core/ui/notify';
@@ -26,13 +26,10 @@ import { StatusBadge } from '@shared/components/status-badge/status-badge';
 import { LimaDatePipe } from '@shared/pipes/lima-date-pipe';
 import { limaNow } from '@shared/utils/lima-date';
 import { valueOf } from '@shared/utils/resource';
-import { EMPTY, Observable, catchError, filter, finalize, of, switchMap, tap } from 'rxjs';
-import { ScheduleData, ScheduleDialog } from '../schedule-dialog/schedule-dialog';
+import { EMPTY, Observable, catchError, finalize, of, switchMap, tap } from 'rxjs';
 
 /** Same limit as the backend (ApplicationService.MAX_RESCHEDULES). */
 const MAX_RESCHEDULES = 2;
-const SIGNED_ACT_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
-const MAX_FILE_MB = 5;
 
 /** Where an approved application stands against the clock of its appointment. */
 interface DeliveryClock {
@@ -201,75 +198,7 @@ export class ApplicationReview {
       .subscribe((response) => saveBlob(response, fallbackName));
   }
 
-  // ----- pending
-
-  protected approve(application: ApplicationResponse): void {
-    this.askSchedule({
-      title: 'Aprobar y agendar la entrega',
-      message: `Elige cuándo se entregará ${application.petName}. Las demás solicitudes pendientes para esta mascota se rechazarán.`,
-      confirmLabel: 'Aprobar solicitud',
-    })
-      .pipe(
-        switchMap((schedule) =>
-          this.run('approve', this.applicationApi.approve(application.id, schedule)),
-        ),
-      )
-      .subscribe(() => this.notify.success('Solicitud aprobada y entrega agendada'));
-  }
-
-  protected reject(application: ApplicationResponse): void {
-    this.confirm
-      .askReason({
-        title: 'Rechazar solicitud',
-        message: 'El adoptante verá este motivo en su solicitud y en sus notificaciones.',
-        label: 'Motivo del rechazo',
-        confirmLabel: 'Rechazar',
-        tone: 'danger',
-      })
-      .pipe(
-        switchMap((reason) =>
-          this.run('reject', this.applicationApi.reject(application.id, { reason })),
-        ),
-      )
-      .subscribe(() => this.notify.success('Solicitud rechazada'));
-  }
-
   // ----- approved / no-show
-
-  protected reschedule(application: ApplicationResponse): void {
-    const extra = this.rescheduleLimitReached();
-    this.askSchedule({
-      title: 'Reprogramar la entrega',
-      message: extra
-        ? `Esta solicitud ya usó sus ${MAX_RESCHEDULES} reprogramaciones. Como administrador puedes autorizar una más indicando el motivo.`
-        : `Reprogramación ${application.rescheduleCount + 1} de ${MAX_RESCHEDULES}. El adoptante recibirá una notificación.`,
-      confirmLabel: 'Reprogramar',
-      requireObservation: extra,
-    })
-      .pipe(
-        switchMap((schedule) =>
-          this.run('reschedule', this.applicationApi.reschedule(application.id, schedule)),
-        ),
-      )
-      .subscribe(() => this.notify.success('Entrega reprogramada'));
-  }
-
-  protected cancel(application: ApplicationResponse): void {
-    this.confirm
-      .askReason({
-        title: 'Cancelar la adopción',
-        message: `${application.petName} volverá a estar disponible en el catálogo. El adoptante verá este motivo.`,
-        label: 'Motivo de la cancelación',
-        confirmLabel: 'Cancelar adopción',
-        tone: 'danger',
-      })
-      .pipe(
-        switchMap((reason) =>
-          this.run('cancel', this.applicationApi.cancel(application.id, { reason })),
-        ),
-      )
-      .subscribe(() => this.notify.success('Adopción cancelada'));
-  }
 
   protected markNoShow(application: ApplicationResponse): void {
     this.confirm
@@ -303,23 +232,6 @@ export class ApplicationReview {
       });
   }
 
-  protected onSignedActPicked(application: ApplicationResponse, input: HTMLInputElement): void {
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
-    if (!SIGNED_ACT_TYPES.includes(file.type)) {
-      this.notify.error('Solo se permiten archivos PDF, JPG o PNG');
-      return;
-    }
-    if (file.size > MAX_FILE_MB * 1024 * 1024) {
-      this.notify.error(`El archivo supera los ${MAX_FILE_MB} MB`);
-      return;
-    }
-    this.run('signed-act', this.applicationApi.uploadSignedAct(application.id, file)).subscribe(
-      () => this.notify.success('Acta firmada guardada'),
-    );
-  }
-
   protected complete(application: ApplicationResponse): void {
     this.confirm
       .ask({
@@ -329,26 +241,6 @@ export class ApplicationReview {
       })
       .pipe(switchMap(() => this.run('complete', this.applicationApi.complete(application.id))))
       .subscribe(() => this.notify.success('¡Adopción completada!'));
-  }
-
-  protected completeByContingency(application: ApplicationResponse): void {
-    this.confirm
-      .askReason({
-        title: 'Cerrar por contingencia',
-        message:
-          'El plazo de recojo ya venció. Indica por qué se completa la adopción fuera de plazo.',
-        label: 'Motivo de la contingencia',
-        confirmLabel: 'Completar por contingencia',
-      })
-      .pipe(
-        switchMap((reason) =>
-          this.run(
-            'contingency',
-            this.applicationApi.completeByContingency(application.id, { reason }),
-          ),
-        ),
-      )
-      .subscribe(() => this.notify.success('Adopción completada por contingencia'));
   }
 
   // ----- helpers
@@ -371,13 +263,6 @@ export class ApplicationReview {
       );
     }
     return EMPTY;
-  }
-
-  private askSchedule(data: ScheduleData): Observable<ScheduleRequest> {
-    return this.dialog
-      .open<ScheduleDialog, ScheduleData, ScheduleRequest>(ScheduleDialog, { data })
-      .afterClosed()
-      .pipe(filter((schedule): schedule is ScheduleRequest => !!schedule));
   }
 
   /** Runs a workflow action and shows the application it returns. */

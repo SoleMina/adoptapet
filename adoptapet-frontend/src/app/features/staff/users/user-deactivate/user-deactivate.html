@@ -1,0 +1,52 @@
+<app-panel-header heading="Desactivar usuario" subtitle="El usuario no podrá iniciar sesión." />
+
+@if (user.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando usuario"></div>
+} @else if (user.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="user.error()"
+      heading="No encontramos este usuario"
+      (retry)="user.reload()"
+    >
+      <a matButton="tonal" [routerLink]="backPath()">Volver</a>
+    </app-error-state>
+  </section>
+} @else if (current(); as account) {
+  @if (blocked(); as message) {
+    <section class="ap-panel">
+      <p class="ap-banner ap-banner--warning">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        {{ message }}
+      </p>
+      <div class="footer">
+        <a matButton="outlined" [routerLink]="backPath()">Volver</a>
+      </div>
+    </section>
+  } @else {
+    <form class="ap-panel" [formGroup]="form" novalidate (ngSubmit)="save(account)">
+      <p class="ap-banner ap-banner--warning alert">
+        <span class="alert__icon" aria-hidden="true"><mat-icon>lock</mat-icon></span>
+        <span>Al desactivar el usuario, no podrá iniciar sesión en el sistema.</span>
+      </p>
+
+      <div class="subject">
+        <app-avatar [person]="account" size="large" />
+        <div>
+          <p class="subject__name">{{ account.firstName }} {{ account.lastName }}</p>
+          <p class="subject__meta">{{ account.username }} · {{ roleLabel[account.role] }}</p>
+        </div>
+      </div>
+
+      <app-reason-field [control]="reason" [required]="false" />
+
+      <div class="footer">
+        <button matButton="filled" class="danger" type="submit" [disabled]="saving()">
+          <mat-icon aria-hidden="true">block</mat-icon>
+          {{ saving() ? 'Desactivando…' : 'Desactivar' }}
+        </button>
+        <a matButton="outlined" [routerLink]="backPath()">Volver</a>
+      </div>
+    </form>
+  }
+}

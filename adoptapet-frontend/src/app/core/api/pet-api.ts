@@ -33,9 +33,9 @@ export class PetApi {
   }
 
   /** Staff. Logical delete: the pet becomes INACTIVE. */
-  deactivate(id: number, version: number): Observable<PetResponse> {
+  deactivate(id: number, version: number, reason?: string): Observable<PetResponse> {
     const params = new HttpParams().set('version', version);
-    return this.http.delete<PetResponse>(apiUrl(`/pets/${id}`), { params });
+    return this.http.delete<PetResponse>(apiUrl(`/pets/${id}`), { params, body: { reason } });
   }
 
   /** Staff. */

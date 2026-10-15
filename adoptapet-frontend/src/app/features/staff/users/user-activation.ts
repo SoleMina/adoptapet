@@ -1,40 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { UserApi } from '@core/api/user-api';
 import { ApiError } from '@core/errors/api-error';
-import { Confirm } from '@core/ui/confirm';
+import { UserResponse } from '@core/models/user';
 import { Notify } from '@core/ui/notify';
-import { EMPTY, Observable, catchError, of, switchMap, tap } from 'rxjs';
-
-interface Account {
-  id: number;
-  firstName: string;
-  active: boolean;
-}
+import { EMPTY, Observable, catchError, tap } from 'rxjs';
 
 /**
- * ADMIN: deactivate (after confirming) or reactivate an account. An inactive user cannot sign in;
- * the data is kept. Emits the new `active` value when it worked, nothing when cancelled or failed.
+ * ADMIN: reactivates an account from a list (no confirmation needed: it gives access back).
+ * Deactivating has its own page, `/staff/users/:id/deactivate`, where the reason is written.
+ * Emits the updated user when it worked, nothing when it failed.
  */
 @Injectable({ providedIn: 'root' })
 export class UserActivation {
   private readonly userApi = inject(UserApi);
-  private readonly confirm = inject(Confirm);
   private readonly notify = inject(Notify);
 
-  toggle(account: Account): Observable<boolean> {
-    const activate = !account.active;
-    const confirmed: Observable<void> = activate
-      ? of(undefined)
-      : this.confirm.ask({
-          title: `¿Desactivar a ${account.firstName}?`,
-          message: 'No podrá iniciar sesión hasta que reactives su cuenta. Sus datos se conservan.',
-          confirmLabel: 'Desactivar cuenta',
-          tone: 'danger',
-        });
-    return confirmed.pipe(
-      switchMap(() => this.userApi.setActive(account.id, activate)),
-      tap((user) => this.notify.success(user.active ? 'Cuenta reactivada' : 'Cuenta desactivada')),
-      switchMap((user) => of(user.active)),
+  activate(id: number): Observable<UserResponse> {
+    return this.userApi.activate(id).pipe(
+      tap(() => this.notify.success('Cuenta reactivada')),
       catchError((error: unknown) => {
         if (error instanceof ApiError && !error.notified) {
           error.notified = true;

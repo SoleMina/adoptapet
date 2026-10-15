@@ -30,6 +30,8 @@ export interface PetResponse {
   sterilizationStatus: SterilizationStatus;
   adoptionStatus: AdoptionStatus;
   observations: string | null;
+  /** Why it was deactivated (INACTIVE only). */
+  deactivationReason: string | null;
   /** Relative to the gateway: `/api/pets/images/{file}`. Use `imageUrl()` from core/http to render it. */
   imageUrl: string | null;
   version: number;

@@ -1,0 +1,54 @@
+<app-panel-header heading="Desactivar mascota" [subtitle]="subtitle()" />
+
+@if (pet.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando mascota"></div>
+} @else if (pet.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="pet.error()"
+      heading="No encontramos esta mascota"
+      (retry)="pet.reload()"
+    >
+      <a matButton="tonal" [routerLink]="backPath">Volver a mascotas</a>
+    </app-error-state>
+  </section>
+} @else if (current(); as item) {
+  @if (blocked(); as message) {
+    <section class="ap-panel">
+      <p class="ap-banner ap-banner--warning">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        {{ message }}
+      </p>
+      <div class="footer">
+        <a matButton="outlined" [routerLink]="backPath">Volver</a>
+      </div>
+    </section>
+  } @else {
+    <form class="ap-panel" [formGroup]="form" novalidate (ngSubmit)="save(item)">
+      <p class="ap-banner ap-banner--warning alert">
+        <span class="alert__icon alert__icon--solid" aria-hidden="true">
+          <mat-icon>priority_high</mat-icon>
+        </span>
+        <span>
+          <strong class="alert__title">{{ item.name }} dejará de mostrarse en el catálogo.</strong>
+          El registro se conserva.
+        </span>
+      </p>
+
+      <div class="subject">
+        <app-pet-photo class="subject__photo" [path]="item.imageUrl" [name]="item.name" />
+        <p class="subject__name subject__name--big">{{ item.name }}</p>
+      </div>
+
+      <app-reason-field [control]="reason" [required]="false" />
+
+      <div class="footer footer--divided">
+        <button matButton="filled" class="danger" type="submit" [disabled]="saving()">
+          <mat-icon aria-hidden="true">block</mat-icon>
+          {{ saving() ? 'Desactivando…' : 'Desactivar' }}
+        </button>
+        <a matButton="outlined" [routerLink]="backPath">Volver</a>
+      </div>
+    </form>
+  }
+}

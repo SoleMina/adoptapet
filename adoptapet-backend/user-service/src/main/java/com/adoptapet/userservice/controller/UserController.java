@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adoptapet.shared.exception.ApiException;
 import com.adoptapet.shared.security.AuthUser;
+import com.adoptapet.userservice.dto.DeactivateRequest;
 import com.adoptapet.userservice.dto.RegisterRequest;
 import com.adoptapet.userservice.dto.UpdateUserRequest;
 import com.adoptapet.userservice.dto.UserResponse;
@@ -74,12 +75,14 @@ public class UserController {
 	@PutMapping("/{id}/activate")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<UserResponse> activate(@PathVariable Long id, @AuthenticationPrincipal AuthUser user) {
-		return ResponseEntity.ok(service.setActive(id, true, user.getId()));
+		return ResponseEntity.ok(service.setActive(id, true, null, user.getId()));
 	}
 
 	@PutMapping("/{id}/deactivate")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<UserResponse> deactivate(@PathVariable Long id, @AuthenticationPrincipal AuthUser user) {
-		return ResponseEntity.ok(service.setActive(id, false, user.getId()));
+	public ResponseEntity<UserResponse> deactivate(@PathVariable Long id,
+			@Valid @RequestBody(required = false) DeactivateRequest request, @AuthenticationPrincipal AuthUser user) {
+		String reason = request == null ? null : request.getReason();
+		return ResponseEntity.ok(service.setActive(id, false, reason, user.getId()));
 	}
 }

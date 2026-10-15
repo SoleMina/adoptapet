@@ -29,12 +29,13 @@ export const routes: Routes = [
       {
         path: 'forbidden',
         title: 'Sin permiso',
-        loadComponent: errorPage,
-        data: {
-          icon: 'lock',
-          heading: 'No tienes permiso para ver esta página',
-          message: 'Tu cuenta no tiene acceso a esta sección.',
-        },
+        loadComponent: () => import('@features/errors/forbidden-page').then((m) => m.ForbiddenPage),
+      },
+      {
+        path: 'session-expired',
+        title: 'Sesión expirada',
+        loadComponent: () =>
+          import('@features/errors/session-expired-page').then((m) => m.SessionExpiredPage),
       },
     ],
   },

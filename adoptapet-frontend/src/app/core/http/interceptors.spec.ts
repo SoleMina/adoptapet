@@ -17,7 +17,7 @@ describe('interceptors', () => {
     localStorage.clear();
     TestBed.configureTestingModule({
       providers: [
-        // 401 sends the user to /login.
+        // 401 sends the user to /session-expired.
         provideRouter([{ path: '**', children: [] }]),
         provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
         provideHttpClientTesting(),

@@ -1,0 +1,60 @@
+<app-panel-header [heading]="texts().heading" [subtitle]="texts().subtitle" />
+
+@if (application.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando solicitud"></div>
+} @else if (application.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="application.error()"
+      heading="No encontramos esta solicitud"
+      (retry)="application.reload()"
+    >
+      <a matButton="tonal" routerLink="/staff/applications">Volver a solicitudes</a>
+    </app-error-state>
+  </section>
+} @else if (current(); as application) {
+  @if (blocked(); as message) {
+    <section class="ap-panel">
+      <p class="ap-banner ap-banner--warning">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        {{ message }}
+      </p>
+      <div class="footer">
+        <a matButton="outlined" [routerLink]="backPath()">Volver a la solicitud</a>
+      </div>
+    </section>
+  } @else {
+    <form class="ap-panel" [formGroup]="form" novalidate (ngSubmit)="save(application)">
+      @switch (mode()) {
+        @case ('reject') {
+          <p class="ap-banner ap-banner--danger alert">
+            <span class="alert__icon" aria-hidden="true"><mat-icon>priority_high</mat-icon></span>
+            Vas a rechazar esta solicitud. Esta acción notificará al adoptante.
+          </p>
+        }
+        @case ('contingency') {
+          <p class="ap-banner ap-banner--warning alert alert--strong">
+            <mat-icon class="alert__plain" aria-hidden="true">shield_with_house</mat-icon>
+            Solo administrador. Disponible tras vencer el límite de recojo.
+          </p>
+        }
+      }
+      <p class="context">{{ application.petName }} · Solicitud #{{ application.id }}</p>
+
+      <app-reason-field [control]="reason" />
+
+      <div class="footer">
+        <button
+          matButton="filled"
+          type="submit"
+          [class.danger]="texts().danger"
+          [disabled]="saving()"
+        >
+          <mat-icon aria-hidden="true">{{ texts().icon }}</mat-icon>
+          {{ saving() ? 'Guardando…' : texts().submit }}
+        </button>
+        <a matButton="outlined" [routerLink]="backPath()">Volver</a>
+      </div>
+    </form>
+  }
+}

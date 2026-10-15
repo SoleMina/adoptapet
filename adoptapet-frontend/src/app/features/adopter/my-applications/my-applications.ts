@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 import { ApplicationApi } from '@core/api/application-api';
 import { PetApi } from '@core/api/pet-api';
 import { ApplicationResponse } from '@core/models/application';
-import { EmptyState } from '@shared/components/empty-state/empty-state';
+import { StateView } from '@shared/components/state-view/state-view';
 import { ErrorState } from '@shared/components/error-state/error-state';
 import { PageHero } from '@shared/components/page-hero/page-hero';
 import { PetPhoto } from '@shared/components/pet-photo/pet-photo';
@@ -33,7 +33,7 @@ interface ApplicationRow {
     PageHero,
     PetPhoto,
     StatusBadge,
-    EmptyState,
+    StateView,
     ErrorState,
     LimaDatePipe,
   ],

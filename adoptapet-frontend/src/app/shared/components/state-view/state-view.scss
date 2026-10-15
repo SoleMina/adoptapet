@@ -1,0 +1,200 @@
+// Palette of the drawings, derived from the theme tokens (works in light and dark).
+:host {
+  --art-faint: var(--ap-color-primary-faint);
+  --art-soft: color-mix(in srgb, var(--ap-color-primary) 18%, var(--ap-color-surface));
+  --art-mid: color-mix(in srgb, var(--ap-color-primary) 42%, var(--ap-color-surface));
+  --art-strong: color-mix(in srgb, var(--ap-color-primary) 70%, var(--ap-color-surface));
+  --art-warm: color-mix(in srgb, var(--ap-color-accent) 45%, var(--ap-color-surface));
+  --art-warm-strong: var(--ap-color-accent);
+  --art-clock: color-mix(in srgb, var(--ap-color-warning-strong) 30%, var(--ap-color-surface));
+
+  display: grid;
+  justify-items: center;
+  gap: var(--ap-space-4);
+  padding: var(--ap-space-8) var(--ap-space-4);
+  text-align: center;
+}
+
+.art {
+  width: min(460px, 100%);
+  height: auto;
+}
+
+.heading {
+  font-size: var(--ap-font-size-2xl);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.message {
+  max-width: 560px;
+  font-size: var(--ap-font-size-lg);
+  color: var(--ap-color-text-muted);
+}
+
+.actions:not(:empty) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ap-space-3);
+  margin-top: var(--ap-space-2);
+
+  ::ng-deep .mat-mdc-button-base {
+    --mat-button-filled-container-height: 56px;
+    --mat-button-outlined-container-height: 56px;
+    min-width: min(260px, 100%);
+  }
+}
+
+// ----- drawing parts
+.faint {
+  fill: var(--art-faint);
+
+  &--warm {
+    fill: color-mix(in srgb, var(--ap-color-accent) 10%, var(--ap-color-surface));
+  }
+}
+
+.soft {
+  fill: var(--art-faint);
+}
+
+.soft-strong {
+  fill: var(--art-soft);
+}
+
+.mid,
+.mid * {
+  fill: var(--art-mid);
+}
+
+.strong {
+  fill: var(--art-strong);
+}
+
+.warm,
+.warm * {
+  fill: var(--art-warm);
+}
+
+.on-warm {
+  fill: var(--ap-color-surface);
+}
+
+.on-warm-strong {
+  fill: var(--art-warm-strong);
+}
+
+.paper {
+  fill: var(--ap-color-surface);
+  stroke: var(--art-soft);
+  stroke-width: 4;
+}
+
+.paper-back {
+  fill: var(--art-faint);
+  stroke: var(--art-soft);
+  stroke-width: 3;
+}
+
+.bar,
+.bar * {
+  fill: var(--art-soft);
+}
+
+.bar-strong,
+.bar-strong * {
+  fill: var(--art-mid);
+}
+
+.shadow {
+  fill: var(--art-faint);
+}
+
+.ground {
+  stroke: var(--art-soft);
+  stroke-width: 2;
+}
+
+.lens {
+  fill: var(--ap-color-surface);
+  stroke: var(--art-mid);
+  stroke-width: 16;
+}
+
+.handle {
+  stroke: var(--art-mid);
+  stroke-width: 30;
+  stroke-linecap: round;
+}
+
+.spark line {
+  stroke: var(--art-warm);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.spark--cool line {
+  stroke: var(--art-soft);
+}
+
+.dot {
+  fill: var(--art-soft);
+}
+
+.clock-face {
+  fill: var(--art-clock);
+  stroke: var(--ap-color-warning-strong);
+  stroke-width: 9;
+}
+
+.clock-hand {
+  fill: none;
+  stroke: var(--art-warm-strong);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.clock-hand-strong {
+  fill: none;
+  stroke: var(--art-strong);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ring {
+  fill: var(--ap-color-surface);
+  stroke: var(--art-soft);
+  stroke-width: 18;
+}
+
+.wifi {
+  fill: none;
+  stroke: var(--art-strong);
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+.sync {
+  fill: none;
+  stroke: var(--art-strong);
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.sync-head {
+  fill: var(--art-strong);
+}
+
+.lock-shackle {
+  fill: none;
+  stroke: var(--art-strong);
+  stroke-width: 12;
+}
+
+.shield-half {
+  fill: var(--art-mid);
+  opacity: 0.35;
+}

@@ -7,11 +7,7 @@
 
 <section class="ap-panel">
   @if (workers.isLoading()) {
-    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando trabajadores">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <app-loading-state />
   } @else if (workers.error()) {
     <app-error-state [error]="workers.error()" (retry)="workers.reload()" />
   } @else if (rows().length === 0) {
@@ -58,20 +54,28 @@
                   Editar
                   <span class="cdk-visually-hidden">a {{ worker.firstName }}</span>
                 </a>
-                <button
-                  type="button"
-                  class="ap-row-action"
-                  [class.ap-row-action--danger]="worker.active"
-                  [class.ap-row-action--success]="!worker.active"
-                  [disabled]="busyId() === worker.id"
-                  (click)="toggle(worker)"
-                >
-                  <mat-icon aria-hidden="true">{{
-                    worker.active ? 'block' : 'autorenew'
-                  }}</mat-icon>
-                  {{ worker.active ? 'Desactivar' : 'Activar' }}
-                  <span class="cdk-visually-hidden">a {{ worker.firstName }}</span>
-                </button>
+                @if (worker.active) {
+                  <a
+                    class="ap-row-action ap-row-action--danger"
+                    [routerLink]="['/staff/users', worker.id, 'deactivate']"
+                    [queryParams]="{ from: '/staff/workers' }"
+                  >
+                    <mat-icon aria-hidden="true">block</mat-icon>
+                    Desactivar
+                    <span class="cdk-visually-hidden">a {{ worker.firstName }}</span>
+                  </a>
+                } @else {
+                  <button
+                    type="button"
+                    class="ap-row-action ap-row-action--success"
+                    [disabled]="busyId() === worker.id"
+                    (click)="activate(worker)"
+                  >
+                    <mat-icon aria-hidden="true">autorenew</mat-icon>
+                    Activar
+                    <span class="cdk-visually-hidden">a {{ worker.firstName }}</span>
+                  </button>
+                }
               </td>
             </tr>
           }

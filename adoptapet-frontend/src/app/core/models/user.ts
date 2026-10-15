@@ -28,6 +28,8 @@ export interface UserResponse {
   email: string;
   role: Role;
   active: boolean;
+  /** Why the account was deactivated (inactive accounts only). */
+  deactivationReason: string | null;
   firstName: string;
   lastName: string;
   dni: string;

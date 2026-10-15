@@ -67,4 +67,8 @@ public class User {
 
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+
+	/** Why the account was deactivated; cleared when it is activated again. */
+	@Column(length = 500)
+	private String deactivationReason;
 }

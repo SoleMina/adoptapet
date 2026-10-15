@@ -57,6 +57,10 @@ public class Pet {
 	@Column(length = 500)
 	private String observations;
 
+	/** Why it was taken out of the catalog; cleared when it is activated again. */
+	@Column(length = 500)
+	private String deactivationReason;
+
 	/** File name inside app.storage.pet-images, served at /api/pets/images/{imageName}. */
 	private String imageName;
 

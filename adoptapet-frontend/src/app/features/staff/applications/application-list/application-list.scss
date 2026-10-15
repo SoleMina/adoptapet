@@ -101,15 +101,3 @@
     width: 100%;
   }
 }
-
-.loading {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ap-space-3);
-}
-
-.loading__row {
-  height: 88px;
-  border-radius: var(--ap-radius-lg);
-  background-color: var(--ap-color-primary-faint);
-}

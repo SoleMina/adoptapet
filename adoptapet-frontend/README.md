@@ -69,11 +69,11 @@ src/
 | `/inicio` (`/` redirects here), `/pets`, `/pets/:id` | everyone | ✅ built |
 | `/login`, `/register` | visitors only (`guestGuard`) | ✅ built |
 | `/apply/:petId` (4 steps + "sent"), `/my-applications`, `/my-applications/:id`, `/notifications`, `/profile` | ADOPTER | ✅ built |
-| `/staff/dashboard` (Panel), `/staff/pets`, `pets/new`, `pets/:id/edit`, `/staff/applications`, `applications/:id` (review), `delivery-calendar`, `adopters`, `adopters/:id`, `users`, `profile` | ADMIN, WORKER | ✅ built |
+| `/staff/dashboard` (Panel), `/staff/pets`, `pets/new`, `pets/:id/edit`, `/staff/applications`, `applications/:id` (review), `applications/:id/approve`, `/reject`, `/reschedule`, `/cancel`, `/signed-act`, `pets/:id/deactivate`, `delivery-calendar`, `adopters`, `adopters/:id`, `users`, `profile` | ADMIN, WORKER | ✅ built |
 | `/staff/workers`, `/staff/workers/new`, `/staff/workers/:id/edit` | ADMIN | ✅ built (workers: list, create, edit) |
-| `/staff/users/:id/edit` | ADMIN | ✅ built (edit any account) |
+| `/staff/users/:id/edit`, `/staff/users/:id/deactivate`, `/staff/applications/:id/contingency` | ADMIN | ✅ built (edit any account) |
 | `/staff/reports` | ADMIN | ✅ built (general PDF report with filters) |
-| `/forbidden`, `**` | everyone | ✅ built |
+| `/forbidden`, `/session-expired`, `**` | everyone | ✅ built |
 
 After login an adopter goes to `returnUrl` or the catalog, staff to `/staff/dashboard` (as in the Figma). The session
 is stored in `localStorage` and closed automatically when the JWT expires (there is no refresh token).

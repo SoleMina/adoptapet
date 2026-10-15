@@ -99,6 +99,11 @@
     color: var(--ap-color-success);
   }
 
+  &--warning {
+    background-color: var(--ap-color-warning-soft);
+    color: var(--ap-color-warning-strong);
+  }
+
   .mat-icon {
     flex-shrink: 0;
   }

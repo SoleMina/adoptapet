@@ -17,15 +17,16 @@
   </div>
 
   @if (users.isLoading()) {
-    <div class="ap-loading-rows" aria-busy="true" aria-label="Cargando usuarios">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
+    <app-loading-state />
   } @else if (users.error()) {
     <app-error-state [error]="users.error()" (retry)="users.reload()" />
   } @else if (rows().length === 0) {
-    <app-empty-state icon="person_off" heading="No hay usuarios con este rol" />
+    <app-no-results message="No encontramos usuarios con este rol.">
+      <button matButton="filled" type="button" (click)="role.set('')">
+        <mat-icon aria-hidden="true">filter_alt_off</mat-icon>
+        Ver todos
+      </button>
+    </app-no-results>
   } @else {
     <p class="cdk-visually-hidden" aria-live="polite">{{ rows().length }} usuarios</p>
     <table class="ap-table">
@@ -65,20 +66,28 @@
                   <span class="cdk-visually-hidden">a {{ user.username }}</span>
                 </a>
                 @if (canToggle(user)) {
-                  <button
-                    type="button"
-                    class="ap-row-action"
-                    [class.ap-row-action--danger]="user.active"
-                    [class.ap-row-action--success]="!user.active"
-                    [disabled]="busyId() === user.id"
-                    (click)="toggle(user)"
-                  >
-                    <mat-icon aria-hidden="true">{{
-                      user.active ? 'block' : 'autorenew'
-                    }}</mat-icon>
-                    {{ user.active ? 'Desactivar' : 'Activar' }}
-                    <span class="cdk-visually-hidden">a {{ user.username }}</span>
-                  </button>
+                  @if (user.active) {
+                    <a
+                      class="ap-row-action ap-row-action--danger"
+                      [routerLink]="['/staff/users', user.id, 'deactivate']"
+                      [queryParams]="{ from: '/staff/users' }"
+                    >
+                      <mat-icon aria-hidden="true">block</mat-icon>
+                      Desactivar
+                      <span class="cdk-visually-hidden">a {{ user.username }}</span>
+                    </a>
+                  } @else {
+                    <button
+                      type="button"
+                      class="ap-row-action ap-row-action--success"
+                      [disabled]="busyId() === user.id"
+                      (click)="activate(user)"
+                    >
+                      <mat-icon aria-hidden="true">autorenew</mat-icon>
+                      Activar
+                      <span class="cdk-visually-hidden">a {{ user.username }}</span>
+                    </button>
+                  }
                 }
               </td>
             } @else {

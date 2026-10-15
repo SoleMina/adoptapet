@@ -1,0 +1,74 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.skeleton {
+  min-height: 280px;
+}
+
+.alert {
+  gap: var(--ap-space-4);
+  margin-bottom: var(--ap-space-5);
+  padding: var(--ap-space-4) var(--ap-space-5);
+  color: var(--ap-color-text);
+  font-size: var(--ap-font-size-md);
+}
+
+.alert--strong {
+  color: var(--ap-color-warning-strong);
+  font-weight: 700;
+}
+
+.alert__plain {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+}
+
+.alert__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--ap-color-danger);
+  color: #fff;
+
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.context {
+  margin-bottom: var(--ap-space-4);
+  font-size: var(--ap-font-size-sm);
+  color: var(--ap-color-text-muted);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ap-space-4);
+  margin-top: var(--ap-space-5);
+
+  .mat-mdc-button-base {
+    --mat-button-filled-container-height: 52px;
+    --mat-button-outlined-container-height: 52px;
+    flex: 1 1 160px;
+
+    @include bp.up(bp.$sm) {
+      flex: 0 0 auto;
+      min-width: 160px;
+    }
+  }
+}
+
+.danger {
+  --mat-button-filled-container-color: var(--ap-color-danger);
+  --mat-button-filled-label-text-color: #fff;
+}

@@ -40,22 +40,17 @@
   </form>
 
   @if (pets.isLoading()) {
-    <div class="loading" aria-busy="true" aria-label="Cargando mascotas">
-      <div class="loading__row"></div>
-      <div class="loading__row"></div>
-      <div class="loading__row"></div>
-    </div>
+    <app-loading-state />
   } @else if (pets.error()) {
     <app-error-state [error]="pets.error()" (retry)="pets.reload()" />
   } @else if (rows().length === 0) {
     @if (hasFilters()) {
-      <app-empty-state
-        icon="search_off"
-        heading="Ninguna mascota coincide con los filtros"
-        message="Prueba con otro estado u otra especie."
-      >
-        <button matButton="tonal" type="button" (click)="clearFilters()">Limpiar filtros</button>
-      </app-empty-state>
+      <app-no-results message="No encontramos mascotas con estos filtros.">
+        <button matButton="filled" type="button" class="clear" (click)="clearFilters()">
+          <mat-icon aria-hidden="true">filter_alt_off</mat-icon>
+          Limpiar filtros
+        </button>
+      </app-no-results>
     } @else {
       <app-empty-state
         heading="Aún no hay mascotas registradas"
@@ -95,6 +90,9 @@
                 <span class="ap-badge__dot" aria-hidden="true"></span>
                 {{ row.status.text }}
               </span>
+              @if (row.pet.deactivationReason) {
+                <span class="reason">{{ row.pet.deactivationReason }}</span>
+              }
             </td>
             <td class="ap-table__actions">
               <a class="ap-row-action" [routerLink]="['/staff/pets', row.pet.id, 'edit']">
@@ -103,16 +101,14 @@
                 <span class="cdk-visually-hidden">a {{ row.pet.name }}</span>
               </a>
               @if (row.pet.adoptionStatus === 'AVAILABLE') {
-                <button
-                  type="button"
+                <a
                   class="ap-row-action ap-row-action--danger"
-                  [disabled]="busyId() === row.pet.id"
-                  (click)="deactivate(row.pet)"
+                  [routerLink]="['/staff/pets', row.pet.id, 'deactivate']"
                 >
                   <mat-icon aria-hidden="true">block</mat-icon>
                   Desactivar
                   <span class="cdk-visually-hidden">a {{ row.pet.name }}</span>
-                </button>
+                </a>
               } @else if (row.pet.adoptionStatus === 'INACTIVE') {
                 <button
                   type="button"

@@ -6,13 +6,14 @@ import { AdopterApi } from '@core/api/adopter-api';
 import { Avatar } from '@shared/components/avatar/avatar';
 import { EmptyState } from '@shared/components/empty-state/empty-state';
 import { ErrorState } from '@shared/components/error-state/error-state';
+import { LoadingState } from '@shared/components/loading-state/loading-state';
 import { PanelHeader } from '@shared/components/panel-header/panel-header';
 import { valueOf } from '@shared/utils/resource';
 
 /** Staff: adopters with their contact data and how many applications each one has. */
 @Component({
   selector: 'app-adopter-list',
-  imports: [MatIconModule, RouterLink, PanelHeader, Avatar, EmptyState, ErrorState],
+  imports: [MatIconModule, RouterLink, PanelHeader, Avatar, EmptyState, ErrorState, LoadingState],
   templateUrl: './adopter-list.html',
   styleUrl: './adopter-list.scss',
 })

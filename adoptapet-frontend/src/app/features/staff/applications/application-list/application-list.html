@@ -19,10 +19,7 @@
 
 <section class="panel">
   @if (applications.isLoading()) {
-    <div class="loading" aria-busy="true" aria-label="Cargando solicitudes">
-      <div class="loading__row"></div>
-      <div class="loading__row"></div>
-    </div>
+    <app-loading-state />
   } @else if (applications.error()) {
     <app-error-state [error]="applications.error()" (retry)="applications.reload()" />
   } @else if (rows().length === 0) {

@@ -20,6 +20,7 @@ public class PetResponse {
 	private String sterilizationStatus;
 	private String adoptionStatus;
 	private String observations;
+	private String deactivationReason;
 	private String imageUrl;
 	private Long version;
 	private LocalDateTime createdAt;
@@ -37,6 +38,7 @@ public class PetResponse {
 		response.setSterilizationStatus(pet.getSterilizationStatus().name());
 		response.setAdoptionStatus(pet.getAdoptionStatus().name());
 		response.setObservations(pet.getObservations());
+		response.setDeactivationReason(pet.getDeactivationReason());
 		response.setImageUrl(pet.getImageName() == null ? null : "/api/pets/images/" + pet.getImageName());
 		response.setVersion(pet.getVersion());
 		response.setCreatedAt(pet.getCreatedAt());

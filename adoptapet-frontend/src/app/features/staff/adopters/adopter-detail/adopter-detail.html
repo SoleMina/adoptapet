@@ -24,16 +24,27 @@
       </p>
     </div>
     @if (isAdmin()) {
-      <button
-        matButton="outlined"
-        type="button"
-        [class.danger]="current.active"
-        [disabled]="saving()"
-        (click)="toggleActive(current)"
-      >
-        <mat-icon aria-hidden="true">{{ current.active ? 'block' : 'autorenew' }}</mat-icon>
-        {{ current.active ? 'Desactivar cuenta' : 'Reactivar cuenta' }}
-      </button>
+      @if (current.active) {
+        <a
+          matButton="outlined"
+          class="danger"
+          [routerLink]="['/staff/users', current.id, 'deactivate']"
+          [queryParams]="{ from: '/staff/adopters/' + current.id }"
+        >
+          <mat-icon aria-hidden="true">block</mat-icon>
+          Desactivar cuenta
+        </a>
+      } @else {
+        <button
+          matButton="outlined"
+          type="button"
+          [disabled]="saving()"
+          (click)="activate(current)"
+        >
+          <mat-icon aria-hidden="true">autorenew</mat-icon>
+          Reactivar cuenta
+        </button>
+      }
     }
   </header>
 

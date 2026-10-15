@@ -81,7 +81,7 @@ public class PetService {
 
 	/** Logical delete. Only pets without an adoption in progress can be removed. */
 	@Transactional
-	public PetResponse deactivate(Long id, Long version) {
+	public PetResponse deactivate(Long id, Long version, String reason) {
 		Pet pet = getPet(id);
 		checkVersion(pet, version);
 
@@ -89,6 +89,7 @@ public class PetService {
 			throw ApiException.conflict("Only available pets can be deactivated");
 		}
 		pet.setAdoptionStatus(AdoptionStatus.INACTIVE);
+		pet.setDeactivationReason(blankToNull(reason));
 		return PetResponse.from(repository.saveAndFlush(pet));
 	}
 
@@ -100,7 +101,12 @@ public class PetService {
 			throw ApiException.conflict("Only inactive pets can be activated");
 		}
 		pet.setAdoptionStatus(AdoptionStatus.AVAILABLE);
+		pet.setDeactivationReason(null);
 		return PetResponse.from(repository.saveAndFlush(pet));
+	}
+
+	private static String blankToNull(String text) {
+		return text == null || text.isBlank() ? null : text.trim();
 	}
 
 	/**

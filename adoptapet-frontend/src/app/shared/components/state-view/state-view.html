@@ -1,0 +1,264 @@
+<svg class="art" viewBox="0 0 480 300" aria-hidden="true" focusable="false">
+  @switch (art()) {
+    @case ('search') {
+      <path
+        class="soft"
+        d="M70 280c-40-60-30-150 40-185 50-25 90 5 130-30 45-40 120-35 150 25 25 50 60 70 40 130-10 30-25 50-40 60z"
+      />
+      <line class="ground" x1="10" y1="282" x2="470" y2="282" />
+      <g class="mid">
+        <path d="M60 282c-10-40 0-80 25-100 10 35 5 75-25 100z" />
+        <path d="M62 282c10-35 35-55 60-58-5 30-25 52-60 58z" />
+      </g>
+      <path class="warm" d="M58 282c-30-15-48-40-50-62 30 5 48 30 50 62z" />
+      <g class="mid">
+        <path d="M420 282c-12-35-5-70 18-90 10 30 5 65-18 90z" />
+        <path d="M418 282c-25-12-40-32-42-52 26 4 40 25 42 52z" />
+      </g>
+      <path class="warm" d="M424 282c15-30 40-45 62-45-8 28-30 43-62 45z" />
+      <g class="spark">
+        <line x1="310" y1="30" x2="300" y2="58" />
+        <line x1="350" y1="50" x2="326" y2="72" />
+        <line x1="364" y1="92" x2="336" y2="98" />
+      </g>
+      <line class="handle" x1="300" y1="210" x2="340" y2="254" />
+      <circle class="lens" cx="235" cy="145" r="78" />
+      <g class="mid">
+        <ellipse cx="235" cy="170" rx="30" ry="25" />
+        <ellipse cx="200" cy="138" rx="11" ry="14" />
+        <ellipse cx="222" cy="116" rx="11" ry="15" />
+        <ellipse cx="249" cy="116" rx="11" ry="15" />
+        <ellipse cx="271" cy="138" rx="11" ry="14" />
+      </g>
+    }
+    @case ('empty') {
+      <path
+        class="faint"
+        d="M90 270c-30-50-20-120 40-150 30-15 50-50 100-60 60-12 110 20 120 70 40 0 70 40 60 80-5 25-20 45-30 60z"
+      />
+      <ellipse class="shadow" cx="240" cy="276" rx="170" ry="10" />
+      <path
+        class="paper"
+        d="M150 50h130l45 45v170a10 10 0 0 1-10 10H150a10 10 0 0 1-10-10V60a10 10 0 0 1 10-10z"
+      />
+      <path class="mid" d="M280 50v35a10 10 0 0 0 10 10h35z" />
+      <g class="mid">
+        <ellipse cx="232" cy="150" rx="22" ry="18" />
+        <ellipse cx="205" cy="126" rx="8" ry="10" />
+        <ellipse cx="222" cy="110" rx="8" ry="11" />
+        <ellipse cx="242" cy="110" rx="8" ry="11" />
+        <ellipse cx="259" cy="126" rx="8" ry="10" />
+      </g>
+      <g class="bar">
+        <rect x="175" y="190" width="125" height="10" rx="5" />
+        <rect x="175" y="212" width="125" height="10" rx="5" />
+        <rect x="175" y="234" width="90" height="10" rx="5" />
+      </g>
+      <path
+        class="warm"
+        d="M372 150c-14-12-36-28-36-46 0-12 9-21 20-21 7 0 13 4 16 10 3-6 9-10 16-10 11 0 20 9 20 21 0 18-22 34-36 46z"
+      />
+      <g class="spark">
+        <line x1="345" y1="40" x2="340" y2="62" />
+        <line x1="375" y1="55" x2="360" y2="70" />
+      </g>
+      <g class="mid">
+        <path d="M120 275c-25-15-40-40-35-70 25 12 38 40 35 70z" />
+        <path d="M122 275c5-30 25-50 50-55-2 28-20 48-50 55z" />
+        <path d="M350 275c0-30 15-55 40-65 3 30-12 55-40 65z" />
+        <path d="M352 275c18-20 42-26 62-20-12 22-35 28-62 20z" />
+      </g>
+    }
+    @case ('pending') {
+      <path
+        class="faint"
+        d="M90 230c-20-60 30-110 90-120 40-8 50-50 110-55 70-5 120 50 110 110 30 30 10 75-30 85H130c-20 0-35-8-40-20z"
+      />
+      <ellipse class="shadow" cx="250" cy="262" rx="150" ry="10" />
+      <rect
+        class="paper-back"
+        x="168"
+        y="40"
+        width="160"
+        height="210"
+        rx="12"
+        transform="rotate(4 248 145)"
+      />
+      <rect
+        class="paper"
+        x="150"
+        y="45"
+        width="160"
+        height="210"
+        rx="12"
+        transform="rotate(4 230 150)"
+      />
+      <g class="mid" transform="rotate(4 230 150)">
+        <ellipse cx="228" cy="110" rx="22" ry="18" />
+        <ellipse cx="201" cy="86" rx="8" ry="10" />
+        <ellipse cx="218" cy="70" rx="8" ry="11" />
+        <ellipse cx="238" cy="70" rx="8" ry="11" />
+        <ellipse cx="255" cy="86" rx="8" ry="10" />
+      </g>
+      <g class="bar" transform="rotate(4 230 150)">
+        <rect x="175" y="150" width="110" height="12" rx="6" />
+        <rect x="175" y="174" width="95" height="12" rx="6" />
+        <rect x="175" y="198" width="70" height="12" rx="6" />
+      </g>
+      <circle class="clock-face" cx="320" cy="215" r="45" />
+      <path class="clock-hand" d="M320 190v27l15 12" />
+      <g class="spark">
+        <line x1="140" y1="35" x2="150" y2="58" />
+        <line x1="115" y1="55" x2="138" y2="66" />
+        <line x1="365" y1="165" x2="378" y2="150" />
+        <line x1="370" y1="182" x2="388" y2="178" />
+      </g>
+    }
+    @case ('offline') {
+      <circle class="faint" cx="130" cy="185" r="62" />
+      <circle class="faint" cx="370" cy="185" r="62" />
+      <ellipse class="shadow" cx="245" cy="268" rx="130" ry="10" />
+      <path
+        class="soft-strong"
+        d="M150 245c-30 0-50-22-50-50s22-50 50-50c8-50 45-80 95-80s90 35 95 80c30 0 50 22 50 50s-20 50-50 50z"
+      />
+      <path class="wifi" d="M200 180a65 65 0 0 1 90 0" />
+      <path class="wifi" d="M218 202a38 38 0 0 1 54 0" />
+      <circle class="strong" cx="245" cy="225" r="12" />
+      <circle class="warm" cx="340" cy="120" r="30" />
+      <rect class="on-warm" x="336" y="100" width="8" height="26" rx="4" />
+      <circle class="on-warm" cx="340" cy="136" r="5" />
+      <g class="spark">
+        <line x1="160" y1="70" x2="172" y2="88" />
+        <line x1="380" y1="62" x2="368" y2="80" />
+      </g>
+      <g class="spark spark--cool">
+        <line x1="105" y1="140" x2="128" y2="146" />
+        <line x1="388" y1="108" x2="408" y2="98" />
+      </g>
+    }
+    @case ('unavailable') {
+      <circle class="faint" cx="240" cy="150" r="115" />
+      <ellipse class="shadow" cx="240" cy="270" rx="100" ry="9" />
+      <g class="mid">
+        <ellipse cx="236" cy="175" rx="48" ry="40" />
+        <ellipse cx="180" cy="135" rx="17" ry="22" />
+        <ellipse cx="212" cy="100" rx="17" ry="24" />
+        <ellipse cx="262" cy="100" rx="17" ry="24" />
+        <ellipse cx="294" cy="135" rx="17" ry="22" />
+      </g>
+      <circle class="warm" cx="315" cy="215" r="34" />
+      <circle class="on-warm-strong" cx="315" cy="200" r="5" />
+      <rect class="on-warm-strong" x="310" y="210" width="10" height="24" rx="4" />
+      <g class="spark">
+        <line x1="150" y1="40" x2="162" y2="60" />
+        <line x1="128" y1="70" x2="152" y2="76" />
+      </g>
+    }
+    @case ('conflict') {
+      <ellipse class="shadow" cx="245" cy="268" rx="150" ry="11" />
+      <rect
+        class="paper-back"
+        x="240"
+        y="70"
+        width="150"
+        height="190"
+        rx="10"
+        transform="rotate(10 315 165)"
+      />
+      <g class="bar" transform="rotate(10 315 165)">
+        <rect x="300" y="120" width="70" height="8" rx="4" />
+        <rect x="300" y="145" width="70" height="8" rx="4" />
+        <rect x="300" y="170" width="70" height="8" rx="4" />
+        <rect x="300" y="195" width="55" height="8" rx="4" />
+      </g>
+      <path
+        class="soft-strong"
+        d="M120 50h110l35 35v160a8 8 0 0 1-8 8H120a8 8 0 0 1-8-8V58a8 8 0 0 1 8-8z"
+        transform="rotate(-6 190 150)"
+      />
+      <g class="bar-strong" transform="rotate(-6 190 150)">
+        <rect x="135" y="95" width="70" height="8" rx="4" />
+        <rect x="135" y="120" width="85" height="8" rx="4" />
+        <rect x="135" y="145" width="60" height="8" rx="4" />
+      </g>
+      <circle class="paper" cx="245" cy="160" r="58" />
+      <path class="sync" d="M215 150a32 32 0 0 1 58-14" />
+      <path class="sync-head" d="M262 120l14 18-22 3z" />
+      <path class="sync" d="M275 170a32 32 0 0 1-58 14" />
+      <path class="sync-head" d="M228 200l-14-18 22-3z" />
+      <circle class="warm" cx="345" cy="75" r="30" />
+      <rect class="on-warm-strong" x="341" y="56" width="8" height="26" rx="4" />
+      <circle class="on-warm-strong" cx="345" cy="92" r="5" />
+      <g class="spark">
+        <line x1="390" y1="30" x2="382" y2="50" />
+        <line x1="405" y1="62" x2="388" y2="68" />
+      </g>
+      <g class="spark spark--cool">
+        <line x1="95" y1="160" x2="105" y2="175" />
+        <line x1="90" y1="205" x2="110" y2="205" />
+        <line x1="380" y1="230" x2="400" y2="222" />
+      </g>
+    }
+    @case ('expired') {
+      <path
+        class="faint"
+        d="M110 260c-30-40-20-100 30-120 10-60 70-100 140-90 70 10 110 70 100 130 20 20 20 60-10 80z"
+      />
+      <ellipse class="shadow" cx="240" cy="266" rx="160" ry="10" />
+      <circle class="ring" cx="230" cy="150" r="88" />
+      <path class="clock-hand-strong" d="M228 80v72l42 28" />
+      <circle class="strong" cx="228" cy="152" r="7" />
+      <g class="mid">
+        <path d="M350 140c-5-30 15-50 40-55-2 28-20 48-40 55z" />
+        <path d="M352 175c10-25 35-38 58-35-8 25-32 38-58 35z" />
+      </g>
+      <rect class="strong" x="285" y="175" width="95" height="85" rx="14" />
+      <path class="lock-shackle" d="M305 178v-22a28 28 0 0 1 56 0v22" />
+      <circle class="paper" cx="332" cy="212" r="10" />
+      <rect class="paper" x="327" y="214" width="10" height="22" rx="4" />
+      <circle class="paper" cx="125" cy="225" r="34" />
+      <g class="warm">
+        <ellipse cx="125" cy="235" rx="15" ry="12" />
+        <ellipse cx="107" cy="218" rx="5" ry="7" />
+        <ellipse cx="119" cy="208" rx="5" ry="7" />
+        <ellipse cx="132" cy="208" rx="5" ry="7" />
+        <ellipse cx="143" cy="218" rx="5" ry="7" />
+      </g>
+      <g class="spark">
+        <line x1="150" y1="40" x2="162" y2="60" />
+        <line x1="120" y1="62" x2="142" y2="72" />
+        <line x1="115" y1="95" x2="138" y2="98" />
+      </g>
+    }
+    @case ('forbidden') {
+      <circle class="faint" cx="215" cy="130" r="80" />
+      <circle class="faint faint--warm" cx="320" cy="200" r="60" />
+      <ellipse class="shadow" cx="240" cy="272" rx="160" ry="10" />
+      <g class="mid">
+        <path d="M140 270c-25-15-40-40-35-70 25 12 38 40 35 70z" />
+        <path d="M142 270c5-30 25-50 50-55-2 28-20 48-50 55z" />
+        <path d="M335 270c0-30 15-55 40-65 3 30-12 55-40 65z" />
+      </g>
+      <path class="soft-strong" d="M240 45l95 35v70c0 60-40 100-95 120-55-20-95-60-95-120V80z" />
+      <path class="shield-half" d="M240 45l95 35v70c0 60-40 100-95 120z" />
+      <rect class="strong" x="200" y="135" width="80" height="68" rx="12" />
+      <path class="lock-shackle" d="M215 138v-16a25 25 0 0 1 50 0v16" />
+      <circle class="paper" cx="240" cy="165" r="9" />
+      <rect class="paper" x="235" y="168" width="10" height="20" rx="4" />
+      <g class="spark">
+        <line x1="350" y1="80" x2="338" y2="98" />
+        <line x1="365" y1="115" x2="342" y2="118" />
+        <line x1="358" y1="150" x2="338" y2="140" />
+      </g>
+      <circle class="dot" cx="160" cy="185" r="8" />
+      <circle class="dot" cx="330" cy="40" r="9" />
+      <circle class="dot" cx="175" cy="240" r="5" />
+    }
+  }
+</svg>
+@if (heading()) {
+  <h2 class="heading">{{ heading() }}</h2>
+}
+<p class="message">{{ message() }}</p>
+<div class="actions"><ng-content /></div>

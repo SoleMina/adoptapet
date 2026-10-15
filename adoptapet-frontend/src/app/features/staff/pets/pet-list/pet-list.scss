@@ -36,14 +36,15 @@
   padding: var(--ap-space-4) var(--ap-space-5);
 }
 
-.loading {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ap-space-3);
+.reason {
+  display: block;
+  max-width: 220px;
+  margin-top: var(--ap-space-1);
+  font-size: var(--ap-font-size-xs);
+  color: var(--ap-color-text-muted);
 }
 
-.loading__row {
-  height: 96px;
-  border-radius: var(--ap-radius-lg);
-  background-color: var(--ap-color-primary-faint);
+.clear {
+  --mat-button-filled-container-height: 56px;
+  min-width: 240px;
 }

@@ -13,6 +13,7 @@ import { HealthStatus, PetRequest, PetResponse, Sex, SterilizationStatus } from 
 import { PageTitleStrategy } from '@core/routing/page-title-strategy';
 import { Notify } from '@core/ui/notify';
 import { ErrorState } from '@shared/components/error-state/error-state';
+import { StateView } from '@shared/components/state-view/state-view';
 import { FieldError } from '@shared/components/field-error/field-error';
 import { PanelHeader } from '@shared/components/panel-header/panel-header';
 import { valueOf } from '@shared/utils/resource';
@@ -44,6 +45,7 @@ const STALE_MESSAGES = [
     PanelHeader,
     FieldError,
     ErrorState,
+    StateView,
   ],
   templateUrl: './pet-form.html',
   styleUrl: './pet-form.scss',
@@ -58,9 +60,10 @@ export class PetForm {
   readonly id = input<string>();
 
   protected readonly editing = computed(() => this.id() !== undefined);
-  protected readonly heading = computed(() =>
-    this.editing() ? 'Editar mascota' : 'Registrar mascota',
-  );
+  protected readonly heading = computed(() => {
+    if (this.stale()) return 'Registro modificado';
+    return this.editing() ? 'Editar mascota' : 'Registrar mascota';
+  });
 
   protected readonly pet = rxResource({
     params: () => (this.id() === undefined ? undefined : Number(this.id())),

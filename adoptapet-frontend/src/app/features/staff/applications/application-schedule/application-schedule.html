@@ -1,0 +1,187 @@
+<app-panel-header
+  [heading]="approving() ? 'Aprobar y agendar' : 'Reprogramar entrega'"
+  [subtitle]="
+    approving()
+      ? 'Selecciona fecha y franja con cupos disponibles.'
+      : 'Consulta cupos antes de cambiar la cita.'
+  "
+/>
+
+@if (application.isLoading()) {
+  <div class="ap-panel skeleton" aria-busy="true" aria-label="Cargando solicitud"></div>
+} @else if (application.error()) {
+  <section class="ap-panel">
+    <app-error-state
+      [error]="application.error()"
+      heading="No encontramos esta solicitud"
+      (retry)="application.reload()"
+    >
+      <a matButton="tonal" routerLink="/staff/applications">Volver a solicitudes</a>
+    </app-error-state>
+  </section>
+} @else if (current(); as application) {
+  @if (blocked(); as reason) {
+    <section class="ap-panel">
+      <p class="ap-banner ap-banner--warning">
+        <mat-icon aria-hidden="true">info</mat-icon>
+        {{ reason }}
+      </p>
+      <div class="footer">
+        <a matButton="outlined" [routerLink]="backPath()">
+          <mat-icon aria-hidden="true">arrow_back</mat-icon>
+          Volver a la solicitud
+        </a>
+      </div>
+    </section>
+  } @else {
+    <form class="ap-panel" [formGroup]="form" novalidate (ngSubmit)="save(application)">
+      <header class="section">
+        <span class="section__icon" aria-hidden="true"><mat-icon>calendar_month</mat-icon></span>
+        <div>
+          <h2 class="section__title">Datos de la entrega</h2>
+          <p class="section__hint">
+            {{ application.petName }} · Solicitud #{{ application.id }}
+            @if (!approving()) {
+              · Reprogramación {{ application.rescheduleCount + 1 }}
+            }
+          </p>
+        </div>
+      </header>
+
+      <div class="ap-form-grid">
+        <div class="ap-field">
+          <label class="ap-field__label" for="deliveryDate">Fecha</label>
+          <input
+            #dateInput
+            id="deliveryDate"
+            class="ap-input"
+            type="date"
+            formControlName="deliveryDate"
+            [min]="today"
+            (change)="onDate(dateInput.value)"
+          />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="slot">Franja</label>
+          <div class="slot-row">
+            <select
+              #slotSelect
+              id="slot"
+              class="ap-input"
+              formControlName="slot"
+              [attr.aria-busy]="slots.isLoading()"
+              [attr.aria-invalid]="controls.slot.invalid && controls.slot.touched"
+              aria-describedby="slot-error"
+              (change)="choose(slotSelect.value)"
+            >
+              @if (slots.isLoading()) {
+                <option value="">Consultando cupos…</option>
+              } @else {
+                <option value="" disabled>Elige una franja</option>
+                @for (item of slots.value(); track item.startTime) {
+                  <option [value]="item.startTime" [disabled]="!item.available">
+                    {{ option(item) }}
+                  </option>
+                }
+              }
+            </select>
+            @if (slot(); as selected) {
+              <span class="ap-badge" data-tone="success">
+                <span class="ap-badge__dot" aria-hidden="true"></span>
+                {{ freeText(selected) }}
+              </span>
+            }
+          </div>
+          @if (slots.error()) {
+            <p class="ap-field__error" role="alert">
+              No pudimos consultar los cupos.
+              <button type="button" class="link" (click)="slots.reload()">Reintentar</button>
+            </p>
+          }
+          <app-field-error [control]="controls.slot" errorId="slot-error" />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="pickupDeadline">Límite de recojo</label>
+          <input
+            id="pickupDeadline"
+            class="ap-input"
+            type="datetime-local"
+            formControlName="pickupDeadline"
+            [min]="date() + 'T00:00'"
+            [attr.aria-invalid]="controls.pickupDeadline.invalid && controls.pickupDeadline.touched"
+            aria-describedby="pickupDeadline-error"
+          />
+          <app-field-error [control]="controls.pickupDeadline" errorId="pickupDeadline-error" />
+        </div>
+
+        <div class="ap-field">
+          <label class="ap-field__label" for="observation">
+            Observación
+            @if (extraReschedule()) {
+              <span class="required" aria-hidden="true">*</span>
+            }
+          </label>
+          <textarea
+            id="observation"
+            class="ap-input"
+            rows="3"
+            maxlength="500"
+            placeholder="Completar"
+            formControlName="observation"
+            [attr.aria-invalid]="controls.observation.invalid && controls.observation.touched"
+            aria-describedby="observation-error"
+          ></textarea>
+          <app-field-error [control]="controls.observation" errorId="observation-error" />
+        </div>
+      </div>
+
+      <div class="notes">
+        @if (!slots.isLoading() && !slots.error()) {
+          <p
+            class="ap-banner"
+            [class.ap-banner--warning]="!approving() || noneAvailable()"
+            role="status"
+          >
+            <mat-icon aria-hidden="true">{{ approving() ? 'info' : 'error' }}</mat-icon>
+            @if (noneAvailable()) {
+              No quedan franjas libres este día. Elige otra fecha.
+            } @else {
+              {{ unavailableText() }} No se permiten franjas iniciadas o vencidas.
+            }
+          </p>
+        }
+        @if (approving()) {
+          <p class="ap-banner ap-banner--warning">
+            <mat-icon aria-hidden="true">warning</mat-icon>
+            Al aprobar se rechazan las demás solicitudes pendientes para esta mascota.
+          </p>
+        } @else if (extraReschedule()) {
+          <p class="ap-banner ap-banner--warning">
+            <mat-icon aria-hidden="true">admin_panel_settings</mat-icon>
+            Esta solicitud ya usó sus 2 reprogramaciones. Como administrador puedes autorizar una
+            más: explica el motivo en la observación.
+          </p>
+        }
+      </div>
+
+      <div class="footer">
+        <button matButton="filled" type="submit" [disabled]="saving() || noneAvailable()">
+          <mat-icon aria-hidden="true">{{ approving() ? 'check' : 'event_available' }}</mat-icon>
+          @if (saving()) {
+            Guardando…
+          } @else {
+            {{ approving() ? 'Confirmar aprobación' : 'Confirmar cambio' }}
+          }
+        </button>
+        <a matButton="outlined" [routerLink]="backPath()">
+          @if (!approving()) {
+            <mat-icon aria-hidden="true">arrow_back</mat-icon>
+          }
+          Volver
+        </a>
+      </div>
+    </form>
+  }
+}

@@ -38,8 +38,12 @@ export class UserApi {
   }
 
   /** ADMIN. */
-  setActive(id: number, active: boolean): Observable<UserResponse> {
-    const action = active ? 'activate' : 'deactivate';
-    return this.http.put<UserResponse>(apiUrl(`/users/${id}/${action}`), null);
+  activate(id: number): Observable<UserResponse> {
+    return this.http.put<UserResponse>(apiUrl(`/users/${id}/activate`), null);
+  }
+
+  /** ADMIN. The reason is optional and is kept until the account is activated again. */
+  deactivate(id: number, reason?: string): Observable<UserResponse> {
+    return this.http.put<UserResponse>(apiUrl(`/users/${id}/deactivate`), { reason });
   }
 }
