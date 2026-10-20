@@ -148,6 +148,14 @@ export class ApplicationReview {
     };
   });
 
+  /** "20/10/2026 a las 14:00": when the signed act and the closing unlock. */
+  protected readonly deliveryStart = computed(() => {
+    const appointment = this.current()?.appointment;
+    if (!appointment) return null;
+    const [year, month, day] = appointment.deliveryDate.split('-');
+    return `${day}/${month}/${year} a las ${appointment.startTime.slice(0, 5)}`;
+  });
+
   /** Reschedules used up: only an ADMIN can add another one, explaining why. */
   protected readonly rescheduleLimitReached = computed(
     () => (this.current()?.rescheduleCount ?? 0) >= MAX_RESCHEDULES,

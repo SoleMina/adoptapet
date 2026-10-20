@@ -1,0 +1,12 @@
+**/target/
+**/.factorypath
+**/.classpath
+**/.project
+**/.settings/
+**/.idea/
+**/*.iml
+.env
+.env.*
+uploads/
+database/
+*.log

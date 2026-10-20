@@ -1,0 +1,141 @@
+# Whole AdoptaPet stack: MySQL, RabbitMQ, the 6 Spring Boot services and the Angular app.
+#   docker compose up -d --build
+# Secrets (JWT_SECRET, ADMIN_*) come from adoptapet-backend/.env. MySQL and RabbitMQ credentials are fixed here
+# because both run only inside Docker; they override whatever .env says for a local install.
+
+x-backend: &backend
+  env_file: adoptapet-backend/.env
+  restart: unless-stopped
+
+x-backend-env: &backend-env
+  EUREKA_URL: http://eureka-server:8761/eureka/
+  DB_USER: root
+  DB_PASSWORD: adoptapet
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_USER: adoptapet
+  RABBITMQ_PASSWORD: adoptapet
+
+x-depends-infra: &depends-infra
+  mysql:
+    condition: service_healthy
+  rabbitmq:
+    condition: service_healthy
+  eureka-server:
+    condition: service_started
+
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: adoptapet
+    ports:
+      - "3307:3306"   # 3307 on the host so it does not clash with a local MySQL
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # Test users and example pets. Imported only when mysql-data is empty (`docker compose down -v` to redo it)
+      - ./adoptapet-backend/database/test-users.sql:/docker-entrypoint-initdb.d/test-users.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padoptapet"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    environment:
+      RABBITMQ_DEFAULT_USER: adoptapet
+      RABBITMQ_DEFAULT_PASS: adoptapet
+    ports:
+      - "5672:5672"
+      - "15672:15672" # management UI
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+
+  # Copies the photos of the example pets into adoptapet-backend/uploads/pets (never overwrites a file)
+  uploads-seed:
+    image: alpine:3.20
+    command: ["sh", "-c", "mkdir -p /uploads/pets && cp -n /seed/* /uploads/pets/"]
+    volumes:
+      - ./adoptapet-backend/database/pet-images:/seed:ro
+      - ./adoptapet-backend/uploads:/uploads
+
+  eureka-server:
+    build: { context: adoptapet-backend, args: { SERVICE: eureka-server } }
+    environment:
+      BIND_ADDRESS: 0.0.0.0
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+
+  user-service:
+    <<: *backend
+    build: { context: adoptapet-backend, args: { SERVICE: user-service } }
+    environment:
+      <<: *backend-env
+      INSTANCE_HOSTNAME: user-service
+      DB_URL: jdbc:mysql://mysql:3306/pets_users?createDatabaseIfNotExist=true
+    depends_on: *depends-infra
+
+  pet-service:
+    <<: *backend
+    build: { context: adoptapet-backend, args: { SERVICE: pet-service } }
+    environment:
+      <<: *backend-env
+      INSTANCE_HOSTNAME: pet-service
+      DB_URL: jdbc:mysql://mysql:3306/pets_catalog?createDatabaseIfNotExist=true
+      PET_IMAGES_DIR: /app/uploads/pets
+    volumes:
+      - ./adoptapet-backend/uploads:/app/uploads
+    depends_on:
+      <<: *depends-infra
+      uploads-seed:
+        condition: service_completed_successfully
+
+  adoption-service:
+    <<: *backend
+    build: { context: adoptapet-backend, args: { SERVICE: adoption-service } }
+    environment:
+      <<: *backend-env
+      INSTANCE_HOSTNAME: adoption-service
+      DB_URL: jdbc:mysql://mysql:3306/pets_adoptions?createDatabaseIfNotExist=true
+      DOCUMENTS_DIR: /app/uploads/documents
+    volumes:
+      - ./adoptapet-backend/uploads:/app/uploads
+    depends_on:
+      <<: *depends-infra
+      uploads-seed:
+        condition: service_completed_successfully
+
+  notification-service:
+    <<: *backend
+    build: { context: adoptapet-backend, args: { SERVICE: notification-service } }
+    environment:
+      <<: *backend-env
+      INSTANCE_HOSTNAME: notification-service
+      DB_URL: jdbc:mysql://mysql:3306/pets_notifications?createDatabaseIfNotExist=true
+    depends_on: *depends-infra
+
+  api-gateway:
+    <<: *backend
+    build: { context: adoptapet-backend, args: { SERVICE: api-gateway } }
+    environment:
+      <<: *backend-env
+      INSTANCE_HOSTNAME: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  frontend:
+    build: adoptapet-frontend
+    ports:
+      - "4200:80"     # same origin as ng serve, so the gateway's default CORS keeps working
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

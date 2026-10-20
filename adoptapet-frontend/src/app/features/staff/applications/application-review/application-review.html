@@ -328,7 +328,14 @@
           } @else if (!clock().started) {
             <p class="hint">
               <mat-icon aria-hidden="true">info</mat-icon>
-              El acta firmada y el cierre se habilitan cuando empieza la franja de entrega.
+              @if (deliveryStart(); as start) {
+                Subir el acta firmada y completar la adopción se habilitan el
+                <strong>{{ start }}</strong
+                >, cuando empieza la franja de entrega. Puedes generar el acta desde ahora para
+                imprimirla.
+              } @else {
+                El acta firmada y el cierre se habilitan cuando empieza la franja de entrega.
+              }
             </p>
           }
 
