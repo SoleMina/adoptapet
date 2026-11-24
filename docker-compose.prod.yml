@@ -1,0 +1,48 @@
+# Server overrides on top of docker-compose.yml (see deploy/README.md):
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# Only Caddy is published (80/443, automatic HTTPS for $DOMAIN). MySQL, RabbitMQ, Eureka, the gateway and nginx stay on
+# Docker's internal network. Values come from the .env next to this file.
+
+x-limits: &limits
+  mem_limit: 768m   # the JVM takes 75% of it as max heap (JAVA_OPTS in the Dockerfile)
+
+services:
+  mysql:
+    ports: !reset []
+  rabbitmq:
+    ports: !reset []
+  eureka-server:
+    <<: *limits
+    ports: !reset []
+  user-service:
+    <<: *limits
+  pet-service:
+    <<: *limits
+  adoption-service:
+    <<: *limits
+  notification-service:
+    <<: *limits
+  api-gateway:
+    <<: *limits
+    ports: !reset []
+  frontend:
+    ports: !reset []
+
+  caddy:
+    image: caddy:2.10-alpine
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env, e.g. 129-146-10-20.sslip.io}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data       # Let's Encrypt certificates: keep them across restarts
+      - caddy-config:/config
+    depends_on:
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  caddy-data:
+  caddy-config:

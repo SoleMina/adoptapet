@@ -1,0 +1,7 @@
+# Public entry point on the server. Caddy gets and renews the HTTPS certificate for $DOMAIN by itself.
+# Everything goes to the frontend's nginx, which serves the Angular app and proxies /api to the gateway,
+# so the web is https://$DOMAIN and the iOS app uses https://$DOMAIN/api.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy frontend:80
+}

@@ -50,3 +50,8 @@ password `secreto123`. The file already has an ADMIN, so the `ADMIN_*` of `.env`
 * Port 5672 is published too. Stop a local RabbitMQ (`brew services stop rabbitmq`) before `docker compose up`.
 * For frontend work with hot reload, free port 4200 with `docker compose stop frontend` and use `npm start` as
   usual; the backend keeps running in Docker.
+* The nginx of the `frontend` container proxies `/api` to the gateway, so `http://localhost:4200/api` works too.
+
+## Deploy
+
+To publish the same stack on a free Oracle Cloud ARM server with HTTPS, see [deploy/README.md](deploy/README.md).

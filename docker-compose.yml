@@ -1,7 +1,9 @@
 # Whole AdoptaPet stack: MySQL, RabbitMQ, the 6 Spring Boot services and the Angular app.
 #   docker compose up -d --build
-# Secrets (JWT_SECRET, ADMIN_*) come from adoptapet-backend/.env. MySQL and RabbitMQ credentials are fixed here
-# because both run only inside Docker; they override whatever .env says for a local install.
+# Secrets (JWT_SECRET, ADMIN_*) come from adoptapet-backend/.env. MySQL and RabbitMQ credentials are set here
+# because both run only inside Docker; they override whatever adoptapet-backend/.env says for a local install.
+# Locally they default to adoptapet; on a server put MYSQL_ROOT_PASSWORD and RABBITMQ_PASSWORD in a .env next to this
+# file (see deploy/README.md).
 
 x-backend: &backend
   env_file: adoptapet-backend/.env
@@ -10,10 +12,10 @@ x-backend: &backend
 x-backend-env: &backend-env
   EUREKA_URL: http://eureka-server:8761/eureka/
   DB_USER: root
-  DB_PASSWORD: adoptapet
+  DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-adoptapet}
   RABBITMQ_HOST: rabbitmq
   RABBITMQ_USER: adoptapet
-  RABBITMQ_PASSWORD: adoptapet
+  RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-adoptapet}
 
 x-depends-infra: &depends-infra
   mysql:
@@ -27,7 +29,7 @@ services:
   mysql:
     image: mysql:8.4
     environment:
-      MYSQL_ROOT_PASSWORD: adoptapet
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-adoptapet}
     ports:
       - "3307:3306"   # 3307 on the host so it does not clash with a local MySQL
     volumes:
@@ -35,7 +37,7 @@ services:
       # Test users and example pets. Imported only when mysql-data is empty (`docker compose down -v` to redo it)
       - ./adoptapet-backend/database/test-users.sql:/docker-entrypoint-initdb.d/test-users.sql:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padoptapet"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       retries: 20
     restart: unless-stopped
@@ -44,7 +46,7 @@ services:
     image: rabbitmq:4.1-management
     environment:
       RABBITMQ_DEFAULT_USER: adoptapet
-      RABBITMQ_DEFAULT_PASS: adoptapet
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-adoptapet}
     ports:
       - "5672:5672"
       - "15672:15672" # management UI
@@ -132,7 +134,7 @@ services:
   frontend:
     build: adoptapet-frontend
     ports:
-      - "4200:80"     # same origin as ng serve, so the gateway's default CORS keeps working
+      - "4200:80"     # nginx serves the app and proxies /api to the gateway
     depends_on:
       - api-gateway
     restart: unless-stopped
