@@ -9,6 +9,9 @@ iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
 iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
 netfilter-persistent save
 
+# On first boot unattended-upgrades holds the apt lock; the Docker installer fails if it runs meanwhile
+while fuser /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock >/dev/null 2>&1; do sleep 5; done
+
 curl -fsSL https://get.docker.com | sh
 usermod -aG docker ubuntu
 
